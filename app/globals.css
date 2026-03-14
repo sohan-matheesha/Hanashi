@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #2d2a32;
+  --hanashi-primary: #c3829e;
+  --hanashi-secondary: #e9b1cd;
+  --hanashi-accent: #ffe7de;
+  --hanashi-dark: #32253a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-hanashi-primary: var(--hanashi-primary);
+  --color-hanashi-secondary: var(--hanashi-secondary);
+  --color-hanashi-accent: var(--hanashi-accent);
+  --color-hanashi-dark: var(--hanashi-dark);
+  --font-sans: var(--font-inter), var(--font-noto-sans-jp), ui-sans-serif, system-ui, sans-serif;
+  --font-jp: var(--font-noto-sans-jp), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
