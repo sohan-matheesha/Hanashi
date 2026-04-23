@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Castle, User } from "lucide-react"; // Using Castle/Home icon as substitute for the temple logo
+import { Castle, User } from "lucide-react"; 
 import { createClient } from "@/utils/supabase/server";
 
 export default async function Navbar() {
@@ -7,17 +7,17 @@ export default async function Navbar() {
   const { data: { user } } = await supabase.auth.getUser();
 
   return (
-    <nav className="w-full h-20 px-8 flex items-center justify-between bg-white/80 backdrop-blur-sm fixed top-0 z-50">
+    <nav className="w-full h-24 px-8 md:px-12 flex items-center justify-between bg-white/80 backdrop-blur-sm fixed top-0 z-50">
       {/* Logo */}
       <div className="flex items-center gap-2">
-        <Castle className="w-6 h-6 text-hanashi-dark" />
-        <span className="font-bold text-xl text-hanashi-dark">
-          Hanashi <span className="font-jp text-gray-500 font-normal">(話し)</span>
+        <Castle className="w-5 h-5 text-hanashi-primary" />
+        <span className="font-extrabold text-xl text-hanashi-primary tracking-tight">
+          Hanashi <span className="font-jp font-medium text-hanashi-primary/80 opacity-80 text-lg">(話し)</span>
         </span>
       </div>
 
       {/* Nav Links */}
-      <div className="hidden md:flex items-center gap-8 font-semibold text-sm text-hanashi-dark">
+      <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-10 font-bold text-[13px] tracking-wider uppercase text-black">
         <Link href="#features" className="hover:text-hanashi-primary transition-colors">
           Features
         </Link>
@@ -30,15 +30,15 @@ export default async function Navbar() {
       </div>
 
       {/* Auth Buttons */}
-      <div className="flex items-center gap-6 font-semibold text-sm">
+      <div className="flex items-center gap-6 font-bold text-[13px] tracking-wider uppercase">
         {user ? (
           <>
-            <Link href="/dashboard" className="text-hanashi-dark hover:text-hanashi-primary transition-colors">
+            <Link href="/dashboard" className="text-hanashi-primary hover:text-hanashi-secondary transition-colors">
               Dashboard
             </Link>
             <Link
               href="/profile"
-              className="flex items-center gap-2 bg-hanashi-primary text-white px-5 py-2.5 rounded-lg hover:bg-opacity-90 transition-colors shadow-sm"
+              className="flex items-center gap-2 bg-hanashi-secondary text-white px-6 py-2.5 rounded-xl hover:bg-opacity-90 transition-colors shadow-sm"
             >
               <User className="w-4 h-4" />
               Profile
@@ -46,12 +46,12 @@ export default async function Navbar() {
           </>
         ) : (
           <>
-            <Link href="/login" className="text-hanashi-dark hover:text-hanashi-primary transition-colors">
+            <Link href="/login" className="text-hanashi-primary hover:text-hanashi-secondary transition-colors">
               Login
             </Link>
             <Link
               href="/register"
-              className="bg-hanashi-primary text-white px-5 py-2.5 rounded-lg hover:bg-opacity-90 transition-colors shadow-sm"
+              className="bg-hanashi-secondary text-white px-6 py-2.5 rounded-xl hover:bg-opacity-90 transition-colors shadow-sm tracking-normal text-sm font-semibold whitespace-nowrap"
             >
               Register
             </Link>
