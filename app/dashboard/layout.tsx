@@ -24,14 +24,15 @@ export default async function DashboardLayout({
     .single()
 
   return (
-    <div className="min-h-screen bg-[#fafafc] flex font-sans text-[#202c5c]">
-      {/* Dynamic Main Sidebar */}
-      <MainSidebar />
+    <div className="min-h-screen bg-[#fafafc] flex font-sans text-[#202c5c] relative">
+      <div className="flex w-full z-10">
+        {/* Dynamic Main Sidebar */}
+        <MainSidebar />
 
-      {/* Main Area */}
+        {/* Main Area */}
       <MainContent>
         {/* Top Header */}
-        <header className="h-[88px] bg-white flex items-center justify-between px-10 sticky top-0 z-10">
+        <header className="h-[88px] bg-white/80 backdrop-blur-md flex items-center justify-between px-10 sticky top-0 z-10 border-b border-gray-100/50">
           
           <div className="flex items-center gap-12">
             {/* Logo */}
@@ -73,6 +74,7 @@ export default async function DashboardLayout({
           {children}
         </main>
       </MainContent>
+      </div>
     </div>
   )
 }

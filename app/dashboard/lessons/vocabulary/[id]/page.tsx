@@ -7,9 +7,13 @@ import { ArrowLeft, Volume2, Info, BookOpen } from 'lucide-react'
 // Content definitions mapped by id
 
 import { greetingsData } from "../data/greetings"
+import { numbersData } from "../data/numbers"
+import { familyData } from "../data/family"
 
 const vocabularyContent: Record<string, any> = {
-  "greetings": greetingsData
+  "greetings": greetingsData,
+  "numbers": numbersData,
+  "family-members": familyData
 }
 
 export default function VocabularyDetailPage() {
@@ -92,49 +96,53 @@ export default function VocabularyDetailPage() {
             </button>
          </div>
 
-         {/* Vocabulary Grid List */}
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {content.items.map((item: any, index: number) => (
-              <div key={index} className="bg-white rounded-[24px] p-6 md:p-8 border border-gray-100/80 shadow-sm hover:shadow-xl hover:shadow-[#202c5c]/5 transition-all group flex flex-col justify-between hover:border-gray-200 relative overflow-hidden">
-                 
-                 <div className="absolute top-0 left-0 w-2 h-full opacity-0 group-hover:opacity-100 transition-opacity" style={{backgroundColor: '#c64161'}}></div>
-
-                 {/* Japanese Headers */}
-                 <div className="flex items-start justify-between mb-8">
-                    <div>
-                       <h3 className="text-3xl lg:text-4xl font-black font-jp text-[#202c5c] tracking-wide mb-3 leading-tight">
-                         {item.kanji}
-                       </h3>
-                       <p className={`${content.colorText} font-bold tracking-wider text-sm font-jp uppercase bg-[#fff5f7] inline-block px-3 py-1.5 rounded-lg border border-[#c64161]/10`}>
-                          {item.romaji}
-                       </p>
-                    </div>
-                    <button className="text-gray-300 hover:text-[#c64161] transition-all w-12 h-12 rounded-full flex items-center justify-center hover:bg-[#fff5f7] hover:scale-110 active:scale-95 border border-transparent shadow-sm hover:shadow bg-gray-50/50 group-hover:border-[#c64161]/20 shrink-0">
-                       <Volume2 className="w-5 h-5" />
-                    </button>
-                 </div>
-
-                 <div className="w-full h-px bg-gray-100/80 mb-6"></div>
-
-                 {/* English / Sinhala Translations */}
-                 <div>
-                    <h4 className="text-gray-800 font-black text-xl mb-1.5">{item.english}</h4>
-                    <p className="text-gray-500 font-medium text-sm lg:text-base">{item.sinhala}</p>
-                    
-                    {item.notes && (
-                      <div className="mt-5 flex items-start gap-2 bg-gray-50 px-4 py-3 rounded-xl border border-gray-100 text-gray-600">
-                        <Info className="w-4 h-4 mt-0.5 shrink-0 text-gray-400" />
-                        <span className="text-sm font-medium leading-relaxed">{item.notes}</span>
-                      </div>
-                    )}
-                 </div>
-
-                 {/* Mark as learned invisible button layer */}
-                 <div className="absolute flex top-6 right-6 gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      {/* Can add interactive actions here later */}
-                 </div>
-              </div>
-            ))}
+         {/* Vocabulary Table Layout */}
+         <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-12">
+            <div className="overflow-x-auto">
+               <table className="w-full text-left border-collapse">
+                  <thead>
+                     <tr className="bg-[#202c5c] text-white border-b border-[#2a3b7c]">
+                        <th className="px-6 py-5 font-bold text-sm uppercase tracking-wider">No.</th>
+                        <th className="px-6 py-5 font-bold text-sm uppercase tracking-wider">Romaji</th>
+                        <th className="px-6 py-5 font-bold text-sm uppercase tracking-wider">Hiragana / Kanji</th>
+                        <th className="px-6 py-5 font-bold text-sm uppercase tracking-wider">Meaning</th>
+                        <th className="px-6 py-5 font-bold text-sm uppercase tracking-wider text-center w-24">Audio</th>
+                     </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                     {content.items.map((item: any, index: number) => (
+                        <tr key={index} className="hover:bg-[#fff5f7] transition-colors group">
+                           <td className="px-6 py-5">
+                              <span className="font-bold text-gray-500">{index + 1}</span>
+                           </td>
+                           <td className="px-6 py-5">
+                              <span className={`${content.colorText} bg-[#fff5f7] px-3 py-1.5 rounded-lg text-sm font-bold tracking-wider font-jp uppercase border border-[#c64161]/10`}>{item.romaji}</span>
+                           </td>
+                           <td className="px-6 py-5">
+                              <span className="text-2xl font-black font-jp text-[#202c5c]">{item.kanji}</span>
+                           </td>
+                           <td className="px-6 py-5">
+                              <div>
+                                 <span className="font-black text-gray-800 text-lg block mb-1">{item.english}</span>
+                                 <span className="text-gray-500 font-medium text-sm">{item.sinhala}</span>
+                                 {item.notes && (
+                                    <div className="mt-2 flex items-start gap-1.5 text-xs text-gray-500 bg-gray-50 py-1.5 px-3 rounded-md w-fit">
+                                       <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                                       <span>{item.notes}</span>
+                                    </div>
+                                 )}
+                              </div>
+                           </td>
+                           <td className="px-6 py-5 text-center">
+                              <button className="text-gray-300 hover:text-[#c64161] hover:bg-[#fff5f7] w-10 h-10 rounded-full transition-all inline-flex items-center justify-center border border-transparent shadow-sm hover:shadow group-hover:border-[#c64161]/20">
+                                 <Volume2 className="w-4 h-4" />
+                              </button>
+                           </td>
+                        </tr>
+                     ))}
+                  </tbody>
+               </table>
+            </div>
          </div>
       </div>
     </div>

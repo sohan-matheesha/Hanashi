@@ -1,19 +1,28 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Sparkles, MessageSquare, BookOpen, Mic, Globe, Gamepad2, Settings } from "lucide-react";
+import { Sparkles, BookOpen, Mic, Globe, Gamepad2, Settings } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <div className="font-sans bg-white pb-20">
-      <Navbar />
+    <div 
+      className="font-sans min-h-screen pb-20 relative"
+      style={{
+        backgroundImage: "linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)), url('/images/japan-bg.jpg')",
+        backgroundSize: "contain",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed"
+      }}
+    >
+      <div className="relative z-10">
+        <Navbar />
 
-      {/* Hero Section */}
+        {/* Hero Section */}
       <section className="relative overflow-hidden pt-28 pb-16 lg:pt-32 lg:pb-24">
-        <main className="max-w-7xl mx-auto px-8 grid lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-20 items-center">
-          {/* Left Column: Copy & Actions */}
-          <div className="flex flex-col items-start gap-8 z-10 w-full">
+        <main className="max-w-4xl mx-auto px-8 flex flex-col items-center justify-center text-center">
+          {/* Copy & Actions */}
+          <div className="flex flex-col items-center gap-8 z-10 w-full">
             {/* Badge */}
             <div className="flex items-center gap-2 bg-hanashi-accent/30 text-hanashi-primary text-[11px] font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-2 border border-hanashi-accent">
               <Sparkles className="w-3.5 h-3.5" />
@@ -21,59 +30,24 @@ export default function Home() {
             </div>
 
             {/* Heading */}
-            <h1 className="text-[3.5rem] lg:text-[5.5rem] font-black text-hanashi-dark leading-[1.05] tracking-tight">
-              Master <br />
-              Japanese <br />
-              <span className="text-hanashi-primary italic font-serif font-medium">through</span> <br />
-              Practice
+            <h1 className="text-[3.5rem] lg:text-[5.5rem] font-black text-hanashi-dark leading-[1.05] tracking-tight text-center">
+              Master Japanese <br className="hidden lg:block"/>
+              <span className="text-hanashi-primary italic font-serif font-medium">through</span> Practice
             </h1>
 
             {/* Subheading */}
-            <p className="text-lg md:text-xl text-gray-500 leading-relaxed font-medium max-w-120">
+            <p className="text-lg md:text-xl text-gray-500 leading-relaxed font-medium max-w-120 text-center">
               An editorial-grade language platform designed to bridge the gap between textbook Japanese and native fluency.
             </p>
 
             {/* Buttons */}
-            <div className="flex flex-col sm:flex-row items-center gap-4 mt-2 w-full sm:w-auto">
-              <Link href="/register" className="flex items-center justify-center w-full sm:w-auto bg-hanashi-secondary text-white px-8 py-4 rounded-2xl font-bold hover:bg-opacity-90 transition-all shadow-md  hover:-translate-y-0.5 whitespace-nowrap">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-2 w-full sm:w-auto">
+              <Link href="/register" className="flex items-center justify-center w-full sm:w-auto bg-hanashi-secondary text-white px-8 py-4 rounded-2xl font-bold hover:bg-opacity-90 transition-all shadow-md hover:-translate-y-0.5 whitespace-nowrap">
                 Get Started Free
               </Link>
               <button className="w-full sm:w-auto bg-white text-hanashi-dark px-8 py-4 rounded-2xl font-bold border border-gray-200 hover:border-gray-300 transition-all shadow-sm hover:-translate-y-0.5 whitespace-nowrap">
                 Explore Features
               </button>
-            </div>
-          </div>
-
-          {/* Right Column: Image & Decorative Elements */}
-          <div className="relative w-full max-w-150 mx-auto lg:ml-auto pt-10 lg:pt-0">
-            {/* Background Blob */}
-            <div className="absolute top-0 right-0 w-100 h-100 bg-hanashi-accent/40 rounded-[60px] -rotate-12 -z-10 translate-x-12 -translate-y-12"></div>
-            
-            {/* Main Image Container */}
-            <div className="relative bg-hanashi-dark rounded-[2.5rem] p-4 pb-6 shadow-2xl">
-              <div className="relative aspect-3/4 w-full rounded-3xl overflow-hidden shadow-inner bg-black/20 border border-white/10">
-                <Image
-                  src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1200&auto=format&fit=crop"
-                  alt="Traditional Japanese temple"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-
-              {/* Floating Card inside the dark container */}
-              <div className="absolute bottom-10 left-10 right-10 bg-white/95 backdrop-blur-md px-5 py-4 rounded-2xl shadow-xl flex items-center justify-between gap-4 border border-white/50 z-20">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-hanashi-secondary text-white rounded-xl flex items-center justify-center">
-                    <MessageSquare className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <p className="text-hanashi-dark font-bold text-sm">New Live Session</p>
-                    <p className="text-gray-500 text-xs font-medium">Practice with Yuki-san (N1 Native)</p>
-                  </div>
-                </div>
-                <div className="w-2.5 h-2.5 bg-green-500 rounded-full shrink-0"></div>
-              </div>
             </div>
           </div>
         </main>
@@ -161,6 +135,7 @@ export default function Home() {
       </section>
 
       <Footer />
+      </div>
     </div>
   );
 }

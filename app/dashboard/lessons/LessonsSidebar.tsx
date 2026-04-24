@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { BookOpen, FileText, Languages, PenTool, RefreshCw, GraduationCap } from 'lucide-react'
+import { BookOpen, FileText, Languages, PenTool, RefreshCw, GraduationCap, BookText } from 'lucide-react'
 
 export default function LessonsSidebar() {
   const pathname = usePathname()
@@ -11,6 +11,7 @@ export default function LessonsSidebar() {
     { name: 'Hiragana', href: '/dashboard/lessons/hiragana', icon: BookOpen },
     { name: 'Katakana', href: '/dashboard/lessons/katakana', icon: FileText },
     { name: 'Kanji', href: '/dashboard/lessons/kanji', icon: Languages },
+    { name: 'Vocabulary', href: '/dashboard/lessons/vocabulary', icon: BookText },
     { name: 'Grammar', href: '/dashboard/lessons/grammar', icon: PenTool },
     { name: 'Review', href: '/dashboard/lessons/review', icon: RefreshCw },
   ]
