@@ -32,12 +32,12 @@ export default async function DashboardLayout({
         {/* Main Area */}
       <MainContent>
         {/* Top Header */}
-        <header className="h-[88px] bg-white/80 backdrop-blur-md flex items-center justify-between px-10 sticky top-0 z-10 border-b border-gray-100/50">
+        <header className="h-[64px] md:h-[88px] bg-white/80 backdrop-blur-md flex items-center justify-between px-4 md:px-10 sticky top-0 z-10 border-b border-gray-100/50">
           
           <div className="flex items-center gap-12">
             {/* Logo */}
-            <Link href="/dashboard" className="flex items-center">
-              <h1 className="font-bold text-3xl tracking-tight text-[#202c5c]">Komorebi</h1>
+            <Link href="/dashboard" className="flex items-center ml-10 md:ml-0">
+              <h1 className="font-bold text-xl md:text-3xl tracking-tight text-[#202c5c]">Komorebi</h1>
             </Link>
 
             {/* Top Navigation Links */}
@@ -49,9 +49,9 @@ export default async function DashboardLayout({
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-4 w-full max-w-[320px] justify-end">
+          <div className="flex items-center gap-4 max-w-[320px] justify-end">
             {/* Search Bar */}
-            <div className="relative w-full max-w-[240px]">
+            <div className="relative w-full max-w-[240px] hidden sm:block">
               <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
                 <Search className="w-[14px] h-[14px]" />
               </div>
