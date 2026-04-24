@@ -12,15 +12,15 @@ export default function Home() {
         backgroundSize: "contain",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        backgroundAttachment: "fixed"
+        backgroundAttachment: "scroll"
       }}
     >
       <div className="relative z-10">
         <Navbar />
 
         {/* Hero Section */}
-      <section className="relative overflow-hidden pt-28 pb-16 lg:pt-32 lg:pb-24">
-        <main className="max-w-4xl mx-auto px-8 flex flex-col items-center justify-center text-center">
+      <section className="relative overflow-hidden pt-20 pb-12 md:pt-28 md:pb-16 lg:pt-32 lg:pb-24">
+        <main className="max-w-4xl mx-auto px-4 md:px-8 flex flex-col items-center justify-center text-center">
           {/* Copy & Actions */}
           <div className="flex flex-col items-center gap-8 z-10 w-full">
             {/* Badge */}
@@ -30,13 +30,13 @@ export default function Home() {
             </div>
 
             {/* Heading */}
-            <h1 className="text-[3.5rem] lg:text-[5.5rem] font-black text-hanashi-dark leading-[1.05] tracking-tight text-center">
+            <h1 className="text-3xl sm:text-[3.5rem] lg:text-[5.5rem] font-black text-hanashi-dark leading-[1.05] tracking-tight text-center">
               Master Japanese <br className="hidden lg:block"/>
               <span className="text-hanashi-primary italic font-serif font-medium">through</span> Practice
             </h1>
 
             {/* Subheading */}
-            <p className="text-lg md:text-xl text-gray-500 leading-relaxed font-medium max-w-120 text-center">
+            <p className="text-base md:text-xl text-gray-500 leading-relaxed font-medium max-w-120 text-center px-2">
               An editorial-grade language platform designed to bridge the gap between textbook Japanese and native fluency.
             </p>
 
@@ -54,8 +54,8 @@ export default function Home() {
       </section>
 
       {/* Methodology / Features Section */}
-      <section id="features" className="bg-gray-50/50 py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-8">
+      <section id="features" className="bg-gray-50/50 py-16 md:py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="text-center mb-16 max-w-2xl mx-auto">
             <h4 className="text-hanashi-primary text-[11px] font-bold tracking-widest uppercase mb-4">
               Core Methodology
@@ -81,7 +81,7 @@ export default function Home() {
             </div>
 
             {/* Feature 2 */}
-            <div className="bg-white p-8 rounded-4xl shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow relative overflow-hidden group mt-4 lg:mt-6">
+            <div className="bg-white p-8 rounded-4xl shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow relative overflow-hidden group mt-0 lg:mt-6">
               <div className="w-14 h-14 bg-hanashi-accent/30 rounded-2xl flex items-center justify-center text-hanashi-primary mb-8 transition-transform group-hover:scale-110">
                 <Mic className="w-6 h-6" />
               </div>
@@ -92,7 +92,7 @@ export default function Home() {
             </div>
 
             {/* Feature 3 */}
-            <div className="bg-white p-8 rounded-4xl shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow relative overflow-hidden group mt-8 lg:mt-12">
+            <div className="bg-white p-8 rounded-4xl shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow relative overflow-hidden group mt-0 lg:mt-12">
               <div className="w-14 h-14 bg-hanashi-accent/30 rounded-2xl flex items-center justify-center text-hanashi-primary mb-8 transition-transform group-hover:scale-110">
                 <Globe className="w-6 h-6" />
               </div>
@@ -103,7 +103,7 @@ export default function Home() {
             </div>
 
             {/* Feature 4 */}
-            <div className="bg-white p-8 rounded-4xl shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow relative overflow-hidden group mt-12 lg:mt-16">
+            <div className="bg-white p-8 rounded-4xl shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow relative overflow-hidden group mt-0 lg:mt-16">
               <div className="w-14 h-14 bg-hanashi-accent/30 rounded-2xl flex items-center justify-center text-hanashi-primary mb-8 transition-transform group-hover:scale-110">
                 <Gamepad2 className="w-6 h-6" />
               </div>
@@ -117,12 +117,12 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-4 md:px-8">
-        <div className="max-w-6xl mx-auto bg-linear-to-br from-[#30273a] to-[#251e2e] rounded-[3rem] p-12 md:p-24 flex flex-col items-center text-center shadow-2xl relative overflow-hidden">
+      <section className="py-12 md:py-24 px-4 md:px-8">
+        <div className="max-w-6xl mx-auto bg-linear-to-br from-[#30273a] to-[#251e2e] rounded-2xl md:rounded-[3rem] p-8 md:p-24 flex flex-col items-center text-center shadow-2xl relative overflow-hidden">
           <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-hanashi-secondary mb-8 relative z-10 border border-white/10">
             <Settings className="w-8 h-8" />
           </div>
-          <h2 className="text-4xl md:text-[3.5rem] font-black text-white mb-6 relative z-10 tracking-tight">
+          <h2 className="text-2xl md:text-4xl lg:text-[3.5rem] font-black text-white mb-6 relative z-10 tracking-tight">
             Begin Your Story.
           </h2>
           <p className="text-gray-300 font-medium text-lg max-w-2xl mb-12 relative z-10 leading-relaxed">
