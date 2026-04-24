@@ -1,84 +1,141 @@
-import Image from "next/image";
-import { Sparkles, MessageSquare } from "lucide-react";
+import Link from "next/link";
+import { Sparkles, BookOpen, Mic, Globe, Gamepad2, Settings } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-white via-white to-hanashi-accent/30 font-sans">
-      <Navbar />
+    <div 
+      className="font-sans min-h-screen pb-20 relative"
+      style={{
+        backgroundImage: "linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)), url('/images/japan-bg.jpg')",
+        backgroundSize: "contain",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed"
+      }}
+    >
+      <div className="relative z-10">
+        <Navbar />
 
-      <main className="max-w-7xl mx-auto px-8 pt-40 pb-16 lg:py-32 grid lg:grid-cols-2 gap-12 items-center min-h-[calc(100vh-80px)]">
-        {/* Left Column: Copy & Actions */}
-        <div className="flex flex-col items-start gap-8 z-10 w-full max-w-[600px]">
-          {/* Badge */}
-          <div className="flex items-center gap-2 bg-hanashi-accent/40 text-hanashi-primary text-xs font-bold tracking-wider uppercase px-4 py-2 rounded-full border border-hanashi-secondary/40 mb-2">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>New: Live Conversation Matching</span>
+        {/* Hero Section */}
+      <section className="relative overflow-hidden pt-28 pb-16 lg:pt-32 lg:pb-24">
+        <main className="max-w-4xl mx-auto px-8 flex flex-col items-center justify-center text-center">
+          {/* Copy & Actions */}
+          <div className="flex flex-col items-center gap-8 z-10 w-full">
+            {/* Badge */}
+            <div className="flex items-center gap-2 bg-hanashi-accent/30 text-hanashi-primary text-[11px] font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-2 border border-hanashi-accent">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>New: Live Conversation Matching</span>
+            </div>
+
+            {/* Heading */}
+            <h1 className="text-[3.5rem] lg:text-[5.5rem] font-black text-hanashi-dark leading-[1.05] tracking-tight text-center">
+              Master Japanese <br className="hidden lg:block"/>
+              <span className="text-hanashi-primary italic font-serif font-medium">through</span> Practice
+            </h1>
+
+            {/* Subheading */}
+            <p className="text-lg md:text-xl text-gray-500 leading-relaxed font-medium max-w-120 text-center">
+              An editorial-grade language platform designed to bridge the gap between textbook Japanese and native fluency.
+            </p>
+
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-2 w-full sm:w-auto">
+              <Link href="/register" className="flex items-center justify-center w-full sm:w-auto bg-hanashi-secondary text-white px-8 py-4 rounded-2xl font-bold hover:bg-opacity-90 transition-all shadow-md hover:-translate-y-0.5 whitespace-nowrap">
+                Get Started Free
+              </Link>
+              <button className="w-full sm:w-auto bg-white text-hanashi-dark px-8 py-4 rounded-2xl font-bold border border-gray-200 hover:border-gray-300 transition-all shadow-sm hover:-translate-y-0.5 whitespace-nowrap">
+                Explore Features
+              </button>
+            </div>
+          </div>
+        </main>
+      </section>
+
+      {/* Methodology / Features Section */}
+      <section id="features" className="bg-gray-50/50 py-24 md:py-32">
+        <div className="max-w-7xl mx-auto px-8">
+          <div className="text-center mb-16 max-w-2xl mx-auto">
+            <h4 className="text-hanashi-primary text-[11px] font-bold tracking-widest uppercase mb-4">
+              Core Methodology
+            </h4>
+            <h2 className="text-3xl md:text-[2.75rem] leading-tight font-black text-hanashi-dark mb-6">
+              Why Choose Hanashi?
+            </h2>
+            <p className="text-gray-500 font-medium text-lg leading-relaxed">
+              A curated blend of traditional pedagogy and modern interaction for the discerning learner.
+            </p>
           </div>
 
-          {/* Heading */}
-          <h1 className="text-[3.5rem] lg:text-[4.5rem] font-black text-hanashi-dark leading-[1.1] tracking-tight">
-            Master <br />
-            Japanese <br />
-            <span className="relative inline-block mt-2">
-              <span className="relative z-10">through</span>
-              <span className="absolute bottom-2 left-0 w-full h-4 bg-hanashi-secondary/50 -z-10 -rotate-1 rounded-sm"></span>
-            </span>{" "}
-            <br />
-            <span className="relative inline-block mt-2">
-              <span className="relative z-10">Practice</span>
-              <span className="absolute bottom-2 left-0 w-full h-4 bg-hanashi-secondary/50 -z-10 rotate-1 rounded-sm"></span>
-            </span>
-          </h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Feature 1 */}
+            <div className="bg-white p-8 rounded-4xl shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow relative overflow-hidden group">
+              <div className="w-14 h-14 bg-hanashi-accent/30 rounded-2xl flex items-center justify-center text-hanashi-primary mb-8 transition-transform group-hover:scale-110">
+                <BookOpen className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-hanashi-dark text-xl mb-3">Structured Lessons</h3>
+              <p className="text-gray-500 leading-relaxed text-sm font-medium">
+                Deep linguistic insights and modules designed by Tokyo&apos;s top educators.
+              </p>
+            </div>
 
-          {/* Subheading */}
-          <p className="text-lg text-gray-600 leading-relaxed font-medium">
-            A complete language platform designed to take you from beginner to
-            fluent with native-speaker interactions and cultural immersion.
+            {/* Feature 2 */}
+            <div className="bg-white p-8 rounded-4xl shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow relative overflow-hidden group mt-4 lg:mt-6">
+              <div className="w-14 h-14 bg-hanashi-accent/30 rounded-2xl flex items-center justify-center text-hanashi-primary mb-8 transition-transform group-hover:scale-110">
+                <Mic className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-hanashi-dark text-xl mb-3">Speak Confidently</h3>
+              <p className="text-gray-500 leading-relaxed text-sm font-medium">
+                Proprietary real-time matching system for high-fidelity vocal practice.
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="bg-white p-8 rounded-4xl shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow relative overflow-hidden group mt-8 lg:mt-12">
+              <div className="w-14 h-14 bg-hanashi-accent/30 rounded-2xl flex items-center justify-center text-hanashi-primary mb-8 transition-transform group-hover:scale-110">
+                <Globe className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-hanashi-dark text-xl mb-3">Cultural Context</h3>
+              <p className="text-gray-500 leading-relaxed text-sm font-medium">
+                Understand the nuances of etiquette and history behind every phrase.
+              </p>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="bg-white p-8 rounded-4xl shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow relative overflow-hidden group mt-12 lg:mt-16">
+              <div className="w-14 h-14 bg-hanashi-accent/30 rounded-2xl flex items-center justify-center text-hanashi-primary mb-8 transition-transform group-hover:scale-110">
+                <Gamepad2 className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-hanashi-dark text-xl mb-3">Gamified Mastery</h3>
+              <p className="text-gray-500 leading-relaxed text-sm font-medium">
+                Reward-driven paths that make the JLPT journey feel like an adventure.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 px-4 md:px-8">
+        <div className="max-w-6xl mx-auto bg-linear-to-br from-[#30273a] to-[#251e2e] rounded-[3rem] p-12 md:p-24 flex flex-col items-center text-center shadow-2xl relative overflow-hidden">
+          <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-hanashi-secondary mb-8 relative z-10 border border-white/10">
+            <Settings className="w-8 h-8" />
+          </div>
+          <h2 className="text-4xl md:text-[3.5rem] font-black text-white mb-6 relative z-10 tracking-tight">
+            Begin Your Story.
+          </h2>
+          <p className="text-gray-300 font-medium text-lg max-w-2xl mb-12 relative z-10 leading-relaxed">
+            Join 50,000+ students worldwide mastering Japanese with elegance. Your first masterclass is complimentary.
           </p>
-
-          {/* Buttons */}
-          <div className="flex flex-col sm:flex-row items-center gap-4 mt-2 w-full sm:w-auto">
-            <button className="w-full sm:w-auto bg-hanashi-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-opacity-90 transition-all shadow-lg shadow-hanashi-primary/30 hover:-translate-y-0.5">
-              Get Started Free
-            </button>
-            <button className="w-full sm:w-auto bg-white text-hanashi-primary px-8 py-4 rounded-xl font-bold border-2 border-hanashi-secondary/30 hover:border-hanashi-primary/40 transition-all shadow-sm hover:-translate-y-0.5">
-              Explore Features
-            </button>
-          </div>
+          <Link href="/register" className="inline-flex items-center justify-center bg-white text-hanashi-dark px-10 py-4 rounded-2xl font-bold text-lg hover:bg-gray-50 transition-all shadow-xl relative z-10 hover:-translate-y-0.5">
+            Start Free Now
+          </Link>
         </div>
+      </section>
 
-        {/* Right Column: Image & Decorative Elements */}
-        <div className="relative z-10 w-full max-w-[500px] mx-auto lg:ml-auto pt-10 lg:pt-0">
-          {/* Main Image Container */}
-          <div className="relative aspect-[4/3] w-full rounded-[2rem] overflow-hidden bg-hanashi-accent shadow-2xl p-4 md:p-6">
-            <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-inner border border-white/20">
-              <Image
-                src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=1200&auto=format&fit=crop"
-                alt="Traditional Japanese interior overlooking a garden"
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-          </div>
-
-          {/* Floating Card */}
-          <div className="absolute -bottom-6 -left-4 lg:-left-12 bg-white px-5 py-4 rounded-2xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] flex items-center gap-4 border border-gray-50 z-20">
-            <div className="w-12 h-12 bg-hanashi-accent/60 rounded-xl flex items-center justify-center text-hanashi-primary">
-              <MessageSquare className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-hanashi-dark font-bold text-sm">New Partner!</p>
-              <p className="text-gray-500 text-xs font-medium">Practice with Yuki-san</p>
-            </div>
-          </div>
-
-          {/* Decorative blur blob */}
-          <div className="absolute top-10 -right-10 w-64 h-64 bg-hanashi-accent rounded-full mix-blend-multiply filter blur-3xl opacity-70 -z-10"></div>
-          <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-hanashi-secondary/80 rounded-full mix-blend-multiply filter blur-3xl opacity-40 -z-10"></div>
-        </div>
-      </main>
+      <Footer />
+      </div>
     </div>
   );
 }

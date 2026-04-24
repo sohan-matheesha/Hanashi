@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Castle, ArrowLeft, Camera, User, BadgeInfo, MapPin, Briefcase } from 'lucide-react'
 import { updateProfile } from './actions'
+import { AvatarUpload } from './AvatarUpload'
 
 export default async function ProfilePage(props: { searchParams: Promise<{ message?: string }> }) {
   const searchParams = await props.searchParams;
@@ -53,24 +54,10 @@ export default async function ProfilePage(props: { searchParams: Promise<{ messa
           
           {/* Photograph Upload Section */}
           <section className="flex flex-col items-center justify-center pt-2 pb-6 border-b border-gray-50">
-            <div className="relative group cursor-pointer">
-              <div className="w-32 h-32 bg-hanashi-accent/40 rounded-full flex items-center justify-center border-4 border-white shadow-md overflow-hidden relative">
-                <User className="w-12 h-12 text-hanashi-primary/60" />
-                <div className="absolute inset-0 bg-hanashi-dark/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Camera className="w-8 h-8 text-white" />
-                </div>
-              </div>
-              <div className="absolute bottom-0 right-0 bg-white p-2 text-hanashi-primary rounded-full shadow-sm border border-gray-100">
-                <Camera className="w-4 h-4" />
-              </div>
-              {/* Note: This is an unstyled visual file input. It would typically be handled via client component JS to show preview */}
-              <input type="file" name="photograph" accept="image/*" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-            </div>
+            <AvatarUpload currentPhotoUrl={profile?.avatar_url || ''} />
             <p className="text-sm font-semibold text-gray-700 mt-4">Upload Photograph</p>
             <p className="text-xs text-gray-400 mt-1">PNG or JPG up to 5MB</p>
-          </section>
-
-          {/* Personal Information */}
+          </section>          {/* Personal Information */}
           <section className="space-y-6">
             <div className="flex items-center gap-2 mb-2">
               <BadgeInfo className="w-5 h-5 text-hanashi-primary" />

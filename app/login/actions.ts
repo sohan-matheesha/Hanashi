@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 
 export async function login(formData: FormData) {
@@ -25,6 +26,8 @@ export async function login(formData: FormData) {
 
 export async function signup(formData: FormData) {
   const supabase = await createClient()
+  const headersList = await headers()
+  const origin = headersList.get('origin') || headersList.get('x-forwarded-host') || ''
 
   const email = formData.get('email') as string
   const password = formData.get('password') as string
@@ -32,6 +35,9 @@ export async function signup(formData: FormData) {
   const { error } = await supabase.auth.signUp({
     email,
     password,
+    options: {
+      emailRedirectTo: `${origin.startsWith('http') ? origin : `https://${origin}`}/auth/callback`,
+    },
   })
 
   if (error) {
