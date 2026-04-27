@@ -53,7 +53,7 @@ export default function MyLessonsPage() {
 
             {/* Overall Progress Card */}
             <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-sm flex items-center gap-6 min-w-[280px]">
-              <div className="relative w-[80px] h-[80px] flex-shrink-0">
+              <div className="relative w-[80px] h-[80px] shrink-0">
                 <svg className="w-full h-full transform -rotate-90">
                   <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="8" fill="transparent" className="text-gray-50" />
                   <circle 
@@ -194,64 +194,6 @@ export default function MyLessonsPage() {
               </div>
             </div>
 
-            {/* Module 5: Adjectives */}
-            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgb(0,0,0,0.06)] transition-all flex flex-col">
-              <div className="flex justify-between items-start mb-4">
-                <div className="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-500">
-                   <Palette className="w-6 h-6" />
-                </div>
-                <div className="bg-gray-50 text-gray-500 border border-gray-100/50 text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-1.5">
-                   Started
-                </div>
-              </div>
-              <h4 className="font-black text-hanashi-dark text-xl mb-1 mt-auto">5. Adjectives</h4>
-              <p className="text-gray-500 text-sm font-medium mb-4">Describing Things <span className="font-jp text-xs opacity-70">(形容詞)</span></p>
-              
-              <ul className="text-sm font-medium text-gray-500 space-y-2 mb-6 flex-1 opacity-70">
-                 <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-orange-300 rounded-full"></div> i-Adjectives (い-形容詞)</li>
-                 <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-orange-300 rounded-full"></div> na-Adjectives (な-形容詞)</li>
-                 <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-orange-300 rounded-full"></div> Present & Past Tenses</li>
-              </ul>
-
-              <div className="mt-auto">
-                <div className="flex justify-between text-xs font-bold text-gray-400 mb-2">
-                  <span>Required: Module 4</span>
-                  <span>&nbsp;</span>
-                </div>
-                <div className="w-full bg-gray-50 rounded-full h-2 mb-6"></div>
-                <Link href="/dashboard/lessons/adjectives" className="w-full bg-hanashi-primary text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-opacity-90 transition-all shadow-md shadow-hanashi-primary/20 hover:-translate-y-0.5">Start Module <ArrowRight className="w-4 h-4" /></Link>
-              </div>
-            </div>
-
-            {/* Module 6: Verbs */}
-            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgb(0,0,0,0.06)] transition-all flex flex-col">
-              <div className="flex justify-between items-start mb-4">
-                <div className="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-500">
-                   <Activity className="w-6 h-6" />
-                </div>
-                <div className="bg-gray-50 text-gray-500 border border-gray-100/50 text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-1.5">
-                   Started
-                </div>
-              </div>
-              <h4 className="font-black text-hanashi-dark text-xl mb-1 mt-auto">6. Verbs</h4>
-              <p className="text-gray-500 text-sm font-medium mb-4">Basic Actions <span className="font-jp text-xs opacity-70">(動詞)</span></p>
-
-              <ul className="text-sm font-medium text-gray-500 space-y-2 mb-6 flex-1 opacity-70">
-                 <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-purple-300 rounded-full"></div> Godan vs Ichidan Verbs</li>
-                 <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-purple-300 rounded-full"></div> Formal Masu Form (~ます)</li>
-                 <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-purple-300 rounded-full"></div> Common Travel & Daily Actions</li>
-              </ul>
-
-              <div className="mt-auto">
-                <div className="flex justify-between text-xs font-bold text-gray-400 mb-2">
-                  <span>Required: Module 5</span>
-                  <span>&nbsp;</span>
-                </div>
-                <div className="w-full bg-gray-50 rounded-full h-2 mb-6"></div>
-                <Link href="/dashboard/lessons/verbs" className="w-full bg-hanashi-primary text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-opacity-90 transition-all shadow-md shadow-hanashi-primary/20 hover:-translate-y-0.5">Start Module <ArrowRight className="w-4 h-4" /></Link>
-              </div>
-            </div>
-
           </div>
 
           {/* Bottom Stats Banner */}
@@ -302,7 +244,7 @@ export default function MyLessonsPage() {
           {/* Advanced Overall Progress Horizontal Card */}
           <div className="bg-white rounded-3xl p-6 md:p-8 border border-gray-100 shadow-sm flex flex-col md:flex-row items-center gap-8 mb-10">
             {/* Circle Progress */}
-            <div className="relative w-28 h-28 flex-shrink-0">
+            <div className="relative w-28 h-28 shrink-0">
               <svg className="w-full h-full transform -rotate-90">
                 <circle cx="56" cy="56" r="50" stroke="currentColor" strokeWidth="8" fill="transparent" className="text-gray-50" />
                 <circle 
@@ -337,7 +279,7 @@ export default function MyLessonsPage() {
             </div>
 
             {/* CTA */}
-            <div className="w-full md:w-auto flex-shrink-0">
+            <div className="w-full md:w-auto shrink-0">
               <button className="w-full md:w-auto bg-[#ea580c] text-white px-8 py-3.5 rounded-xl font-bold hover:bg-orange-700 transition-colors shadow-md shadow-orange-600/20">
                 Continue Learning
               </button>

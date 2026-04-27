@@ -2,17 +2,18 @@ import Link from "next/link";
 import { Sparkles, BookOpen, Mic, Globe, Gamepad2, Settings } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SakuraNightAnimation from "@/components/SakuraNightAnimation";
 
 export default function Home() {
   return (
     <div 
-      className="font-sans min-h-screen pb-20 relative"
+      className="font-sans min-h-screen pb-20 relative bg-[#0a0a0c]"
       style={{
-        backgroundImage: "linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)), url('/images/japan-bg.jpg')",
-        backgroundSize: "contain",
+        backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.65)), url('/images/sakura-night.png')",
+        backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        backgroundAttachment: "scroll"
+        backgroundAttachment: "fixed"
       }}
     >
       <div className="relative z-10">
@@ -20,32 +21,33 @@ export default function Home() {
 
         {/* Hero Section */}
       <section className="relative overflow-hidden pt-20 pb-12 md:pt-28 md:pb-16 lg:pt-32 lg:pb-24">
+        <SakuraNightAnimation />
         <main className="max-w-4xl mx-auto px-4 md:px-8 flex flex-col items-center justify-center text-center">
           {/* Copy & Actions */}
           <div className="flex flex-col items-center gap-8 z-10 w-full">
             {/* Badge */}
-            <div className="flex items-center gap-2 bg-hanashi-accent/30 text-hanashi-primary text-[11px] font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-2 border border-hanashi-accent">
+            <div className="flex items-center gap-2 bg-pink-500/20 text-pink-300 text-[11px] font-bold tracking-widest uppercase px-4 py-2 rounded-full mb-2 border border-pink-500/30 backdrop-blur-md">
               <Sparkles className="w-3.5 h-3.5" />
               <span>New: Live Conversation Matching</span>
             </div>
 
             {/* Heading */}
-            <h1 className="text-3xl sm:text-[3.5rem] lg:text-[5.5rem] font-black text-hanashi-dark leading-[1.05] tracking-tight text-center">
+            <h1 className="text-3xl sm:text-[3.5rem] lg:text-[5.5rem] font-black text-white leading-[1.05] tracking-tight text-center drop-shadow-2xl">
               Master Japanese <br className="hidden lg:block"/>
-              <span className="text-hanashi-primary italic font-serif font-medium">through</span> Practice
+              <span className="text-pink-400 italic font-serif font-medium">through</span> Practice
             </h1>
 
             {/* Subheading */}
-            <p className="text-base md:text-xl text-gray-500 leading-relaxed font-medium max-w-120 text-center px-2">
+            <p className="text-base md:text-xl text-gray-200 leading-relaxed font-medium max-w-120 text-center px-2 opacity-90">
               An editorial-grade language platform designed to bridge the gap between textbook Japanese and native fluency.
             </p>
 
             {/* Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-2 w-full sm:w-auto">
-              <Link href="/register" className="flex items-center justify-center w-full sm:w-auto bg-hanashi-secondary text-white px-8 py-4 rounded-2xl font-bold hover:bg-opacity-90 transition-all shadow-md hover:-translate-y-0.5 whitespace-nowrap">
+              <Link href="/register" className="flex items-center justify-center w-full sm:w-auto bg-pink-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-pink-500 transition-all shadow-[0_0_20px_rgba(219,39,119,0.3)] hover:-translate-y-0.5 whitespace-nowrap">
                 Get Started Free
               </Link>
-              <button className="w-full sm:w-auto bg-white text-hanashi-dark px-8 py-4 rounded-2xl font-bold border border-gray-200 hover:border-gray-300 transition-all shadow-sm hover:-translate-y-0.5 whitespace-nowrap">
+              <button className="w-full sm:w-auto bg-white/10 backdrop-blur-md text-white px-8 py-4 rounded-2xl font-bold border border-white/20 hover:bg-white/20 transition-all shadow-sm hover:-translate-y-0.5 whitespace-nowrap">
                 Explore Features
               </button>
             </div>

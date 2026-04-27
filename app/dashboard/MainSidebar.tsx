@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, BookOpen, MessageCircle, CheckCircle2, Globe, Trophy, Menu, X } from 'lucide-react'
+import { LayoutDashboard, BookOpen, MessageCircle, CheckCircle2, Globe, Trophy, Menu, X, Library } from 'lucide-react'
 
 export default function MainSidebar() {
   const pathname = usePathname()
@@ -19,6 +19,7 @@ export default function MainSidebar() {
     { href: '/dashboard/lessons', icon: BookOpen, label: 'My Lessons' },
     { href: '/dashboard/conversation', icon: MessageCircle, label: 'Conversation' },
     { href: '/dashboard/quizzes', icon: CheckCircle2, label: 'Quizzes' },
+    { href: '/dashboard/lessons/vocabulary', icon: Library, label: 'Vocabulary' },
     { href: '/dashboard/cultural-hub', icon: Globe, label: 'Cultural Hub' },
     { href: '/dashboard/achievements', icon: Trophy, label: 'Achievements' },
   ]
