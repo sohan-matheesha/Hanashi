@@ -16,7 +16,8 @@
   --color-hanashi-secondary: var(--hanashi-secondary);
   --color-hanashi-accent: var(--hanashi-accent);
   --color-hanashi-dark: var(--hanashi-dark);
-  --font-sans: var(--font-inter), var(--font-noto-sans-jp), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-sans), "Inter", sans-serif;
+  --font-serif: var(--font-serif), "Noto Serif JP", serif;
   --font-jp: var(--font-noto-sans-jp), ui-sans-serif, system-ui, sans-serif;
 }
 
