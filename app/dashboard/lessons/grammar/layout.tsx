@@ -2,81 +2,89 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Layers, Settings, User } from 'lucide-react'
+import { 
+  BookOpen, Leaf, Clock, Smile, Zap, FileText, Users, List, User, 
+  Settings, ChevronRight, ArrowLeft
+} from 'lucide-react'
 import { grammarLessons } from './data'
 
 export default function GrammarLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
-  return (
-    <div className="max-w-[1400px] mx-auto w-full min-h-[900px] bg-[#f8f9fc] rounded-[2rem] shadow-2xl flex flex-col md:flex-row overflow-hidden font-sans border-8 border-white/60 mb-20 relative">
-       {/* Sidebar */}
-       <div className="w-full md:w-[280px] bg-white p-6 lg:p-8 flex flex-col shrink-0 z-10 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
-         <div className="flex items-center gap-3 mb-10">
-           <div className="w-10 h-10 rounded-full border-2 border-gray-100 flex items-center justify-center overflow-hidden shrink-0">
-             <User className="w-5 h-5 text-gray-400" />
-           </div>
-           <div>
-             <h2 className="text-[#202c5c] text-sm font-black tracking-tight leading-tight">My Path</h2>
-             <p className="text-gray-400 text-[10px] font-bold">Zen Practitioner</p>
-           </div>
-         </div>
+  // Helper to get the correct icon component
+  const getIcon = (iconName: string, isActive: boolean) => {
+    const props = { className: `w-5 h-5 transition-colors ${isActive ? 'text-[#c64188]' : 'text-gray-500 group-hover:text-gray-700'}` }
+    switch (iconName) {
+      case 'Leaf': return <Leaf {...props} />
+      case 'Clock': return <Clock {...props} />
+      case 'Smile': return <Smile {...props} />
+      case 'Zap': return <Zap {...props} />
+      case 'FileText': return <FileText {...props} />
+      case 'Users': return <Users {...props} />
+      case 'List': return <List {...props} />
+      case 'User': return <User {...props} />
+      default: return <BookOpen {...props} />
+    }
+  }
 
-         <nav className="flex md:flex-col gap-1.5 flex-1 overflow-x-auto md:overflow-visible pb-4 md:pb-0">
-           {grammarLessons.map((lesson) => {
-              const isActive = pathname.includes(lesson.id)
+  return (
+    <div className="flex flex-col md:flex-row min-h-screen bg-white">
+      {/* Secondary Sidebar (Grammar Specific) */}
+      <aside className="w-full md:w-80 bg-white border-r border-gray-100 flex flex-col shrink-0 z-20 overflow-y-auto">
+        <div className="p-8 pb-4">
+          {/* Back to Lessons */}
+          <Link 
+            href="/dashboard/lessons" 
+            className="flex items-center gap-2 text-gray-400 hover:text-[#202c5c] transition-colors mb-8 group/back"
+          >
+            <div className="p-1.5 rounded-lg group-hover/back:bg-gray-100 transition-all">
+              <ArrowLeft className="w-4 h-4" />
+            </div>
+            <span className="text-[13px] font-bold tracking-tight">Back to Lessons</span>
+          </Link>
+
+          <div className="flex items-center gap-3 mb-10 text-[#202c5c]">
+            <BookOpen className="w-6 h-6" />
+            <h2 className="text-xl font-bold tracking-tight">Grammar</h2>
+          </div>
+
+          <nav className="space-y-1.5 pb-20">
+            {grammarLessons.map((lesson) => {
+              const isActive = pathname.includes(lesson.id) || (pathname.endsWith('/grammar') && lesson.id === 'particles')
+              
               return (
                 <Link 
                   key={lesson.id} 
                   href={`/dashboard/lessons/grammar/${lesson.id}`}
-                  className={`px-4 py-3 rounded-xl font-bold text-xs flex items-center gap-3 transition-all whitespace-nowrap md:whitespace-normal flex-shrink-0 md:flex-shrink relative ${
-                      isActive 
-                      ? 'bg-[#feeef5] text-[#c64188]' 
-                      : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                  className={`group flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all relative ${
+                    isActive 
+                    ? 'bg-[#feeef5] text-[#c64188]' 
+                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
                   }`}
                 >
-                  {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-[#e86b9f] rounded-r-full"></div>}
-                  <Layers className={`w-4 h-4 ${isActive ? 'text-[#c64188]' : 'text-gray-400'}`} />
-                  <span className="truncate">{lesson.title.split(' (')[0]}</span>
+                  <div className="flex items-center gap-4">
+                    {getIcon(lesson.icon, isActive)}
+                    <span className={`text-[13px] font-bold tracking-tight ${isActive ? 'text-[#c64188]' : ''}`}>
+                      {lesson.title}
+                    </span>
+                  </div>
+                  
+                  {isActive && (
+                    <div className="w-1.5 h-1.5 bg-[#c64188] rounded-full"></div>
+                  )}
                 </Link>
               )
-           })}
-         </nav>
+            })}
+          </nav>
+        </div>
+      </aside>
 
-         <div className="mt-auto hidden md:block pt-8">
-           <button className="bg-[#202c5c] text-white font-bold py-3.5 px-6 rounded-3xl w-full hover:bg-[#1a234a] transition-colors shadow-lg shadow-[#202c5c]/20 text-xs tracking-wide">
-             Review Mastery
-           </button>
-         </div>
-       </div>
-
-       {/* Main Content */}
-       <div className="flex-1 flex flex-col relative w-full h-[900px] overflow-y-auto bg-[#fdfdfd]">
-         {/* Top Navigation Bar */}
-         <div className="sticky top-0 z-20 flex items-center justify-between px-10 pt-8 pb-4 bg-gradient-to-b from-[#fdfdfd] to-[#fdfdfd]/0 backdrop-blur-sm">
-           <div className="flex items-center gap-2">
-             <h1 className="text-[#202c5c] text-sm font-black tracking-tight">Zen Grammar</h1>
-             <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest bg-gray-100 px-2 py-0.5 rounded-sm">Mastery Path</span>
-           </div>
-           
-           <div className="flex items-center gap-6">
-             <nav className="hidden sm:flex items-center gap-6 text-xs font-bold text-gray-400">
-               <Link href="#" className="text-gray-800 border-b-2 border-gray-800 pb-1">Lessons</Link>
-               <Link href="#" className="hover:text-gray-800 transition-colors">Dictionary</Link>
-               <Link href="#" className="hover:text-gray-800 transition-colors">Community</Link>
-             </nav>
-             <div className="flex items-center gap-3">
-               <button className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-800 transition-colors"><span className="sr-only">Support</span><span className="text-[10px]">◯</span></button>
-               <button className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-800 transition-colors"><Settings className="w-3.5 h-3.5" /></button>
-             </div>
-           </div>
-         </div>
-
-         {/* Content Area */}
-         <div className="px-10 pb-20">
-           {children}
-         </div>
-       </div>
+      {/* Main Content Area */}
+      <main className="flex-1 bg-[#fafafc] min-h-screen overflow-y-auto">
+        <div className="max-w-5xl mx-auto px-6 py-12 md:px-12 lg:px-20">
+          {children}
+        </div>
+      </main>
     </div>
   )
 }

@@ -23,7 +23,7 @@ export default async function DashboardPage() {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto space-y-10 p-10">
+      <div className="max-w-7xl mx-auto space-y-8 md:space-y-10 p-4 md:p-10">
         {/* Welcome Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
@@ -34,12 +34,12 @@ export default async function DashboardPage() {
               You have completed <span className="font-bold text-gray-700">64%</span> of your JLPT N5 curriculum. Keep it up!
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 bg-hanashi-primary text-white px-5 py-3 rounded-xl font-bold hover:bg-opacity-90 transition-all shadow-md">
+          <div className="flex flex-wrap items-center gap-3">
+            <button className="flex items-center gap-2 bg-hanashi-primary text-white px-4 md:px-5 py-2.5 md:py-3 rounded-xl font-bold hover:bg-opacity-90 transition-all shadow-md text-sm md:text-base">
               <Mic className="w-4 h-4" />
               Join Speak Session
             </button>
-            <button className="flex items-center gap-2 bg-white text-hanashi-dark px-5 py-3 rounded-xl font-bold border border-gray-200 hover:border-gray-300 transition-all shadow-sm">
+            <button className="flex items-center gap-2 bg-white text-hanashi-dark px-4 md:px-5 py-2.5 md:py-3 rounded-xl font-bold border border-gray-200 hover:border-gray-300 transition-all shadow-sm text-sm md:text-base">
               <CheckSquare className="w-4 h-4" />
               Daily Quiz
             </button>

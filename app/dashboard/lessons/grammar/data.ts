@@ -17,17 +17,54 @@ export type LessonModule = {
     content: GrammarItem[];
 };
 
-export const grammarLessons: LessonModule[] = [
+export const grammarLessons = [
     {
-        id: 'grammar-1',
-        title: 'Grammar Basics',
-        title_sinhala: 'Grammar මූලික',
-        description: 'Learn the foundational grammar.',
-        type: 'grammar',
-        content: [
-            { char: 'Grammar A', romaji: 'grammar-a', sinhala_pronounce: 'grammar-a', example_word: 'Word', example_reading: 'reading', example_meaning_sinhala: 'meaning', mnemonic_hint: 'hint' },
-            { char: 'Grammar B', romaji: 'grammar-b', sinhala_pronounce: 'grammar-b', example_word: 'Word', example_reading: 'reading', example_meaning_sinhala: 'meaning', mnemonic_hint: 'hint' },
-            { char: 'Grammar C', romaji: 'grammar-c', sinhala_pronounce: 'grammar-c', example_word: 'Word', example_reading: 'reading', example_meaning_sinhala: 'meaning', mnemonic_hint: 'hint' },
-        ]
+        id: 'particles',
+        title: 'Particles',
+        icon: 'Leaf',
+        title_sinhala: 'නිපාත පද (Nipatha Pada)',
+        description: 'Particles are small words used to show the relationship between words in a sentence.'
+    },
+    {
+        id: 'tenses',
+        title: 'Tenses',
+        icon: 'Clock',
+        title_sinhala: 'කාල (Kaala)',
+        description: 'Learn how to express actions in past, present, and future.'
+    },
+    {
+        id: 'adjectives',
+        title: 'Adjectives',
+        icon: 'Smile',
+        title_sinhala: 'නාම විශේෂණ (Nama Visheshana)',
+        description: 'Describing things and people in Japanese.'
+    },
+    {
+        id: 'verbs-forms',
+        title: 'Verbs / Forms',
+        icon: 'Zap',
+        title_sinhala: 'ක්‍රියා පද සහ ආකෘති',
+        description: 'Master Japanese verb groups and their essential conjugations (Te-form, Nai-form, etc.).'
+    },
+    {
+        id: 'polite-plain',
+        title: 'Polite and Plain Form',
+        icon: 'Users',
+        title_sinhala: 'ගෞරවනීය සහ සාමාන්‍ය ව්‍යවහාරය',
+        description: 'Understanding social hierarchy through language.'
+    },
+    {
+        id: 'short-grammar',
+        title: 'Short Grammar',
+        icon: 'List',
+        title_sinhala: 'කෙටි ව්‍යාකරණ (Keti Vyakaranaya)',
+        description: 'Quick rules for daily communication.'
+    },
+    {
+        id: 'nouns',
+        title: 'Nouns',
+        icon: 'User',
+        title_sinhala: 'නාම පද (Nama Pada)',
+        description: 'Basic noun sentences and usage.'
     }
 ];

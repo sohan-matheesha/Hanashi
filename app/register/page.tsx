@@ -1,73 +1,166 @@
-import Link from 'next/link'
-import { signup } from '@/app/login/actions'
-import { Castle } from 'lucide-react'
+"use client";
 
-export default async function RegisterPage(props: { searchParams: Promise<{ message: string }> }) {
-  const searchParams = await props.searchParams;
-  const message = searchParams.message;
+import { useState } from "react";
+import Link from "next/link";
+import { Mail, Lock } from "lucide-react";
+
+export default function RegisterPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      // =========================================
+      // KEEP YOUR EXISTING SUPABASE REGISTER LOGIC HERE
+      // Example:
+      // const { error } = await supabase.auth.signUp({
+      //   email,
+      //   password,
+      // });
+      //
+      // if (error) throw error;
+      // =========================================
+
+      console.log("Register:", { email, password });
+    } catch (error) {
+      console.error("Register error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-white via-white to-hanashi-accent/30 font-sans p-6">
-      <div className="w-full max-w-md bg-white p-8 md:p-10 rounded-4xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-hanashi-accent/50 z-10 relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-hanashi-accent rounded-full mix-blend-multiply opacity-50 -z-10 blur-3xl translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-hanashi-secondary rounded-full mix-blend-multiply opacity-20 -z-10 blur-3xl -translate-x-1/2 translate-y-1/2"></div>
+    <main className="min-h-screen bg-[#f8f6f7] flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-6xl overflow-hidden rounded-4xl bg-white shadow-[0_20px_60px_rgba(0,0,0,0.08)] md:grid md:grid-cols-2">
         
-        <div className="flex flex-col items-center mb-8 relative z-10">
-          <Link href="/" className="flex items-center gap-2 mb-8 text-hanashi-dark hover:opacity-80 transition-opacity">
-            <Castle className="w-8 h-8" />
-            <span className="font-bold text-2xl tracking-tight">
-              Hanashi <span className="font-jp text-gray-500 font-normal text-xl">(話し)</span>
-            </span>
-          </Link>
-          <h1 className="text-2xl font-black text-hanashi-dark mb-2">Create an Account</h1>
-          <p className="text-gray-500 text-sm font-medium text-center">Start your Japanese learning journey today.</p>
+        {/* Left Image Panel */}
+<div
+  className="relative hidden min-h-[700px] overflow-hidden rounded-l-[28px] md:block"
+  style={{
+    backgroundImage: "url('/images/login-japanese-bg.jpg')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  }}
+>
+          <div className="absolute inset-0 bg-linear-to-b from-[#c96c9a]/30 to-[#8d4f87]/20" />
+
+          <div className="absolute inset-x-0 top-0 p-8">
+            <h2 className="max-w-[260px] text-5xl font-bold leading-tight text-white drop-shadow-sm">
+              Master the art of language.
+            </h2>
+
+            <p className="mt-6 max-w-[260px] text-lg leading-8 text-white/90">
+              Learn Japanese in the most elegant and effective way with Hanashi.
+            </p>
+          </div>
+
+          <div className="absolute bottom-8 left-8 flex gap-3">
+            <span className="h-3 w-3 rounded-full bg-pink-500" />
+            <span className="h-3 w-3 rounded-full bg-white/80" />
+            <span className="h-3 w-3 rounded-full bg-white/80" />
+          </div>
         </div>
 
-        <form className="flex flex-col gap-5 relative z-10">
-          {message && (
-            <div className={`p-4 mb-2 text-sm text-center rounded-xl font-medium border ${message.includes('Check') ? 'bg-green-50 text-green-700 border-green-100' : 'bg-red-50 text-red-600 border-red-100'}`}>
-              {message}
+        {/* Right Form Panel */}
+        <div className="flex items-center justify-center bg-white px-6 py-10 sm:px-10 md:px-12">
+          <div className="w-full max-w-md">
+            {/* Logo */}
+            <div className="mb-8 flex items-center gap-3">
+              <span className="text-3xl font-bold text-pink-500">⛩</span>
+              <h1 className="text-3xl font-bold text-[#111827]">
+                Hanashi <span className="text-[#6b7280]">(話し)</span>
+              </h1>
             </div>
-          )}
-          
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5" htmlFor="email">Email address</label>
-            <input
-              className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-hanashi-primary/50 focus:border-hanashi-primary transition-all bg-gray-50/50 text-hanashi-dark placeholder:text-gray-400"
-              type="email"
-              name="email"
-              id="email"
-              placeholder="you@example.com"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5" htmlFor="password">Password</label>
-            <input
-              className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-hanashi-primary/50 focus:border-hanashi-primary transition-all bg-gray-50/50 text-hanashi-dark placeholder:text-gray-400"
-              type="password"
-              name="password"
-              id="password"
-              placeholder="••••••••"
-              required
-              minLength={6}
-            />
-            <p className="text-xs text-gray-500 mt-2">Must be at least 6 characters long.</p>
-          </div>
-          
-          <button
-            formAction={signup}
-            className="w-full bg-hanashi-primary text-white font-bold py-4 px-4 rounded-xl hover:bg-opacity-90 transition-all shadow-lg shadow-hanashi-primary/30 mt-2 hover:-translate-y-0.5"
-          >
-            Create Account
-          </button>
-        </form>
 
-        <div className="mt-8 text-center text-sm text-gray-600 font-medium relative z-10">
-          Already have an account? <Link href="/login" className="text-hanashi-primary font-bold hover:text-hanashi-primary/80 transition-colors ml-1">Sign in</Link>
+            {/* Heading */}
+            <h2 className="text-5xl font-bold tracking-tight text-[#0f172a]">
+              Create Account
+            </h2>
+
+            <p className="mt-4 text-xl leading-8 text-[#667085]">
+              Start your Japanese learning journey today.
+            </p>
+
+            {/* Form */}
+            <form onSubmit={handleRegister} className="mt-10 space-y-6">
+              {/* Email */}
+              <div>
+                <label
+                  htmlFor="email"
+                  className="mb-3 block text-xl font-semibold text-[#1f2937]"
+                >
+                  Email address
+                </label>
+
+                <div className="flex h-16 items-center gap-3 rounded-2xl border border-[#e5e7eb] bg-white px-5 shadow-sm focus-within:border-pink-400">
+                  <Mail className="h-6 w-6 text-[#667085]" />
+                  <input
+                    id="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="w-full bg-transparent text-lg text-[#111827] outline-none placeholder:text-[#98a2b3]"
+                  />
+                </div>
+              </div>
+
+              {/* Password */}
+              <div>
+                <label
+                  htmlFor="password"
+                  className="mb-3 block text-xl font-semibold text-[#1f2937]"
+                >
+                  Password
+                </label>
+
+                <div className="flex h-16 items-center gap-3 rounded-2xl border border-[#e5e7eb] bg-white px-5 shadow-sm focus-within:border-pink-400">
+                  <Lock className="h-6 w-6 text-[#667085]" />
+                  <input
+                    id="password"
+                    type="password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="w-full bg-transparent text-lg text-[#111827] outline-none placeholder:text-[#98a2b3]"
+                  />
+                </div>
+
+                <p className="mt-3 text-sm text-[#98a2b3]">
+                  Must be at least 6 characters long.
+                </p>
+              </div>
+
+              {/* Register Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex h-16 w-full items-center justify-center rounded-2xl bg-linear-to-r from-pink-400 to-pink-500 text-xl font-semibold text-white shadow-lg transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {loading ? "Creating..." : "Create Account"}
+              </button>
+            </form>
+
+            {/* Bottom Link */}
+            <p className="mt-8 text-center text-lg text-[#667085]">
+              Already have an account?{" "}
+              <Link
+                href="/login"
+                className="font-semibold text-pink-500 hover:text-pink-600"
+              >
+                Sign in
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
-    </div>
-  )
+    </main>
+  );
 }

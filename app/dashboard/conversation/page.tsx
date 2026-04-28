@@ -70,7 +70,7 @@ export default function ConversationPage() {
             </div>
           </div>
           
-          <Link href="/dashboard" className="w-full bg-[#f85c5c] hover:bg-red-600 text-white py-3 rounded-xl font-bold flex items-center justify-center transition-all hidden lg:flex">
+          <Link href="/dashboard" className="w-full bg-[#f85c5c] hover:bg-red-600 text-white py-3 rounded-xl font-bold flex items-center justify-center transition-all lg:flex">
             End Session
           </Link>
           <Link href="/dashboard" className="w-10 h-10 mx-auto bg-[#f85c5c] hover:bg-red-600 text-white rounded-xl font-bold flex items-center justify-center transition-all lg:hidden">
@@ -141,7 +141,7 @@ export default function ConversationPage() {
         <div className="flex-1 flex overflow-hidden bg-[#f0f2f9] p-4 lg:p-6 gap-4 lg:gap-6 min-h-0 relative">
           
           {/* Main Jitsi Container */}
-          <div className="flex-1 rounded-[2rem] overflow-hidden shadow-sm border border-gray-200 bg-[#1e1e1e] relative min-w-0">
+          <div className="flex-1 rounded-4xl overflow-hidden shadow-sm border border-gray-200 bg-[#1e1e1e] relative min-w-0">
             <JitsiMeeting
               roomName={roomName}
               configOverwrite={{
@@ -180,7 +180,7 @@ export default function ConversationPage() {
 
           {/* Real-time Assistant Panel */}
           {isSidebarOpen && (
-            <div className="w-[320px] lg:w-[380px] shrink-0 bg-white rounded-[2rem] shadow-sm border border-gray-200 flex flex-col overflow-hidden max-h-full">
+            <div className="w-[320px] lg:w-[380px] shrink-0 bg-white rounded-4xl shadow-sm border border-gray-200 flex flex-col overflow-hidden max-h-full">
               {/* Header */}
               <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-white shrink-0">
                 <div>
@@ -232,7 +232,7 @@ export default function ConversationPage() {
                 </div>
 
                 {/* Tip Card */}
-                <div className="bg-gradient-to-r from-[#fff5f8] to-[#fffbfc] border border-pink-100 rounded-[1.5rem] p-4 shadow-sm relative overflow-hidden">
+                <div className="bg-linear-to-r from-[#fff5f8] to-[#fffbfc] border border-pink-100 rounded-3xl p-4 shadow-sm relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-20 h-20 bg-pink-200/20 rounded-bl-full filter blur-xl"></div>
                   <div className="flex items-center gap-2 mb-2 relative z-10">
                     <div className="w-6 h-6 rounded-full bg-pink-100 flex items-center justify-center">
@@ -264,7 +264,7 @@ export default function ConversationPage() {
                   </button>
                 </div>
 
-                <div className="border border-gray-200 rounded-[1rem] flex items-center p-1 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/10 transition-all bg-gray-50/50">
+                <div className="border border-gray-200 rounded-2xl flex items-center p-1 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/10 transition-all bg-gray-50/50">
                   <input 
                     type="text" 
                     placeholder="Speak or type..." 
