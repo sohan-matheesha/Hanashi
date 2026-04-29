@@ -1,50 +1,31 @@
 import {
   BookOpen,
   Plus,
-  Search,
   Pencil,
   Trash2,
   Eye,
   Clock,
   CheckCircle2,
 } from "lucide-react";
+import { createClient } from "@/utils/supabase/server";
+import { createLesson, deleteLesson } from "./actions";
 
-const lessons = [
-  {
-    title: "Hiragana Basics",
-    level: "Beginner",
-    category: "Characters",
-    status: "Published",
-    duration: "25 min",
-  },
-  {
-    title: "Katakana Practice",
-    level: "Beginner",
-    category: "Characters",
-    status: "Published",
-    duration: "30 min",
-  },
-  {
-    title: "Basic Greetings",
-    level: "Beginner",
-    category: "Vocabulary",
-    status: "Draft",
-    duration: "15 min",
-  },
-  {
-    title: "Particles は and が",
-    level: "N5",
-    category: "Grammar",
-    status: "Published",
-    duration: "35 min",
-  },
-];
+export default async function TeacherLessonsPage() {
+  const supabase = await createClient();
 
-export default function TeacherLessonsPage() {
+  const { data: lessons, error } = await supabase
+    .from("lessons")
+    .select("id, title, level, category, duration, status, description, created_at")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Lessons fetch error:", error);
+  }
+
   return (
     <div className="min-h-screen bg-[#fafafc] px-4 py-6 md:px-8">
       {/* Header */}
-      <div className="mb-6 flex flex-col justify-between gap-4 rounded-3xl bg-white p-6 shadow-sm md:flex-row md:items-center">
+      <div className="mb-6 flex flex-col justify-between gap-4 rounded-3xl bg-white p-6 shadow-sm md:flex-row md:items-start">
         <div>
           <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-[#FF5A1F]">
             Teacher Panel
@@ -57,37 +38,75 @@ export default function TeacherLessonsPage() {
           </p>
         </div>
 
-        <button className="flex w-fit items-center gap-2 rounded-2xl bg-[#FF5A1F] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:scale-105">
-          <Plus size={18} />
-          Add New Lesson
-        </button>
-      </div>
+        <form
+          action={createLesson}
+          className="grid w-full gap-3 md:max-w-2xl md:grid-cols-2"
+        >
+          <input
+            name="title"
+            type="text"
+            placeholder="Lesson title"
+            required
+            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
+          />
 
-      {/* Search and Filters */}
-      <div className="mb-6 rounded-3xl bg-white p-4 shadow-sm">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search lessons..."
-              className="w-full rounded-2xl bg-gray-50 py-3 pl-11 pr-4 text-sm text-[#202c5c] outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
-            />
-          </div>
-
-          <select className="rounded-2xl bg-gray-50 px-4 py-3 text-sm font-medium text-[#202c5c] outline-none focus:ring-2 focus:ring-[#FF5A1F]/20">
-            <option>All Levels</option>
-            <option>Beginner</option>
-            <option>N5</option>
-            <option>N4</option>
+          <select
+            name="level"
+            required
+            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm text-[#202c5c] outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
+          >
+            <option value="">Select level</option>
+            <option value="Beginner">Beginner</option>
+            <option value="N5">N5</option>
+            <option value="N4">N4</option>
+            <option value="N3">N3</option>
           </select>
 
-          <select className="rounded-2xl bg-gray-50 px-4 py-3 text-sm font-medium text-[#202c5c] outline-none focus:ring-2 focus:ring-[#FF5A1F]/20">
-            <option>All Status</option>
-            <option>Published</option>
-            <option>Draft</option>
+          <select
+            name="category"
+            required
+            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm text-[#202c5c] outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
+          >
+            <option value="">Select category</option>
+            <option value="Characters">Characters</option>
+            <option value="Vocabulary">Vocabulary</option>
+            <option value="Grammar">Grammar</option>
+            <option value="Conversation">Conversation</option>
+            <option value="Culture">Culture</option>
           </select>
-        </div>
+
+          <input
+            name="duration"
+            type="text"
+            placeholder="Duration e.g. 25 min"
+            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
+          />
+
+          <select
+            name="status"
+            required
+            defaultValue="Draft"
+            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm text-[#202c5c] outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
+          >
+            <option value="Draft">Draft</option>
+            <option value="Published">Published</option>
+          </select>
+
+          <input
+            name="description"
+            type="text"
+            placeholder="Short description"
+            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
+          />
+
+          <button
+            type="submit"
+            className="flex items-center justify-center gap-2 rounded-2xl bg-[#FF5A1F] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:scale-105 md:col-span-2"
+          >
+            <Plus size={18} />
+            Add New Lesson
+          </button>
+        </form>
       </div>
 
       {/* Lessons Table */}
@@ -113,12 +132,14 @@ export default function TeacherLessonsPage() {
             </thead>
 
             <tbody className="divide-y divide-gray-100">
-              {lessons.map((lesson) => (
-                <tr key={lesson.title} className="transition hover:bg-orange-50/40">
+              {(lessons ?? []).map((lesson) => (
+                <tr key={lesson.id} className="transition hover:bg-orange-50/40">
                   <td className="px-5 py-4">
-                    <div className="font-bold text-[#202c5c]">{lesson.title}</div>
+                    <div className="font-bold text-[#202c5c]">
+                      {lesson.title}
+                    </div>
                     <div className="mt-1 text-xs text-gray-400">
-                      Japanese learning material
+                      {lesson.description || "Japanese learning material"}
                     </div>
                   </td>
 
@@ -133,7 +154,7 @@ export default function TeacherLessonsPage() {
                   <td className="px-5 py-4">
                     <span className="flex items-center gap-1 text-sm text-gray-600">
                       <Clock size={14} />
-                      {lesson.duration}
+                      {lesson.duration || "N/A"}
                     </span>
                   </td>
 
@@ -155,26 +176,39 @@ export default function TeacherLessonsPage() {
                       <button className="rounded-xl bg-gray-50 p-2 text-gray-500 transition hover:bg-blue-50 hover:text-blue-600">
                         <Eye size={16} />
                       </button>
+
                       <button className="rounded-xl bg-gray-50 p-2 text-gray-500 transition hover:bg-orange-50 hover:text-[#FF5A1F]">
                         <Pencil size={16} />
                       </button>
-                      <button className="rounded-xl bg-gray-50 p-2 text-gray-500 transition hover:bg-red-50 hover:text-red-600">
-                        <Trash2 size={16} />
-                      </button>
+
+                      <form action={deleteLesson}>
+                        <input type="hidden" name="lessonId" value={lesson.id} />
+
+                        <button
+                          type="submit"
+                          className="rounded-xl bg-gray-50 p-2 text-gray-500 transition hover:bg-red-50 hover:text-red-600"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </form>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+
+          {(lessons ?? []).length === 0 && (
+            <div className="p-8 text-center text-sm text-gray-500">
+              No lessons found. Add your first lesson from the teacher panel.
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Note */}
       <div className="mt-6 rounded-3xl border border-orange-100 bg-[#fff7f2] p-5 text-sm leading-6 text-gray-600">
-        <strong className="text-[#FF5A1F]">Note:</strong> This is the teacher lesson
-        management UI. Later, these lessons can be connected to Supabase so teachers
-        can create, update, publish, and delete lessons dynamically.
+        <strong className="text-[#FF5A1F]">Connected:</strong> This page now loads
+        real lesson records from the Supabase lessons table.
       </div>
     </div>
   );
