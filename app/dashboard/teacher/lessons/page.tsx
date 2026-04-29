@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   BookOpen,
   Plus,
@@ -177,9 +178,11 @@ export default async function TeacherLessonsPage() {
                         <Eye size={16} />
                       </button>
 
-                      <button className="rounded-xl bg-gray-50 p-2 text-gray-500 transition hover:bg-orange-50 hover:text-[#FF5A1F]">
-                        <Pencil size={16} />
-                      </button>
+                     <Link
+                             href={`/dashboard/teacher/lessons/${lesson.id}`}
+                             className="rounded-xl bg-gray-50 p-2 text-gray-500 transition hover:bg-orange-50 hover:text-[#FF5A1F]">
+  <Pencil size={16} />
+</Link>
 
                       <form action={deleteLesson}>
                         <input type="hidden" name="lessonId" value={lesson.id} />

@@ -16,6 +16,7 @@ export async function createLesson(formData: FormData) {
     throw new Error("Title, level, category, and status are required");
   }
 
+
   const supabase = await createClient();
 
   const {
@@ -54,6 +55,7 @@ export async function createLesson(formData: FormData) {
   revalidatePath("/dashboard/teacher/lessons");
 }
 
+
 export async function deleteLesson(formData: FormData) {
   const lessonId = formData.get("lessonId") as string;
 
@@ -91,5 +93,58 @@ export async function deleteLesson(formData: FormData) {
     throw new Error("Failed to delete lesson");
   }
 
+  eval
+}
+export async function updateLesson(formData: FormData) {
+  const lessonId = formData.get("lessonId") as string;
+  const title = formData.get("title") as string;
+  const level = formData.get("level") as string;
+  const category = formData.get("category") as string;
+  const duration = formData.get("duration") as string;
+  const status = formData.get("status") as string;
+  const description = formData.get("description") as string;
+
+  if (!lessonId || !title || !level || !category || !status) {
+    throw new Error("Lesson ID, title, level, category, and status are required");
+  }
+
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/register");
+  }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  if (profile?.role !== "teacher" && profile?.role !== "admin") {
+    redirect("/dashboard");
+  }
+
+  const { error } = await supabase
+    .from("lessons")
+    .update({
+      title,
+      level,
+      category,
+      duration,
+      status,
+      description,
+    })
+    .eq("id", lessonId);
+
+  if (error) {
+    console.error("Update lesson error:", error);
+    throw new Error("Failed to update lesson");
+  }
+
   revalidatePath("/dashboard/teacher/lessons");
+  redirect("/dashboard/teacher/lessons");
 }
