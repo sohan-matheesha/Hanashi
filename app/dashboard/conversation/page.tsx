@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useState } from 'react'
+import { useId } from 'react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { 
@@ -15,10 +15,9 @@ const JitsiMeeting = dynamic(
 )
 
 export default function ConversationPage() {
-  const [autoTranslate, setAutoTranslate] = useState(true)
+  
   const roomId = useId().replace(/:/g, '')
   const roomName = `HanashiLiveSession_${roomId}`
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
   return (
     <div className="fixed inset-0 z-50 bg-[#f8f9fc] flex font-sans text-hanashi-dark h-screen overflow-hidden">
@@ -178,105 +177,160 @@ export default function ConversationPage() {
             />
           </div>
 
-          {/* Real-time Assistant Panel */}
-          {isSidebarOpen && (
-            <div className="w-[320px] lg:w-[380px] shrink-0 bg-white rounded-4xl shadow-sm border border-gray-200 flex flex-col overflow-hidden max-h-full">
-              {/* Header */}
-              <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-white shrink-0">
-                <div>
-                  <h3 className="font-black text-[#202c5c] text-[11px] tracking-[0.15em] uppercase mb-1 flex items-center gap-2">
-                    <span className="w-1 h-3 bg-blue-500 rounded-full"></span>
-                    Live Transcript
-                  </h3>
-                  <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest pl-3">N3 Natural Flow</p>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-blue-500" />
-                </div>
-              </div>
+          {/* Active Practice Lobby Panel */}
+<div className="w-[320px] lg:w-[380px] shrink-0 bg-white rounded-4xl shadow-sm border border-gray-200 flex flex-col overflow-hidden max-h-full">
+  {/* Header */}
+  <div className="p-5 border-b border-gray-100 bg-white shrink-0">
+    <div className="flex items-center justify-between">
+      <div>
+        <h3 className="font-black text-[#202c5c] text-[11px] tracking-[0.15em] uppercase mb-1 flex items-center gap-2">
+          <span className="w-1 h-3 bg-green-500 rounded-full"></span>
+          Active Practice Lobby
+        </h3>
+        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest pl-3">
+          Find a speaking partner
+        </p>
+      </div>
 
-              {/* Chat Flow */}
-              <div className="flex-1 overflow-y-auto p-5 space-y-6 scrollbar-hide bg-[#fcfdff]">
-                
-                {/* Tutor Bubble */}
-                <div className="flex flex-col gap-2">
-                  <div className="bg-white p-4 rounded-2xl rounded-tl-sm border border-gray-100 shadow-sm text-[#202c5c] text-sm font-medium leading-relaxed">
-                    こんにちは！今日のトピックは「レストランでの注文」ですね。準備はいいですか？
-                  </div>
-                  <div className="flex items-start gap-2 pl-1">
-                    <div className="w-4 h-4 rounded bg-pink-100 flex items-center justify-center shrink-0 mt-0.5">
-                      <span className="text-[9px] text-pink-600 font-bold">A</span>
-                    </div>
-                    <p className="text-[11px] text-gray-500 italic font-medium leading-snug">&quot;Hello! Today&apos;s topic is &apos;Ordering at a restaurant&apos;. Are you ready?&quot;</p>
-                  </div>
-                </div>
-                {/* User Bubble */}
-                <div className="flex flex-col items-end gap-1.5">
-                  <div className="bg-blue-600 text-white p-4 rounded-2xl rounded-tr-sm text-sm font-medium leading-relaxed max-w-[85%] shadow-md shadow-blue-900/10">
-                    はい、準備はできています。お願いします！
-                  </div>
-                  <div className="flex items-center gap-1.5 pr-1">
-                    <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Seen 14:15</span>
-                    <Check className="w-3 h-3 text-blue-400" />
-                  </div>
-                </div>
+      <div className="w-9 h-9 rounded-full bg-green-50 flex items-center justify-center">
+        <Users className="w-4 h-4 text-green-600" />
+      </div>
+    </div>
+  </div>
 
-                {/* Tutor Bubble 2 */}
-                <div className="flex flex-col gap-2">
-                  <div className="bg-white p-4 rounded-2xl rounded-tl-sm border border-gray-100 shadow-sm text-[#202c5c] text-sm font-medium leading-relaxed">
-                    素晴らしい。まずは、メニューを頼むところから始めましょう。「メニューをください」と言ってみてください。
-                  </div>
-                  <button className="text-[9px] font-black text-blue-500 hover:text-blue-600 uppercase tracking-widest text-left pl-1 transition-colors">
-                    Show Translation
-                  </button>
-                </div>
+  {/* Online Status */}
+  <div className="p-5 border-b border-gray-100 bg-[#fcfdff]">
+    <div className="rounded-3xl bg-green-50 border border-green-100 p-4">
+      <div className="flex items-center gap-3">
+        <div className="relative flex h-11 w-11 items-center justify-center rounded-full bg-white text-green-600">
+          <Users className="h-5 w-5" />
+          <span className="absolute right-0 top-0 h-3 w-3 rounded-full border-2 border-white bg-green-500"></span>
+        </div>
 
-                {/* Tip Card */}
-                <div className="bg-linear-to-r from-[#fff5f8] to-[#fffbfc] border border-pink-100 rounded-3xl p-4 shadow-sm relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-pink-200/20 rounded-bl-full filter blur-xl"></div>
-                  <div className="flex items-center gap-2 mb-2 relative z-10">
-                    <div className="w-6 h-6 rounded-full bg-pink-100 flex items-center justify-center">
-                      <Lightbulb className="w-3.5 h-3.5 text-pink-500" />
-                    </div>
-                    <span className="text-[10px] font-black text-pink-600 uppercase tracking-widest">Zen Tip</span>
-                  </div>
-                  <p className="text-xs text-gray-700 font-medium leading-relaxed relative z-10">
-                    Try using <strong className="text-[#202c5c] bg-white px-2 py-0.5 rounded border border-pink-200 mx-0.5">「すみません」</strong> (Sumimasen) before asking for the menu.
-                  </p>
-                </div>
+        <div>
+          <p className="text-sm font-black text-[#202c5c]">
+            4 learners online now
+          </p>
+          <p className="text-xs font-medium text-gray-500">
+            Join a room or wait for a partner.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-              </div>
+  {/* Active Learners */}
+  <div className="flex-1 overflow-y-auto p-5 space-y-4 scrollbar-hide bg-[#fcfdff]">
+    <div className="rounded-3xl border border-gray-100 bg-white p-4 shadow-sm">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="relative flex h-11 w-11 items-center justify-center rounded-full bg-pink-100 font-black text-pink-700">
+            A
+            <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-green-500"></span>
+          </div>
 
-              {/* Input Toolbar */}
-              <div className="p-4 bg-white border-t border-gray-100 shrink-0">
-                <div className="flex items-center justify-between mb-3 px-1">
-                  <div className="flex items-center gap-2">
-                    <button 
-                      onClick={() => setAutoTranslate(!autoTranslate)}
-                      className={`w-9 h-5 rounded-full relative transition-all duration-300 ${autoTranslate ? 'bg-blue-600' : 'bg-gray-200'}`}
-                    >
-                      <div className={`w-3.5 h-3.5 bg-white rounded-full shadow-sm absolute top-[3px] transition-all duration-300 ${autoTranslate ? 'left-[18px]' : 'left-[3px]'}`}></div>
-                    </button>
-                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Auto-Translate</span>
-                  </div>
-                  <button className="text-gray-400 hover:text-[#202c5c] transition-colors">
-                    <Smile className="w-4 h-4" />
-                  </button>
-                </div>
+          <div>
+            <p className="text-sm font-black text-[#202c5c]">Aiko Tanaka</p>
+            <p className="text-xs font-semibold text-gray-400">
+              Level N3 • Intermediate
+            </p>
+          </div>
+        </div>
 
-                <div className="border border-gray-200 rounded-2xl flex items-center p-1 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/10 transition-all bg-gray-50/50">
-                  <input 
-                    type="text" 
-                    placeholder="Speak or type..." 
-                    className="flex-1 bg-transparent border-none outline-none px-3 py-2 text-[13px] font-medium text-[#202c5c] placeholder-gray-400"
-                  />
-                  <button className="w-10 h-10 rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-all shadow-md shadow-blue-500/20">
-                    <Mic className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+        <span className="rounded-full bg-green-50 px-3 py-1 text-[10px] font-black text-green-700">
+          Online
+        </span>
+      </div>
+
+      <div className="mt-4 rounded-2xl bg-gray-50 p-3">
+        <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+          Wants to practice
+        </p>
+        <p className="mt-1 text-sm font-bold text-[#202c5c]">
+          Ordering Food at a Restaurant
+        </p>
+      </div>
+
+      <div className="mt-4 flex gap-2">
+        <button className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#FF5A1F] px-4 py-3 text-xs font-bold text-white transition hover:opacity-90">
+          <Mic className="h-4 w-4" />
+          Voice
+        </button>
+
+        <button className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#202c5c] px-4 py-3 text-xs font-bold text-white transition hover:opacity-90">
+          <Users className="h-4 w-4" />
+          Video
+        </button>
+      </div>
+    </div>
+
+    <div className="rounded-3xl border border-gray-100 bg-white p-4 shadow-sm">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="relative flex h-11 w-11 items-center justify-center rounded-full bg-blue-100 font-black text-blue-700">
+            K
+            <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-green-500"></span>
+          </div>
+
+          <div>
+            <p className="text-sm font-black text-[#202c5c]">Kenji Mori</p>
+            <p className="text-xs font-semibold text-gray-400">
+              Level N5 • Beginner
+            </p>
+          </div>
+        </div>
+
+        <span className="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-black text-blue-700">
+          Voice only
+        </span>
+      </div>
+
+      <div className="mt-4 rounded-2xl bg-gray-50 p-3">
+        <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+          Wants to practice
+        </p>
+        <p className="mt-1 text-sm font-bold text-[#202c5c]">
+          Basic self introduction
+        </p>
+      </div>
+
+      <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#FF5A1F] px-4 py-3 text-xs font-bold text-white transition hover:opacity-90">
+        <Mic className="h-4 w-4" />
+        Join Voice Practice
+      </button>
+    </div>
+
+    <div className="rounded-3xl border border-dashed border-orange-200 bg-[#fff7f2] p-4">
+      <div className="flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-[#FF5A1F]">
+          <Sparkles className="h-5 w-5" />
+        </div>
+
+        <div>
+          <p className="text-sm font-black text-[#202c5c]">
+            Waiting for a partner?
+          </p>
+          <p className="mt-1 text-xs leading-5 text-gray-500">
+            Stay online here. When another learner joins, they can invite you for
+            voice or video practice.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Bottom Action */}
+  <div className="border-t border-gray-100 bg-white p-4 shrink-0">
+    <button className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#202c5c] px-4 py-3 text-sm font-bold text-white transition hover:opacity-90">
+      <Users className="h-4 w-4" />
+      Join Open Practice Room
+    </button>
+
+    <p className="mt-3 text-center text-[10px] font-semibold text-gray-400">
+      Real online presence can be connected with Supabase Realtime later.
+    </p>
+  </div>
+</div>
         </div>
       </div>
     </div>
