@@ -1,3 +1,4 @@
+import FloatingAIButton from "@/components/FloatingAIButton";
 import Link from 'next/link'
 import { Search, User } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
@@ -69,12 +70,13 @@ export default async function DashboardLayout({
           </div>
         </header>
 
-        {/* Page Content */}
+                {/* Page Content */}
         <main className="flex-1 p-0">
           {children}
+          <FloatingAIButton />
         </main>
       </MainContent>
       </div>
-    </div>
+    </div> 
   )
 }
