@@ -1,5 +1,5 @@
 'use client'
-
+import PublishedLessons from "@/components/PublishedLessons";
 import { useState } from 'react'
 import Link from 'next/link'
 import { 
@@ -417,6 +417,7 @@ export default function MyLessonsPage() {
           </div>
         </div>
       )}
+       <PublishedLessons />
     </div>
   )
 }
