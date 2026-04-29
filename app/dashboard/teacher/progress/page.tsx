@@ -10,47 +10,59 @@ import {
   Clock,
   Target,
 } from "lucide-react";
+import { createClient } from "@/utils/supabase/server";
 
-const progressData = [
-  {
-    name: "Sohan Matheesha",
-    level: "Beginner",
-    lessonsCompleted: "18/25",
-    quizScore: "82%",
-    speakingPractice: "12 sessions",
-    overallProgress: "72%",
-    status: "Good",
-  },
-  {
-    name: "Nimali Perera",
-    level: "N5",
-    lessonsCompleted: "22/30",
-    quizScore: "76%",
-    speakingPractice: "09 sessions",
-    overallProgress: "64%",
-    status: "Good",
-  },
-  {
-    name: "Kavindu Silva",
-    level: "Beginner",
-    lessonsCompleted: "10/25",
-    quizScore: "58%",
-    speakingPractice: "04 sessions",
-    overallProgress: "48%",
-    status: "Needs Support",
-  },
-  {
-    name: "Amani Fernando",
-    level: "N4",
-    lessonsCompleted: "28/32",
-    quizScore: "91%",
-    speakingPractice: "16 sessions",
-    overallProgress: "81%",
-    status: "Excellent",
-  },
-];
+export default async function TeacherProgressPage() {
+  const supabase = await createClient();
 
-export default function TeacherProgressPage() {
+  const { data: progressRecords, error } = await supabase
+    .from("student_progress")
+    .select(
+      `
+      id,
+      level,
+      lessons_completed,
+      total_lessons,
+      quiz_score,
+      speaking_sessions,
+      overall_progress,
+      status,
+      profiles (
+        id,
+        full_name
+      )
+    `
+    )
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Progress fetch error:", error);
+  }
+
+  const records = progressRecords ?? [];
+
+  const totalLearners = records.length;
+
+  const averageCompletion =
+    records.length > 0
+      ? Math.round(
+          records.reduce((sum, item) => sum + (item.overall_progress || 0), 0) /
+            records.length
+        )
+      : 0;
+
+  const averageQuizScore =
+    records.length > 0
+      ? Math.round(
+          records.reduce((sum, item) => sum + (item.quiz_score || 0), 0) /
+            records.length
+        )
+      : 0;
+
+  const needSupportCount = records.filter(
+    (item) => item.status === "Needs Support"
+  ).length;
+
   return (
     <div className="min-h-screen bg-[#fafafc] px-4 py-6 md:px-8">
       {/* Header */}
@@ -64,7 +76,7 @@ export default function TeacherProgressPage() {
           </h1>
           <p className="mt-2 text-sm text-gray-500">
             Track lesson completion, quiz performance, speaking practice, and
-            overall learning progress.
+            overall learning progress using real Supabase data.
           </p>
         </div>
 
@@ -80,7 +92,7 @@ export default function TeacherProgressPage() {
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff1ea] text-[#FF5A1F]">
             <Users size={24} />
           </div>
-          <h2 className="text-3xl font-bold text-[#202c5c]">128</h2>
+          <h2 className="text-3xl font-bold text-[#202c5c]">{totalLearners}</h2>
           <p className="mt-1 text-sm font-semibold text-gray-500">
             Total Learners
           </p>
@@ -90,7 +102,9 @@ export default function TeacherProgressPage() {
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-700">
             <CheckCircle2 size={24} />
           </div>
-          <h2 className="text-3xl font-bold text-[#202c5c]">68%</h2>
+          <h2 className="text-3xl font-bold text-[#202c5c]">
+            {averageCompletion}%
+          </h2>
           <p className="mt-1 text-sm font-semibold text-gray-500">
             Average Completion
           </p>
@@ -100,7 +114,9 @@ export default function TeacherProgressPage() {
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
             <Award size={24} />
           </div>
-          <h2 className="text-3xl font-bold text-[#202c5c]">78%</h2>
+          <h2 className="text-3xl font-bold text-[#202c5c]">
+            {averageQuizScore}%
+          </h2>
           <p className="mt-1 text-sm font-semibold text-gray-500">
             Average Quiz Score
           </p>
@@ -110,7 +126,9 @@ export default function TeacherProgressPage() {
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-yellow-50 text-yellow-700">
             <Target size={24} />
           </div>
-          <h2 className="text-3xl font-bold text-[#202c5c]">12</h2>
+          <h2 className="text-3xl font-bold text-[#202c5c]">
+            {needSupportCount}
+          </h2>
           <p className="mt-1 text-sm font-semibold text-gray-500">
             Need Support
           </p>
@@ -129,30 +147,39 @@ export default function TeacherProgressPage() {
             <div>
               <div className="mb-2 flex justify-between text-sm font-semibold text-[#202c5c]">
                 <span>Lesson Completion</span>
-                <span>68%</span>
+                <span>{averageCompletion}%</span>
               </div>
               <div className="h-3 overflow-hidden rounded-full bg-gray-100">
-                <div className="h-full w-[68%] rounded-full bg-[#FF5A1F]" />
+                <div
+                  className="h-full rounded-full bg-[#FF5A1F]"
+                  style={{ width: `${averageCompletion}%` }}
+                />
               </div>
             </div>
 
             <div>
               <div className="mb-2 flex justify-between text-sm font-semibold text-[#202c5c]">
                 <span>Quiz Performance</span>
-                <span>78%</span>
+                <span>{averageQuizScore}%</span>
               </div>
               <div className="h-3 overflow-hidden rounded-full bg-gray-100">
-                <div className="h-full w-[78%] rounded-full bg-green-500" />
+                <div
+                  className="h-full rounded-full bg-green-500"
+                  style={{ width: `${averageQuizScore}%` }}
+                />
               </div>
             </div>
 
             <div>
               <div className="mb-2 flex justify-between text-sm font-semibold text-[#202c5c]">
                 <span>Speaking Practice Participation</span>
-                <span>61%</span>
+                <span>{totalLearners > 0 ? "Active" : "0%"}</span>
               </div>
               <div className="h-3 overflow-hidden rounded-full bg-gray-100">
-                <div className="h-full w-[61%] rounded-full bg-blue-500" />
+                <div
+                  className="h-full rounded-full bg-blue-500"
+                  style={{ width: totalLearners > 0 ? "60%" : "0%" }}
+                />
               </div>
             </div>
           </div>
@@ -164,8 +191,8 @@ export default function TeacherProgressPage() {
             Weekly Focus
           </h2>
           <p className="text-sm leading-6 text-white/80">
-            Some students need extra support with grammar particles and speaking
-            confidence. Consider adding a revision live session this week.
+            Use this progress data to identify students who need support with
+            lessons, quizzes, or speaking practice.
           </p>
 
           <div className="mt-5 rounded-2xl bg-white/10 p-4">
@@ -173,13 +200,13 @@ export default function TeacherProgressPage() {
               Suggested Action
             </p>
             <p className="mt-1 text-sm font-bold">
-              Create a speaking practice assignment
+              Create extra practice for low-progress students
             </p>
           </div>
         </div>
       </div>
 
-      {/* Search */}
+      {/* Search UI only */}
       <div className="mb-6 rounded-3xl bg-white p-4 shadow-sm">
         <div className="relative">
           <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
@@ -216,82 +243,98 @@ export default function TeacherProgressPage() {
             </thead>
 
             <tbody className="divide-y divide-gray-100">
-              {progressData.map((student) => (
-                <tr key={student.name} className="transition hover:bg-orange-50/40">
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#fff1ea] font-bold text-[#FF5A1F]">
-                        {student.name.charAt(0)}
+              {records.map((record) => {
+                const profile = Array.isArray(record.profiles)
+                  ? record.profiles[0]
+                  : record.profiles;
+
+                const studentName = profile?.full_name || "Unnamed Student";
+
+                return (
+                  <tr
+                    key={record.id}
+                    className="transition hover:bg-orange-50/40"
+                  >
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#fff1ea] font-bold text-[#FF5A1F]">
+                          {studentName.charAt(0).toUpperCase()}
+                        </div>
+                        <div className="font-bold text-[#202c5c]">
+                          {studentName}
+                        </div>
                       </div>
-                      <div className="font-bold text-[#202c5c]">
-                        {student.name}
+                    </td>
+
+                    <td className="px-5 py-4 text-sm font-medium text-gray-600">
+                      {record.level}
+                    </td>
+
+                    <td className="px-5 py-4 text-sm font-medium text-gray-600">
+                      {record.lessons_completed}/{record.total_lessons}
+                    </td>
+
+                    <td className="px-5 py-4 text-sm font-bold text-[#202c5c]">
+                      {record.quiz_score}%
+                    </td>
+
+                    <td className="px-5 py-4 text-sm font-medium text-gray-600">
+                      {record.speaking_sessions} sessions
+                    </td>
+
+                    <td className="px-5 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="h-2 w-28 overflow-hidden rounded-full bg-gray-100">
+                          <div
+                            className="h-full rounded-full bg-[#FF5A1F]"
+                            style={{ width: `${record.overall_progress}%` }}
+                          />
+                        </div>
+                        <span className="text-sm font-bold text-[#202c5c]">
+                          {record.overall_progress}%
+                        </span>
                       </div>
-                    </div>
-                  </td>
+                    </td>
 
-                  <td className="px-5 py-4 text-sm font-medium text-gray-600">
-                    {student.level}
-                  </td>
-
-                  <td className="px-5 py-4 text-sm font-medium text-gray-600">
-                    {student.lessonsCompleted}
-                  </td>
-
-                  <td className="px-5 py-4 text-sm font-bold text-[#202c5c]">
-                    {student.quizScore}
-                  </td>
-
-                  <td className="px-5 py-4 text-sm font-medium text-gray-600">
-                    {student.speakingPractice}
-                  </td>
-
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="h-2 w-28 overflow-hidden rounded-full bg-gray-100">
-                        <div
-                          className="h-full rounded-full bg-[#FF5A1F]"
-                          style={{ width: student.overallProgress }}
-                        />
-                      </div>
-                      <span className="text-sm font-bold text-[#202c5c]">
-                        {student.overallProgress}
+                    <td className="px-5 py-4">
+                      <span
+                        className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${
+                          record.status === "Excellent"
+                            ? "bg-green-50 text-green-700"
+                            : record.status === "Needs Support"
+                            ? "bg-yellow-50 text-yellow-700"
+                            : "bg-blue-50 text-blue-700"
+                        }`}
+                      >
+                        {record.status}
                       </span>
-                    </div>
-                  </td>
+                    </td>
 
-                  <td className="px-5 py-4">
-                    <span
-                      className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${
-                        student.status === "Excellent"
-                          ? "bg-green-50 text-green-700"
-                          : student.status === "Needs Support"
-                          ? "bg-yellow-50 text-yellow-700"
-                          : "bg-blue-50 text-blue-700"
-                      }`}
-                    >
-                      {student.status}
-                    </span>
-                  </td>
-
-                  <td className="px-5 py-4">
-                    <div className="flex justify-end">
-                      <button className="rounded-xl bg-gray-50 p-2 text-gray-500 transition hover:bg-orange-50 hover:text-[#FF5A1F]">
-                        <Eye size={16} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    <td className="px-5 py-4">
+                      <div className="flex justify-end">
+                        <button className="rounded-xl bg-gray-50 p-2 text-gray-500 transition hover:bg-orange-50 hover:text-[#FF5A1F]">
+                          <Eye size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
+
+          {records.length === 0 && (
+            <div className="p-8 text-center text-sm text-gray-500">
+              No progress records found. Insert student progress records in
+              Supabase first.
+            </div>
+          )}
         </div>
       </div>
 
       <div className="mt-6 rounded-3xl border border-orange-100 bg-[#fff7f2] p-5 text-sm leading-6 text-gray-600">
-        <strong className="text-[#FF5A1F]">Note:</strong> This is the teacher
-        progress monitoring UI. Later, it can be connected to Supabase to show
-        real quiz scores, lesson completion, speaking practice sessions, and
-        learning analytics.
+        <strong className="text-[#FF5A1F]">Connected:</strong> This page now
+        loads real student progress records from Supabase.
       </div>
     </div>
   );
