@@ -5,7 +5,9 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { LayoutDashboard, BookOpen, MessageCircle, CheckCircle2, Globe, Trophy, Menu, X, Library, GraduationCap, ShieldCheck } from 'lucide-react'
 
-export default function MainSidebar() {
+type UserRole = "student" | "teacher" | "admin" | null;
+
+export default function MainSidebar({ role }: { role: UserRole }) {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
 
@@ -21,8 +23,14 @@ const navLinks = [
   { href: '/dashboard/lessons/vocabulary', icon: Library, label: 'Vocabulary' },
   { href: '/dashboard/cultural-hub', icon: Globe, label: 'Cultural Hub' },
   { href: '/dashboard/achievements', icon: Trophy, label: 'Achievements' },
-  { href: '/dashboard/teacher', icon: GraduationCap, label: 'Teacher Panel' },
-  { href: '/dashboard/admin', icon: ShieldCheck, label: 'Admin Panel' },
+
+  ...(role === 'teacher' || role === 'admin'
+    ? [{ href: '/dashboard/teacher', icon: GraduationCap, label: 'Teacher Panel' }]
+    : []),
+
+  ...(role === 'admin'
+    ? [{ href: '/dashboard/admin', icon: ShieldCheck, label: 'Admin Panel' }]
+    : []),
 ]
 
   return (

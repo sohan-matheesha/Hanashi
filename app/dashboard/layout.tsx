@@ -28,7 +28,7 @@ export default async function DashboardLayout({
     <div className="min-h-screen bg-[#fafafc] flex font-sans text-[#202c5c] relative">
       <div className="flex w-full z-10">
         {/* Dynamic Main Sidebar */}
-        <MainSidebar />
+        <MainSidebar role={profile?.role ?? "student"} />
 
         {/* Main Area */}
       <MainContent>
