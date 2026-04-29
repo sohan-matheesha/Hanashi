@@ -5,43 +5,42 @@ import {
   Users,
   Plus,
   Link2,
-  Pencil,
   Trash2,
   PlayCircle,
 } from "lucide-react";
+import { createClient } from "@/utils/supabase/server";
+import { createLiveSession, deleteLiveSession } from "./actions";
 
-const sessions = [
-  {
-    title: "N5 Grammar Practice",
-    date: "2026-05-02",
-    time: "7:00 PM",
-    students: 24,
-    status: "Upcoming",
-    platform: "Jitsi Meet",
-  },
-  {
-    title: "Hiragana Speaking Practice",
-    date: "2026-05-04",
-    time: "6:30 PM",
-    students: 18,
-    status: "Upcoming",
-    platform: "Jitsi Meet",
-  },
-  {
-    title: "Japanese Greeting Conversation",
-    date: "2026-04-28",
-    time: "8:00 PM",
-    students: 31,
-    status: "Completed",
-    platform: "Jitsi Meet",
-  },
-];
+export default async function TeacherLiveSessionsPage() {
+  const supabase = await createClient();
 
-export default function TeacherLiveSessionsPage() {
+  const { data: sessions, error } = await supabase
+    .from("live_sessions")
+    .select(
+      "id, title, session_date, session_time, meeting_link, platform, status, students_count, created_at"
+    )
+    .order("session_date", { ascending: true });
+
+  if (error) {
+    console.error("Live sessions fetch error:", error);
+  }
+
+  const liveSessions = sessions ?? [];
+  const upcomingCount = liveSessions.filter(
+    (session) => session.status === "Upcoming"
+  ).length;
+  const completedCount = liveSessions.filter(
+    (session) => session.status === "Completed"
+  ).length;
+  const totalStudents = liveSessions.reduce(
+    (total, session) => total + (session.students_count || 0),
+    0
+  );
+
   return (
     <div className="min-h-screen bg-[#fafafc] px-4 py-6 md:px-8">
       {/* Header */}
-      <div className="mb-6 flex flex-col justify-between gap-4 rounded-3xl bg-white p-6 shadow-sm md:flex-row md:items-center">
+      <div className="mb-6 flex flex-col justify-between gap-4 rounded-3xl bg-white p-6 shadow-sm md:flex-row md:items-start">
         <div>
           <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-[#FF5A1F]">
             Teacher Panel
@@ -52,10 +51,69 @@ export default function TeacherLiveSessionsPage() {
           </p>
         </div>
 
-        <button className="flex w-fit items-center gap-2 rounded-2xl bg-[#FF5A1F] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:scale-105">
-          <Plus size={18} />
-          Create Session
-        </button>
+        <form
+          action={createLiveSession}
+          className="grid w-full gap-3 md:max-w-2xl md:grid-cols-2"
+        >
+          <input
+            name="title"
+            type="text"
+            placeholder="Session title"
+            required
+            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
+          />
+
+          <input
+            name="sessionDate"
+            type="date"
+            required
+            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
+          />
+
+          <input
+            name="sessionTime"
+            type="time"
+            required
+            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
+          />
+
+          <input
+            name="meetingLink"
+            type="url"
+            placeholder="Meeting link"
+            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
+          />
+
+          <select
+            name="platform"
+            defaultValue="Jitsi Meet"
+            required
+            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm text-[#202c5c] outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
+          >
+            <option value="Jitsi Meet">Jitsi Meet</option>
+            <option value="Google Meet">Google Meet</option>
+            <option value="Zoom">Zoom</option>
+          </select>
+
+          <select
+            name="status"
+            defaultValue="Upcoming"
+            required
+            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm text-[#202c5c] outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
+          >
+            <option value="Upcoming">Upcoming</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+
+          <button
+            type="submit"
+            className="flex items-center justify-center gap-2 rounded-2xl bg-[#FF5A1F] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:scale-105 md:col-span-2"
+          >
+            <Plus size={18} />
+            Create Session
+          </button>
+        </form>
       </div>
 
       {/* Summary */}
@@ -64,7 +122,9 @@ export default function TeacherLiveSessionsPage() {
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff1ea] text-[#FF5A1F]">
             <Video size={24} />
           </div>
-          <h2 className="text-3xl font-bold text-[#202c5c]">06</h2>
+          <h2 className="text-3xl font-bold text-[#202c5c]">
+            {upcomingCount}
+          </h2>
           <p className="mt-1 text-sm font-semibold text-gray-500">
             Upcoming Sessions
           </p>
@@ -74,7 +134,9 @@ export default function TeacherLiveSessionsPage() {
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
             <Users size={24} />
           </div>
-          <h2 className="text-3xl font-bold text-[#202c5c]">86</h2>
+          <h2 className="text-3xl font-bold text-[#202c5c]">
+            {totalStudents}
+          </h2>
           <p className="mt-1 text-sm font-semibold text-gray-500">
             Registered Students
           </p>
@@ -84,7 +146,9 @@ export default function TeacherLiveSessionsPage() {
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-700">
             <PlayCircle size={24} />
           </div>
-          <h2 className="text-3xl font-bold text-[#202c5c]">14</h2>
+          <h2 className="text-3xl font-bold text-[#202c5c]">
+            {completedCount}
+          </h2>
           <p className="mt-1 text-sm font-semibold text-gray-500">
             Completed Sessions
           </p>
@@ -94,42 +158,12 @@ export default function TeacherLiveSessionsPage() {
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-yellow-50 text-yellow-700">
             <Clock size={24} />
           </div>
-          <h2 className="text-3xl font-bold text-[#202c5c]">2 hrs</h2>
+          <h2 className="text-3xl font-bold text-[#202c5c]">
+            {liveSessions.length}
+          </h2>
           <p className="mt-1 text-sm font-semibold text-gray-500">
-            Average Duration
+            Total Sessions
           </p>
-        </div>
-      </div>
-
-      {/* Create Session Form Preview */}
-      <div className="mb-6 rounded-3xl bg-white p-6 shadow-sm">
-        <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-[#202c5c]">
-          <CalendarDays size={20} className="text-[#FF5A1F]" />
-          Schedule New Session
-        </h2>
-
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <input
-            type="text"
-            placeholder="Session title"
-            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
-          />
-
-          <input
-            type="date"
-            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
-          />
-
-          <input
-            type="time"
-            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
-          />
-
-          <input
-            type="text"
-            placeholder="Meeting link"
-            className="rounded-2xl bg-gray-50 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#FF5A1F]/20"
-          />
         </div>
       </div>
 
@@ -157,25 +191,27 @@ export default function TeacherLiveSessionsPage() {
             </thead>
 
             <tbody className="divide-y divide-gray-100">
-              {sessions.map((session) => (
-                <tr key={session.title} className="transition hover:bg-orange-50/40">
+              {liveSessions.map((session) => (
+                <tr key={session.id} className="transition hover:bg-orange-50/40">
                   <td className="px-5 py-4">
-                    <div className="font-bold text-[#202c5c]">{session.title}</div>
+                    <div className="font-bold text-[#202c5c]">
+                      {session.title}
+                    </div>
                     <div className="mt-1 text-xs text-gray-400">
-                      Real-time learning session
+                      {session.meeting_link || "No meeting link added"}
                     </div>
                   </td>
 
                   <td className="px-5 py-4 text-sm font-medium text-gray-600">
-                    {session.date}
+                    {session.session_date}
                   </td>
 
                   <td className="px-5 py-4 text-sm font-medium text-gray-600">
-                    {session.time}
+                    {session.session_time}
                   </td>
 
                   <td className="px-5 py-4 text-sm font-medium text-gray-600">
-                    {session.students}
+                    {session.students_count}
                   </td>
 
                   <td className="px-5 py-4">
@@ -190,7 +226,9 @@ export default function TeacherLiveSessionsPage() {
                       className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${
                         session.status === "Upcoming"
                           ? "bg-green-50 text-green-700"
-                          : "bg-gray-100 text-gray-500"
+                          : session.status === "Completed"
+                          ? "bg-gray-100 text-gray-500"
+                          : "bg-red-50 text-red-600"
                       }`}
                     >
                       {session.status}
@@ -199,28 +237,49 @@ export default function TeacherLiveSessionsPage() {
 
                   <td className="px-5 py-4">
                     <div className="flex justify-end gap-2">
-                      <button className="rounded-xl bg-gray-50 p-2 text-gray-500 transition hover:bg-green-50 hover:text-green-700">
-                        <PlayCircle size={16} />
-                      </button>
-                      <button className="rounded-xl bg-gray-50 p-2 text-gray-500 transition hover:bg-orange-50 hover:text-[#FF5A1F]">
-                        <Pencil size={16} />
-                      </button>
-                      <button className="rounded-xl bg-gray-50 p-2 text-gray-500 transition hover:bg-red-50 hover:text-red-600">
-                        <Trash2 size={16} />
-                      </button>
+                      {session.meeting_link && (
+                        <a
+                          href={session.meeting_link}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-xl bg-gray-50 p-2 text-gray-500 transition hover:bg-green-50 hover:text-green-700"
+                        >
+                          <PlayCircle size={16} />
+                        </a>
+                      )}
+
+                      <form action={deleteLiveSession}>
+                        <input
+                          type="hidden"
+                          name="sessionId"
+                          value={session.id}
+                        />
+
+                        <button
+                          type="submit"
+                          className="rounded-xl bg-gray-50 p-2 text-gray-500 transition hover:bg-red-50 hover:text-red-600"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </form>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+
+          {liveSessions.length === 0 && (
+            <div className="p-8 text-center text-sm text-gray-500">
+              No live sessions found. Create your first session from the teacher panel.
+            </div>
+          )}
         </div>
       </div>
 
       <div className="mt-6 rounded-3xl border border-orange-100 bg-[#fff7f2] p-5 text-sm leading-6 text-gray-600">
-        <strong className="text-[#FF5A1F]">Note:</strong> This is the teacher live
-        session management UI. Later, this can be connected with Jitsi Meet or
-        another video meeting service to create real live classrooms.
+        <strong className="text-[#FF5A1F]">Connected:</strong> This page now loads
+        and creates real live session records from Supabase.
       </div>
     </div>
   );
