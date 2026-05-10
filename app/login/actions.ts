@@ -21,7 +21,7 @@ export async function login(formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
-  redirect('/dashboard')
+  redirect('/auth/redirect')
 }
 
 export async function signup(formData: FormData) {
@@ -41,9 +41,9 @@ export async function signup(formData: FormData) {
   })
 
   if (error) {
-    return redirect('/register?message=Could not create user: ' + error.message)
-  }
+  return redirect('/login?message=Could not authenticate user')
+}
 
-  revalidatePath('/', 'layout')
-  redirect('/login?message=Check email to continue sign in process')
+revalidatePath('/', 'layout')
+redirect('/auth/redirect')
 }

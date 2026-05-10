@@ -1,33 +1,53 @@
 "use client";
 
+import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Mail, Lock } from "lucide-react";
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const supabase = createClient();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
+
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters long.");
+      return;
+    }
 
     try {
-      // =========================================
-      // KEEP YOUR EXISTING SUPABASE REGISTER LOGIC HERE
-      // Example:
-      // const { error } = await supabase.auth.signUp({
-      //   email,
-      //   password,
-      // });
-      //
-      // if (error) throw error;
-      // =========================================
+      setLoading(true);
 
-      console.log("Register:", { email, password });
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (error) {
+        console.error("Register error:", error);
+        alert(error.message);
+        return;
+      }
+
+      if (!data.session) {
+        alert(
+          "Account created. Please check your email to confirm your account, then login."
+        );
+        router.push("/login");
+        return;
+      }
+
+      router.push("/auth/redirect");
     } catch (error) {
-      console.error("Register error:", error);
+      console.error("Unexpected register error:", error);
+      alert("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -36,18 +56,17 @@ export default function RegisterPage() {
   return (
     <main className="min-h-screen bg-[#f8f6f7] flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-6xl overflow-hidden rounded-4xl bg-white shadow-[0_20px_60px_rgba(0,0,0,0.08)] md:grid md:grid-cols-2">
-        
         {/* Left Image Panel */}
-<div
-  className="relative hidden min-h-[700px] overflow-hidden rounded-l-[28px] md:block"
-  style={{
-    backgroundImage: "url('/images/login-japanese-bg.jpg')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-  }}
->
-          <div className="absolute inset-0 bg-linear-to-b from-[#c96c9a]/30 to-[#8d4f87]/20" />
+        <div
+          className="relative hidden min-h-[700px] overflow-hidden rounded-l-[28px] md:block"
+          style={{
+            backgroundImage: "url('/images/login-japanese-bg.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-[#c96c9a]/30 to-[#8d4f87]/20" />
 
           <div className="absolute inset-x-0 top-0 p-8">
             <h2 className="max-w-[260px] text-5xl font-bold leading-tight text-white drop-shadow-sm">
@@ -77,7 +96,6 @@ export default function RegisterPage() {
               </h1>
             </div>
 
-            {/* Heading */}
             <h2 className="text-5xl font-bold tracking-tight text-[#0f172a]">
               Create Account
             </h2>
@@ -86,7 +104,6 @@ export default function RegisterPage() {
               Start your Japanese learning journey today.
             </p>
 
-            {/* Form */}
             <form onSubmit={handleRegister} className="mt-10 space-y-6">
               {/* Email */}
               <div>
@@ -138,17 +155,15 @@ export default function RegisterPage() {
                 </p>
               </div>
 
-              {/* Register Button */}
               <button
                 type="submit"
                 disabled={loading}
-                className="flex h-16 w-full items-center justify-center rounded-2xl bg-linear-to-r from-pink-400 to-pink-500 text-xl font-semibold text-white shadow-lg transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70"
+                className="flex h-16 w-full items-center justify-center rounded-2xl bg-gradient-to-r from-pink-400 to-pink-500 text-xl font-semibold text-white shadow-lg transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {loading ? "Creating..." : "Create Account"}
               </button>
             </form>
 
-            {/* Bottom Link */}
             <p className="mt-8 text-center text-lg text-[#667085]">
               Already have an account?{" "}
               <Link
