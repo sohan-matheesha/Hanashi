@@ -25,10 +25,15 @@ export default function RegisterPage() {
     try {
       setLoading(true);
 
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
+     const origin = window.location.origin;
+
+const { data, error } = await supabase.auth.signUp({
+  email,
+  password,
+  options: {
+    emailRedirectTo: `${origin}/auth/confirm?next=/auth/redirect`,
+  },
+});
 
       if (error) {
         console.error("Register error:", error);
@@ -66,7 +71,7 @@ export default function RegisterPage() {
             backgroundRepeat: "no-repeat",
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-[#c96c9a]/30 to-[#8d4f87]/20" />
+          <div className="absolute inset-0 bg-linear-to-b from-[#c96c9a]/30 to-[#8d4f87]/20" />
 
           <div className="absolute inset-x-0 top-0 p-8">
             <h2 className="max-w-[260px] text-5xl font-bold leading-tight text-white drop-shadow-sm">
@@ -158,7 +163,7 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex h-16 w-full items-center justify-center rounded-2xl bg-gradient-to-r from-pink-400 to-pink-500 text-xl font-semibold text-white shadow-lg transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70"
+                className="flex h-16 w-full items-center justify-center rounded-2xl bg-linear-to-r from-pink-400 to-pink-500 text-xl font-semibold text-white shadow-lg transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {loading ? "Creating..." : "Create Account"}
               </button>
