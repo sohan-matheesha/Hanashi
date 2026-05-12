@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   ShieldCheck,
   Users,
@@ -6,7 +7,7 @@ import {
   Settings,
   Search,
   CheckCircle2,
-  Clock,
+  ImagePlus,
 } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
 import { updateUserRole } from "./actions";
@@ -15,9 +16,9 @@ export default async function AdminDashboardPage() {
   const supabase = await createClient();
 
   const { data: profiles, error } = await supabase
-  .from("profiles")
-  .select("id, full_name, role, created_at")
-  .order("created_at", { ascending: false });
+    .from("profiles")
+    .select("id, full_name, role, created_at")
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error("Profiles fetch error:", error);
@@ -101,7 +102,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Admin Tools */}
-      <div className="mb-8 grid gap-4 md:grid-cols-3">
+      <div className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-3xl bg-white p-5 shadow-sm">
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
             <Users size={24} />
@@ -131,6 +132,27 @@ export default async function AdminDashboardPage() {
             Manage platform settings, content approval, and access rules.
           </p>
         </div>
+
+        <Link
+          href="/dashboard/admin/cultural-stories"
+          className="group rounded-3xl bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+        >
+          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-pink-50 text-pink-600 transition group-hover:bg-pink-600 group-hover:text-white">
+            <ImagePlus size={24} />
+          </div>
+
+          <h3 className="text-lg font-bold text-[#202c5c]">
+            Cultural Hub Stories
+          </h3>
+
+          <p className="mt-2 text-sm leading-6 text-gray-500">
+            Add, publish, feature, and delete Japanese culture stories.
+          </p>
+
+          <div className="mt-4 inline-flex rounded-full bg-pink-500 px-4 py-2 text-xs font-bold text-white transition group-hover:bg-[#202c5c]">
+            Manage Stories →
+          </div>
+        </Link>
       </div>
 
       {/* Search UI only */}
@@ -182,6 +204,7 @@ export default async function AdminDashboardPage() {
                         <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#fff1ea] font-bold text-[#FF5A1F]">
                           {displayName.charAt(0).toUpperCase()}
                         </div>
+
                         <div>
                           <div className="font-bold text-[#202c5c]">
                             {displayName}

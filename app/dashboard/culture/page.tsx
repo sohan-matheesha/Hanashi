@@ -1,201 +1,371 @@
-import Link from "next/link"
-import { Image as ImageIcon, PlayCircle, Hand, MoveRight } from "lucide-react"
+import {
+  Flower2,
+  Utensils,
+  Torus,
+  Sparkles,
+  Landmark,
+  MessageCircle,
+  Clock,
+  ArrowRight,
+  Star,
+  MapPin,
+  Camera,
+} from 'lucide-react'
 
-export default function CultureHub() {
+const categories = [
+  { name: 'All Stories', icon: Sparkles },
+  { name: 'Traditions', icon: Landmark },
+  { name: 'Food & Dining', icon: Utensils },
+  { name: 'Festivals', icon: Flower2 },
+  { name: 'Daily Life', icon: Torus },
+  { name: 'Etiquette', icon: MessageCircle },
+  { name: 'Places', icon: MapPin },
+  { name: 'Pop Culture', icon: Star },
+]
+
+const featuredStories = [
+  {
+    title: 'Hanami Season in Kyoto',
+    category: 'Seasonal',
+    readTime: '6 min read',
+    image:
+      'https://images.unsplash.com/photo-1522383225653-ed111181a951?q=80&w=1200&auto=format&fit=crop',
+    description:
+      'Discover how cherry blossoms transform Kyoto into a soft pink dream during spring.',
+  },
+  {
+    title: 'Inside a Japanese Tea Ceremony',
+    category: 'Traditions',
+    readTime: '7 min read',
+    image:
+      'https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=1200&auto=format&fit=crop',
+    description:
+      'Learn the beauty of silence, respect, harmony, and mindfulness in Japanese tea culture.',
+  },
+  {
+    title: 'The Art of Bento',
+    category: 'Food & Dining',
+    readTime: '5 min read',
+    image:
+      'https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?q=80&w=1200&auto=format&fit=crop',
+    description:
+      'Small boxes with big meaning. Bento represents care, balance, and creativity.',
+  },
+  {
+    title: 'Why Convenience Stores Feel Magical',
+    category: 'Daily Life',
+    readTime: '5 min read',
+    image:
+      'https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=1200&auto=format&fit=crop',
+    description:
+      'A deep dive into Japan’s comfort culture through konbini life.',
+  },
+]
+
+const trendingStories = [
+  {
+    title: 'Kimono: Elegance in Motion',
+    category: 'Traditions',
+    image:
+      'https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=900&auto=format&fit=crop',
+  },
+  {
+    title: 'Tokyo Nights & Youth Culture',
+    category: 'Pop Culture',
+    image:
+      'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?q=80&w=900&auto=format&fit=crop',
+  },
+  {
+    title: 'Shrine Etiquette for Beginners',
+    category: 'Etiquette',
+    image:
+      'https://images.unsplash.com/photo-1478436127897-769e1b3f0f36?q=80&w=900&auto=format&fit=crop',
+  },
+  {
+    title: 'Ramen Stories from Sapporo',
+    category: 'Food & Dining',
+    image:
+      'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=900&auto=format&fit=crop',
+  },
+]
+
+const weeklyStories = [
+  {
+    title: 'Gion Matsuri: Kyoto’s Timeless Festival',
+    category: 'Festivals',
+    time: '8 min read',
+  },
+  {
+    title: 'Rainy Season Vibes in Kamakura',
+    category: 'Places',
+    time: '4 min read',
+  },
+  {
+    title: 'New Wagashi You Must Try',
+    category: 'Food & Dining',
+    time: '3 min read',
+  },
+]
+
+const galleryImages = [
+  'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?q=80&w=900&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?q=80&w=900&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?q=80&w=900&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1513407030348-c983a97b98d8?q=80&w=900&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?q=80&w=900&auto=format&fit=crop',
+]
+
+export default function CulturalHubPage() {
   return (
-    <div className="max-w-6xl mx-auto space-y-16 pb-20">
-      {/* Hero Section */}
-      <section className="relative w-full h-100 md:h-120 rounded-[2.5rem] overflow-hidden bg-linear-to-r from-slate-400 to-slate-200 flex items-center p-12 md:p-16">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center mix-blend-overlay opacity-50 block"></div>
-        <div className="relative z-10 max-w-xl">
-          <p className="text-white/80 font-bold tracking-widest text-xs uppercase mb-4">Cultural Exploration</p>
-          <h1 className="text-5xl md:text-7xl font-black text-white leading-[1.05] tracking-tight mb-6">
-            Explore the Heart<br />of Japan.
-          </h1>
-          <p className="text-white/90 text-lg md:text-xl font-medium mb-10 max-w-md leading-relaxed">
-            Discover the quiet beauty and deep-rooted traditions of the Japanese spirit through our curated cultural archives.
+    <main className="min-h-screen bg-[#faf7f4] px-6 py-8">
+      <section className="relative overflow-hidden rounded-4xl border border-pink-100 bg-white shadow-sm">
+        <div className="absolute inset-0 bg-linear-to-r from-white via-white/90 to-transparent z-10" />
+
+        <img
+          src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1600&auto=format&fit=crop"
+          alt="Japanese temple with cherry blossoms"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+
+        <div className="relative z-20 max-w-3xl px-10 py-16">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-pink-500">
+            Magazine-style cultural discoveries
           </p>
-          <button className="bg-[#2d3b6a] text-white px-8 py-4 rounded-full font-bold flex items-center gap-3 hover:bg-[#1a2548] transition-colors">
-            START YOUR JOURNEY <br />
-            <MoveRight className="w-5 h-5" />
+
+          <h1 className="font-serif text-6xl font-bold leading-tight text-[#172554]">
+            Cultural Hub <span className="text-pink-400">✿</span>
+          </h1>
+
+          <p className="mt-5 max-w-xl text-lg leading-8 text-slate-700">
+            Dive into the stories, traditions, food, festivals, and modern spirit
+            of Japan through beautiful visual articles.
+          </p>
+
+          <button className="mt-8 rounded-full bg-[#172554] px-7 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[#0f1a3d]">
+            Explore Stories
           </button>
         </div>
       </section>
 
-      {/* Featured Articles & Washoku / Bow Grid */}
-      <section>
-        <div className="flex items-end justify-between mb-8">
-          <div>
-            <p className="text-gray-400 font-bold tracking-widest text-[10px] uppercase mb-2">The Archives</p>
-            <h2 className="text-3xl font-black text-[#222744]">Featured Articles</h2>
-          </div>
-          <Link href="#" className="text-sm font-bold text-gray-500 border-b-2 border-gray-300 pb-1 hover:text-hanashi-primary hover:border-hanashi-primary transition-colors">
-            View All Editorial
-          </Link>
-        </div>
+      <section className="mt-6 flex flex-wrap gap-3">
+        {categories.map((category, index) => {
+          const Icon = category.icon
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          {/* Main Feature - Omotenashi */}
-          <div className="md:col-span-8 bg-linear-to-br from-slate-400 to-slate-500 rounded-4xl overflow-hidden relative min-h-75 flex items-end p-8 group cursor-pointer">
-            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
-            <div className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/80 to-transparent"></div>
-            <div className="absolute inset-0 flex items-center justify-center text-white/30">
-              <ImageIcon className="w-20 h-20" />
-            </div>
-            
-            <div className="relative z-10 w-full">
-              <span className="inline-block bg-[#ff9ebf] text-white text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-md mb-4 shadow-sm">
-                Tradition
-              </span>
-              <h3 className="text-3xl font-bold text-white mb-2 leading-tight">The Art of Omotenashi:<br/>Japanese Hospitality</h3>
-              <p className="text-white/80 text-sm font-medium line-clamp-2 max-w-lg">
-                More than just service, Omotenashi is the philosophy of looking after guests wholeheartedly. Discover the history behind the...
-              </p>
-            </div>
-          </div>
-
-          {/* Side Feature - Matsuri */}
-          <div className="md:col-span-4 bg-gray-50 rounded-4xl overflow-hidden flex flex-col group cursor-pointer border border-gray-100 pb-2 shadow-sm relative">
-            <div className="aspect-4/3 bg-gray-200 relative flex items-center justify-center">
-              <ImageIcon className="w-12 h-12 text-gray-300" />
-            </div>
-            <div className="p-6 mt-auto">
-              <p className="text-gray-400 font-bold tracking-widest text-[10px] uppercase mb-2">Festivals</p>
-              <h3 className="text-xl font-bold text-[#222744] mb-2 leading-tight">Matsuri Guide:<br/>Essential Summer Festivals</h3>
-              <p className="text-gray-500 text-xs font-medium line-clamp-2 leading-relaxed">
-                From the Gion Matsuri to the Awa Odori, explore the vibrant energy of Japan&apos;s...
-              </p>
-            </div>
-          </div>
-
-          {/* Washoku placeholder */}
-          <div className="md:col-span-5 bg-gray-50 rounded-4xl overflow-hidden flex flex-col group cursor-pointer border border-gray-100 pb-2 shadow-sm relative h-full">
-            <div className="aspect-4/3 bg-gray-200 relative flex items-center justify-center m-3 rounded-3xl">
-              <ImageIcon className="w-12 h-12 text-gray-300" />
-            </div>
-            <div className="p-6 pt-2 h-full flex flex-col justify-end">
-              <p className="text-gray-400 font-bold tracking-widest text-[10px] uppercase mb-2 mt-auto">Food</p>
-              <h3 className="text-xl font-bold text-[#222744] mb-2 leading-tight">Washoku: The<br/>Seasons of Japanese Cuisine</h3>
-              <p className="text-gray-500 text-xs font-medium line-clamp-2 leading-relaxed">
-                Learn how &apos;Shun&apos;—the use of seasonal ingredients—defines the UNESCO-...
-              </p>
-            </div>
-          </div>
-        </div>
+          return (
+            <button
+              key={category.name}
+              className={`flex items-center gap-2 rounded-2xl border px-5 py-3 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
+                index === 0
+                  ? 'border-[#172554] bg-[#172554] text-white'
+                  : 'border-pink-100 bg-white text-slate-700'
+              }`}
+            >
+              <Icon size={17} />
+              {category.name}
+            </button>
+          )
+        })}
       </section>
 
-      {/* Etiquette Tip Banner */}
-      <section className="mt-8 mb-16">
-        <div className="bg-[#2d3b6a] rounded-4xl overflow-hidden flex items-center relative cursor-pointer px-10 py-12 shadow-lg mx-auto">
-          {/* Background Decorations */}
-          <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4"></div>
-          <div className="absolute bottom-0 right-20 w-40 h-40 bg-[#ff9ebf]/10 rounded-full translate-y-1/2"></div>
-          
-          <div className="relative z-10 w-full flex items-center justify-between gap-12">
-            <div className="max-w-110">
-              <span className="inline-block bg-[#48a56f] text-white text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-md mb-6 shadow-sm">
-                Etiquette Tip
-              </span>
-              <h3 className="text-[2.5rem] font-bold text-white mb-6 leading-[1.1]">Mastering the<br/>Bow: When and<br/>How?</h3>
-              <p className="text-white/70 text-[15px] font-medium line-clamp-3 mb-8 leading-relaxed">
-                The bow (Ojigi) is fundamental. From a slight 15° Eshaku for greetings to a deep 45° Saikeirei for apologies, understand the subtle language of Japanese respect.
-              </p>
-              <button className="bg-white text-[#2d3b6a] px-8 py-3.5 rounded-full text-sm font-bold shadow-sm hover:bg-gray-50 transition-colors inline-flex items-center gap-2">
-                Read Full Guide
+      <div className="mt-8 grid gap-8 xl:grid-cols-[1fr_360px]">
+        <section>
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="flex items-center gap-2 text-2xl font-bold text-[#172554]">
+              <Flower2 className="text-pink-400" />
+              Editor&apos;s Picks
+            </h2>
+
+            <button className="text-sm font-semibold text-slate-500 hover:text-pink-500">
+              View all →
+            </button>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {featuredStories.map((story) => (
+              <article
+                key={story.title}
+                className="group overflow-hidden rounded-3xl border border-pink-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+              >
+                <div className="h-48 overflow-hidden">
+                  <img
+                    src={story.image}
+                    alt={story.title}
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                  />
+                </div>
+
+                <div className="p-5">
+                  <p className="text-xs font-bold uppercase tracking-wide text-pink-500">
+                    {story.category}
+                  </p>
+
+                  <h3 className="mt-2 text-lg font-bold leading-snug text-[#172554]">
+                    {story.title}
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                    {story.description}
+                  </p>
+
+                  <div className="mt-5 flex items-center justify-between text-sm">
+                    <span className="flex items-center gap-1 text-slate-500">
+                      <Clock size={15} />
+                      {story.readTime}
+                    </span>
+
+                    <button className="flex items-center gap-1 font-semibold text-pink-500">
+                      Read Story
+                      <ArrowRight size={15} />
+                    </button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-10">
+            <h2 className="mb-5 flex items-center gap-2 text-2xl font-bold text-[#172554]">
+              <Sparkles className="text-pink-400" />
+              Trending Culture
+            </h2>
+
+            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+              {trendingStories.map((story) => (
+                <article
+                  key={story.title}
+                  className="overflow-hidden rounded-3xl border border-pink-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                >
+                  <img
+                    src={story.image}
+                    alt={story.title}
+                    className="h-36 w-full object-cover"
+                  />
+
+                  <div className="p-4">
+                    <h3 className="font-bold leading-snug text-[#172554]">
+                      {story.title}
+                    </h3>
+
+                    <p className="mt-2 text-xs font-bold uppercase text-pink-500">
+                      {story.category}
+                    </p>
+
+                    <p className="mt-3 flex items-center gap-1 text-xs text-slate-500">
+                      <Clock size={14} />
+                      5 min read
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <aside className="space-y-6">
+          <div className="rounded-3xl border border-pink-100 bg-white p-5 shadow-sm">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="flex items-center gap-2 text-xl font-bold text-[#172554]">
+                <Flower2 className="text-pink-400" />
+                This Week in Japan
+              </h2>
+
+              <button className="text-xs font-semibold text-pink-500">
+                View all
               </button>
             </div>
 
-            {/* Hand Icon Graphic */}
-            <div className="shrink-0 w-48 h-48 bg-[#ff9ebf] rounded-full flex items-center justify-center shadow-[0_0_0_12px_rgba(255,255,255,0.05)] relative z-10 lg:mr-10">
-              <Hand className="w-20 h-20 text-[#2d3b6a]" />
+            <div className="overflow-hidden rounded-2xl">
+              <img
+                src="https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?q=80&w=1000&auto=format&fit=crop"
+                alt="Japan festival street"
+                className="h-48 w-full object-cover"
+              />
+            </div>
+
+            <div className="mt-4">
+              <p className="text-xs font-bold uppercase text-pink-500">
+                Festivals
+              </p>
+
+              <h3 className="mt-1 text-lg font-bold leading-snug text-[#172554]">
+                Gion Matsuri: Kyoto&apos;s Timeless Festival
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                A spectacular celebration of history, faith, and community.
+              </p>
+            </div>
+
+            <div className="mt-5 space-y-4">
+              {weeklyStories.slice(1).map((story) => (
+                <div
+                  key={story.title}
+                  className="border-t border-slate-100 pt-4"
+                >
+                  <p className="text-xs font-bold uppercase text-pink-500">
+                    {story.category}
+                  </p>
+                  <h4 className="mt-1 font-semibold text-[#172554]">
+                    {story.title}
+                  </h4>
+                  <p className="mt-1 text-xs text-slate-500">{story.time}</p>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Zen in Motion (Video Section) */}
-      <section className="bg-gray-50/50 -mx-10 px-10 py-16">
-        <div className="max-w-6xl mx-auto flex flex-col">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="w-12 h-1 bg-[#8c3246] rounded-full"></div>
-            <h2 className="text-2xl font-black text-[#222744]">Zen in Motion</h2>
-          </div>
+          <div className="rounded-3xl border border-pink-100 bg-white p-5 shadow-sm">
+            <h2 className="mb-4 flex items-center gap-2 text-xl font-bold text-[#172554]">
+              <Camera className="text-pink-400" />
+              Explore by Mood
+            </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Video 1 */}
-            <div className="group cursor-pointer">
-              <div className="aspect-video bg-gray-300 rounded-3xl relative flex items-center justify-center mb-4 overflow-hidden border border-gray-200">
-                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
-                <PlayCircle className="w-14 h-14 text-white/90 relative z-10 drop-shadow-md" strokeWidth={1.5} />
-                <div className="absolute bottom-3 right-3 bg-black/70 text-white text-[10px] font-bold px-2 py-1 rounded-md backdrop-blur-sm">
-                  12:45
-                </div>
-              </div>
-              <h3 className="font-bold text-[#222744] text-sm leading-tight mb-1 group-hover:text-hanashi-primary transition-colors">Kyoto at Dawn: A Cinematic Walk through Gion</h3>
-              <p className="text-gray-400 text-xs font-medium">Travel Vlog • 45k views</p>
-            </div>
-
-            {/* Video 2 */}
-            <div className="group cursor-pointer">
-              <div className="aspect-video bg-gray-300 rounded-3xl relative flex items-center justify-center mb-4 overflow-hidden border border-gray-200">
-                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
-                <PlayCircle className="w-14 h-14 text-white/90 relative z-10 drop-shadow-md" strokeWidth={1.5} />
-                <div className="absolute bottom-3 right-3 bg-black/70 text-white text-[10px] font-bold px-2 py-1 rounded-md backdrop-blur-sm">
-                  08:30
-                </div>
-              </div>
-              <h3 className="font-bold text-[#222744] text-sm leading-tight mb-1 group-hover:text-hanashi-primary transition-colors">Living Treasures: The Master Potters of Karatsu</h3>
-              <p className="text-gray-400 text-xs font-medium">Documentary • 12k views</p>
-            </div>
-
-            {/* Video 3 */}
-            <div className="group cursor-pointer">
-              <div className="aspect-video bg-gray-300 rounded-3xl relative flex items-center justify-center mb-4 overflow-hidden border border-gray-200">
-                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
-                <PlayCircle className="w-14 h-14 text-white/90 relative z-10 drop-shadow-md" strokeWidth={1.5} />
-                <div className="absolute bottom-3 right-3 bg-black/70 text-white text-[10px] font-bold px-2 py-1 rounded-md backdrop-blur-sm">
-                  15:10
-                </div>
-              </div>
-              <h3 className="font-bold text-[#222744] text-sm leading-tight mb-1 group-hover:text-hanashi-primary transition-colors">Finding Stillness: Meditation in a Japanese Temple</h3>
-              <p className="text-gray-400 text-xs font-medium">Culture Lab • 89k views</p>
+            <div className="grid grid-cols-2 gap-3">
+              {['Calm & Mindful', 'Curious & Fun', 'Warm & Cozy', 'Adventurous'].map(
+                (mood) => (
+                  <div
+                    key={mood}
+                    className="rounded-2xl bg-linear-to-br from-pink-50 to-indigo-50 p-4 text-center"
+                  >
+                    <p className="text-sm font-bold text-[#172554]">{mood}</p>
+                    <p className="mt-1 text-xs text-slate-500">12 stories</p>
+                  </div>
+                )
+              )}
             </div>
           </div>
-        </div>
-      </section>
+        </aside>
+      </div>
 
-      {/* Did You Know Banner */}
-      <section className="bg-[#ffebf0] rounded-[3rem] p-12 md:p-16 relative overflow-hidden flex flex-col">
-        {/* Book BG graphic (abstract representation) */}
-        <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-100 h-100 opacity-20 pointer-events-none">
-          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-[#c3829e]">
-            <path d="M100 180V40C100 40 70 20 20 40V180C70 160 100 180 100 180Z" fill="currentColor"/>
-            <path d="M100 180V40C100 40 130 20 180 40V180C130 160 100 180 100 180Z" fill="currentColor"/>
-          </svg>
-        </div>
-
-        <div className="relative z-10 max-w-2xl">
-          <span className="inline-block bg-white text-gray-500 text-[10px] font-black tracking-widest uppercase px-4 py-2 rounded-full mb-6 shadow-sm">
-            Did you know?
-          </span>
-          <h2 className="text-4xl md:text-[3.5rem] font-black text-[#2e2633] mb-6 tracking-tight leading-[1.1]">
-            Japanese has no<br/>future tense.
+      <section className="mt-10">
+        <div className="mb-5 flex items-center justify-between">
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-[#172554]">
+            <Camera className="text-pink-400" />
+            Culture Gallery
           </h2>
-          <p className="text-[#64596b] text-lg font-medium leading-relaxed mb-10 max-w-xl">
-            In Japanese grammar, the present and future are the same. Context and time-words define when something will happen. This linguistic structure is said to root speakers deeply in the &quot;now.&quot;
-          </p>
 
-          <div className="flex flex-wrap gap-4">
-            <button className="bg-[#664b58] text-white px-8 py-3.5 rounded-full text-sm font-bold tracking-wider hover:bg-[#4a3640] transition-colors uppercase">
-              Explore Language Roots
-            </button>
-            <button className="border-2 border-[#c3829e]/40 text-[#664b58] px-8 py-3.5 rounded-full text-sm font-bold tracking-wider hover:bg-[#c3829e]/10 transition-colors uppercase flex items-center gap-2">
-              Share This Fact
-            </button>
-          </div>
+          <button className="text-sm font-semibold text-slate-500 hover:text-pink-500">
+            View gallery →
+          </button>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-5">
+          {galleryImages.map((image, index) => (
+            <div
+              key={image}
+              className={`overflow-hidden rounded-3xl shadow-sm ${
+                index === 0 ? 'md:col-span-2' : ''
+              }`}
+            >
+              <img
+                src={image}
+                alt="Japanese culture gallery"
+                className="h-44 w-full object-cover transition duration-500 hover:scale-110"
+              />
+            </div>
+          ))}
         </div>
       </section>
-
-    </div>
+    </main>
   )
 }

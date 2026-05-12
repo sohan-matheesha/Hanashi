@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import {
+  ArrowLeft,
   Bot,
   BookOpen,
   Copy,
@@ -143,6 +144,15 @@ export default function ConversationPage() {
       {/* Left Sidebar */}
       <aside className="relative z-10 flex h-full w-[86px] shrink-0 flex-col justify-between border-r border-gray-100 bg-white px-4 py-6 shadow-sm transition-all duration-300 lg:w-[240px]">
         <div>
+          {/* Back to Dashboard */}
+          <Link
+            href="/dashboard"
+            className="mb-5 flex items-center justify-center gap-3 rounded-2xl px-3 py-3 text-sm font-bold text-gray-400 transition-all duration-300 hover:-translate-x-1 hover:bg-gray-50 hover:text-[#202c5c] lg:justify-start"
+          >
+            <ArrowLeft className="h-5 w-5" />
+            <span className="hidden lg:block">Back to Dashboard</span>
+          </Link>
+
           <Link
             href="/dashboard"
             className="mb-8 flex items-center justify-center gap-3 lg:justify-start"

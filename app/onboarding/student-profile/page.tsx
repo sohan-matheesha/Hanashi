@@ -54,7 +54,7 @@ export default function StudentProfilePage() {
             "full_name, email, phone_number, date_of_birth, country, japanese_level, current_status, avatar_url"
           )
           .eq("id", user.id)
-          .single();
+          .maybeSingle();
 
         if (error) {
           console.error("Load student profile error:", error);
@@ -71,6 +71,8 @@ export default function StudentProfilePage() {
           setLevel(data.japanese_level || "Beginner");
           setStatus(data.current_status || "University Student");
           setProfileImage(data.avatar_url || null);
+        } else {
+          setEmail(user.email || "");
         }
       } catch (error) {
         console.error("Unexpected load error:", error);
@@ -141,14 +143,14 @@ export default function StudentProfilePage() {
 
   if (loadingProfile) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-rose-50 via-white to-pink-50">
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-rose-50 via-white to-pink-50">
         <p className="font-semibold text-gray-600">Loading profile...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50">
+    <div className="min-h-screen bg-linear-to-br from-rose-50 via-white to-pink-50">
       <header className="border-b border-rose-100 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link

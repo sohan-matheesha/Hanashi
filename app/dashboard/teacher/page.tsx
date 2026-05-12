@@ -1,178 +1,153 @@
-import {
-  BookOpen,
-  Users,
-  Video,
-  ClipboardList,
-  BarChart3,
-  MessageCircle,
-  Plus,
-  ArrowRight,
-} from "lucide-react";
-import Link from "next/link";
+'use client'
 
-const stats = [
-  {
-    title: "Total Students",
-    value: "128",
-    icon: Users,
-    description: "Students enrolled in your classes",
-  },
-  {
-    title: "Active Lessons",
-    value: "24",
-    icon: BookOpen,
-    description: "Published Japanese learning lessons",
-  },
-  {
-    title: "Live Sessions",
-    value: "06",
-    icon: Video,
-    description: "Upcoming teaching sessions",
-  },
-  {
-    title: "Pending Questions",
-    value: "18",
-    icon: MessageCircle,
-    description: "Student questions to review",
-  },
-];
+import { useState } from 'react'
 
-const quickActions = [
-  {
-    title: "Manage Lessons",
-    description: "Create, edit, and organize lesson content.",
-    href: "/dashboard/teacher/lessons",
-    icon: BookOpen,
-  },
-  {
-    title: "Student List",
-    description: "View students and manage learning support.",
-    href: "/dashboard/teacher/students",
-    icon: Users,
-  },
-  {
-    title: "Live Sessions",
-    description: "Schedule and manage live teaching sessions.",
-    href: "/dashboard/teacher/live-sessions",
-    icon: Video,
-  },
-  {
-    title: "Assignments",
-    description: "Create practice tasks and learning activities.",
-    href: "/dashboard/teacher/assignments",
-    icon: ClipboardList,
-  },
-  {
-    title: "Progress Monitor",
-    description: "Track student progress and performance.",
-    href: "/dashboard/teacher/progress",
-    icon: BarChart3,
-  },
-];
+export default function TeacherPage() {
+  const [loading, setLoading] = useState(false)
 
-export default function TeacherDashboardPage() {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setLoading(true)
+
+    const formData = new FormData(e.currentTarget)
+
+    const data = {
+      full_name: formData.get('full_name'),
+      email: formData.get('email'),
+      phone: formData.get('phone'),
+      qualification: formData.get('qualification'),
+      experience: formData.get('experience'),
+      message: formData.get('message'),
+    }
+
+    try {
+      const response = await fetch('/api/teacher-request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        alert(result.error || 'Something went wrong')
+        return
+      }
+
+      alert('Your teacher request has been submitted. Please wait for admin approval.')
+      e.currentTarget.reset()
+    } catch (error) {
+      console.error(error)
+      alert('Failed to submit teacher request')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-[#fafafc] px-4 py-6 md:px-8">
-      {/* Header */}
-      <div className="mb-8 rounded-3xl bg-linear-to-r from-[#FF5A1F] to-[#ff8a5b] p-6 text-white shadow-sm md:p-8">
-        <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
+    <main className="min-h-screen bg-[#f8f5f1] px-6 py-10">
+      <div className="mx-auto max-w-3xl rounded-3xl bg-white p-8 shadow-lg">
+        <div className="mb-8">
+          <p className="text-sm font-semibold uppercase tracking-wide text-[#b45309]">
+            Teacher Verification
+          </p>
+
+          <h1 className="mt-2 text-3xl font-bold text-[#202c5c]">
+            Submit Teacher Approval Request
+          </h1>
+
+          <p className="mt-3 text-sm leading-6 text-gray-600">
+            Please fill in your teaching details. After submitting, the admin will receive
+            an email notification and review your request.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-white/80">
-              Teacher Section
-            </p>
-            <h1 className="text-3xl font-bold md:text-4xl">
-              Welcome to Hanashi Teacher Dashboard
-            </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-white/90 md:text-base">
-              Manage lessons, guide students, conduct live sessions, and monitor
-              learning progress from one place.
-            </p>
+            <label className="mb-2 block text-sm font-semibold text-gray-700">
+              Full Name
+            </label>
+            <input
+              name="full_name"
+              type="text"
+              required
+              placeholder="Enter your full name"
+              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#202c5c]"
+            />
           </div>
 
-          <Link
-            href="/dashboard/teacher/lessons"
-            className="flex w-fit items-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-bold text-[#FF5A1F] shadow-sm transition hover:scale-105"
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-gray-700">
+              Email
+            </label>
+            <input
+              name="email"
+              type="email"
+              required
+              placeholder="Enter your email"
+              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#202c5c]"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-gray-700">
+              Phone Number
+            </label>
+            <input
+              name="phone"
+              type="text"
+              placeholder="Enter your phone number"
+              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#202c5c]"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-gray-700">
+              Qualification
+            </label>
+            <input
+              name="qualification"
+              type="text"
+              placeholder="Example: JLPT N3 / Japanese Diploma / Teaching Certificate"
+              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#202c5c]"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-gray-700">
+              Teaching Experience
+            </label>
+            <textarea
+              name="experience"
+              rows={4}
+              placeholder="Briefly describe your teaching experience"
+              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#202c5c]"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-gray-700">
+              Message to Admin
+            </label>
+            <textarea
+              name="message"
+              rows={4}
+              placeholder="Add any extra message for the admin"
+              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#202c5c]"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-xl bg-[#202c5c] px-5 py-3 font-semibold text-white transition hover:bg-[#162044] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            <Plus size={18} />
-            Create Lesson
-          </Link>
-        </div>
+            {loading ? 'Submitting...' : 'Submit for Approval'}
+          </button>
+        </form>
       </div>
-
-      {/* Stats */}
-      <div className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {stats.map((item) => {
-          const Icon = item.icon;
-
-          return (
-            <div
-              key={item.title}
-              className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm"
-            >
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff1ea] text-[#FF5A1F]">
-                <Icon size={24} />
-              </div>
-
-              <h2 className="text-3xl font-bold text-[#202c5c]">
-                {item.value}
-              </h2>
-              <p className="mt-1 font-semibold text-[#202c5c]">{item.title}</p>
-              <p className="mt-2 text-sm leading-5 text-gray-500">
-                {item.description}
-              </p>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Quick Actions */}
-      <div>
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold text-[#202c5c]">
-              Teacher Tools
-            </h2>
-            <p className="mt-1 text-sm text-gray-500">
-              Access the main tools required for teaching and student
-              management.
-            </p>
-          </div>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {quickActions.map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <Link
-                key={item.title}
-                href={item.href}
-                className="group rounded-3xl border border-gray-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
-              >
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff1ea] text-[#FF5A1F]">
-                  <Icon size={24} />
-                </div>
-
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <h3 className="text-lg font-bold text-[#202c5c]">
-                      {item.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-6 text-gray-500">
-                      {item.description}
-                    </p>
-                  </div>
-
-                  <ArrowRight
-                    size={20}
-                    className="mt-1 text-gray-300 transition group-hover:translate-x-1 group-hover:text-[#FF5A1F]"
-                  />
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
+    </main>
+  )
 }

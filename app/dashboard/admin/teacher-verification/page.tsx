@@ -121,7 +121,7 @@ export default function TeacherVerificationPage() {
   ).length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50">
+    <div className="min-h-screen bg-linear-to-br from-rose-50 via-white to-pink-50">
       <header className="border-b border-rose-100 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <Link

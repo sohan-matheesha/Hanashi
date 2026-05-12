@@ -13,17 +13,33 @@ export default async function TeacherLayout({
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/register");
+    redirect("/login");
   }
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role")
+    .select("role, profile_completed, teacher_verification_status")
     .eq("id", user.id)
     .single();
 
-  if (profile?.role !== "teacher" && profile?.role !== "admin") {
+  if (!profile) {
+    redirect("/onboarding/choose-role");
+  }
+
+  if (profile.role === "admin") {
+    return <>{children}</>;
+  }
+
+  if (profile.role !== "teacher") {
     redirect("/dashboard");
+  }
+
+  if (!profile.profile_completed) {
+    redirect("/onboarding/teacher-profile");
+  }
+
+  if (profile.teacher_verification_status !== "approved") {
+    redirect("/onboarding/teacher-pending");
   }
 
   return <>{children}</>;

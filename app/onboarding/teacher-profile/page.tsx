@@ -56,11 +56,17 @@ export default function TeacherProfilePage() {
           return;
         }
 
-        const { data: profileData } = await supabase
+        const { data: profileData, error: profileLoadError } = await supabase
           .from("profiles")
-          .select("full_name, email, phone_number, date_of_birth, country, avatar_url, teacher_verification_status")
+          .select(
+            "full_name, email, phone_number, date_of_birth, country, avatar_url, teacher_verification_status"
+          )
           .eq("id", user.id)
-          .single();
+          .maybeSingle();
+
+        if (profileLoadError) {
+          console.error("Load teacher base profile error:", profileLoadError);
+        }
 
         if (profileData) {
           setFullName(profileData.full_name || "");
@@ -69,7 +75,9 @@ export default function TeacherProfilePage() {
           setDateOfBirth(profileData.date_of_birth || "");
           setCountry(profileData.country || "");
           setProfileImage(profileData.avatar_url || null);
-          setVerificationStatus(profileData.teacher_verification_status || "pending");
+          setVerificationStatus(
+            profileData.teacher_verification_status || "pending"
+          );
         } else {
           setEmail(user.email || "");
         }
@@ -89,9 +97,15 @@ export default function TeacherProfilePage() {
 
         if (teacherData) {
           setFullName(teacherData.full_name || profileData?.full_name || "");
-          setEmail(teacherData.email || profileData?.email || user.email || "");
-          setPhoneNumber(teacherData.phone_number || profileData?.phone_number || "");
-          setDateOfBirth(teacherData.date_of_birth || profileData?.date_of_birth || "");
+          setEmail(
+            teacherData.email || profileData?.email || user.email || ""
+          );
+          setPhoneNumber(
+            teacherData.phone_number || profileData?.phone_number || ""
+          );
+          setDateOfBirth(
+            teacherData.date_of_birth || profileData?.date_of_birth || ""
+          );
           setCountry(teacherData.country || profileData?.country || "");
           setQualification(teacherData.japanese_qualification || "JLPT N4");
           setExperience(teacherData.teaching_experience || "Less than 1 year");
@@ -144,19 +158,22 @@ export default function TeacherProfilePage() {
         return;
       }
 
-      const { error: profileError } = await supabase
-        .from("profiles")
-        .update({
+      const { error: profileError } = await supabase.from("profiles").upsert(
+        {
+          id: user.id,
           full_name: fullName,
-          email: email,
+          email: email || user.email,
           phone_number: phoneNumber,
           date_of_birth: dateOfBirth,
           country: country,
           role: "teacher",
           profile_completed: true,
           teacher_verification_status: "pending",
-        })
-        .eq("id", user.id);
+        },
+        {
+          onConflict: "id",
+        }
+      );
 
       if (profileError) {
         console.error("Teacher profile update error:", profileError);
@@ -170,7 +187,7 @@ export default function TeacherProfilePage() {
           {
             user_id: user.id,
             full_name: fullName,
-            email: email,
+            email: email || user.email,
             phone_number: phoneNumber,
             date_of_birth: dateOfBirth,
             country: country,
@@ -203,14 +220,16 @@ export default function TeacherProfilePage() {
 
   if (loadingProfile) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-rose-50 via-white to-pink-50">
-        <p className="font-semibold text-gray-600">Loading teacher profile...</p>
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-rose-50 via-white to-pink-50">
+        <p className="font-semibold text-gray-600">
+          Loading teacher profile...
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50">
+    <div className="min-h-screen bg-linear-to-br from-rose-50 via-white to-pink-50">
       <header className="border-b border-rose-100 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link
