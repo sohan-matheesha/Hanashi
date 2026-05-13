@@ -55,83 +55,105 @@ export default async function AdminDashboardPage() {
           </div>
         </div>
       </div>
+{/* Stats */}
+<div className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+  <Link
+    href="/dashboard/admin/users"
+    className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+  >
+    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
+      <Users size={24} />
+    </div>
+    <h2 className="text-3xl font-bold text-[#202c5c]">{totalUsers}</h2>
+    <p className="mt-1 font-semibold text-[#202c5c]">Total Users</p>
+    <p className="mt-2 text-sm text-gray-500">Registered platform users</p>
+  </Link>
 
-      {/* Stats */}
-      <div className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
-            <Users size={24} />
-          </div>
-          <h2 className="text-3xl font-bold text-[#202c5c]">{totalUsers}</h2>
-          <p className="mt-1 font-semibold text-[#202c5c]">Total Users</p>
-          <p className="mt-2 text-sm text-gray-500">
-            Registered platform users
-          </p>
-        </div>
+  <Link
+    href="/dashboard/admin/users?role=student"
+    className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+  >
+    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff1ea] text-[#FF5A1F]">
+      <UserRound size={24} />
+    </div>
+    <h2 className="text-3xl font-bold text-[#202c5c]">{studentCount}</h2>
+    <p className="mt-1 font-semibold text-[#202c5c]">Students</p>
+    <p className="mt-2 text-sm text-gray-500">Learning Japanese</p>
+  </Link>
 
-        <div className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff1ea] text-[#FF5A1F]">
-            <UserRound size={24} />
-          </div>
-          <h2 className="text-3xl font-bold text-[#202c5c]">{studentCount}</h2>
-          <p className="mt-1 font-semibold text-[#202c5c]">Students</p>
-          <p className="mt-2 text-sm text-gray-500">Learning Japanese</p>
-        </div>
+  <Link
+    href="/dashboard/admin/users?role=teacher"
+    className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+  >
+    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-700">
+      <GraduationCap size={24} />
+    </div>
+    <h2 className="text-3xl font-bold text-[#202c5c]">{teacherCount}</h2>
+    <p className="mt-1 font-semibold text-[#202c5c]">Teachers</p>
+    <p className="mt-2 text-sm text-gray-500">Approved teaching accounts</p>
+  </Link>
 
-        <div className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-700">
-            <GraduationCap size={24} />
-          </div>
-          <h2 className="text-3xl font-bold text-[#202c5c]">{teacherCount}</h2>
-          <p className="mt-1 font-semibold text-[#202c5c]">Teachers</p>
-          <p className="mt-2 text-sm text-gray-500">
-            Approved teaching accounts
-          </p>
-        </div>
-
-        <div className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-50 text-purple-700">
-            <ShieldCheck size={24} />
-          </div>
-          <h2 className="text-3xl font-bold text-[#202c5c]">{adminCount}</h2>
-          <p className="mt-1 font-semibold text-[#202c5c]">Admins</p>
-          <p className="mt-2 text-sm text-gray-500">
-            Platform administrators
-          </p>
-        </div>
-      </div>
-
+  <Link
+    href="/dashboard/admin/users?role=admin"
+    className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+  >
+    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-50 text-purple-700">
+      <ShieldCheck size={24} />
+    </div>
+    <h2 className="text-3xl font-bold text-[#202c5c]">{adminCount}</h2>
+    <p className="mt-1 font-semibold text-[#202c5c]">Admins</p>
+    <p className="mt-2 text-sm text-gray-500">Platform administrators</p>
+  </Link>
+</div>
       {/* Admin Tools */}
       <div className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-3xl bg-white p-5 shadow-sm">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
+        <Link
+          href="/dashboard/admin/users"
+          className="group rounded-3xl bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+        >
+          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-700 transition group-hover:bg-blue-600 group-hover:text-white">
             <Users size={24} />
           </div>
           <h3 className="text-lg font-bold text-[#202c5c]">User Management</h3>
           <p className="mt-2 text-sm leading-6 text-gray-500">
             View all registered users and manage user accounts.
           </p>
-        </div>
+          <div className="mt-4 inline-flex rounded-full bg-blue-500 px-4 py-2 text-xs font-bold text-white transition group-hover:bg-[#202c5c]">
+            Manage Users →
+          </div>
+        </Link>
 
-        <div className="rounded-3xl bg-white p-5 shadow-sm">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-700">
+        <Link
+          href="/dashboard/admin/roles"
+          className="group rounded-3xl bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+        >
+          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-700 transition group-hover:bg-green-600 group-hover:text-white">
             <GraduationCap size={24} />
           </div>
           <h3 className="text-lg font-bold text-[#202c5c]">Role Management</h3>
           <p className="mt-2 text-sm leading-6 text-gray-500">
             Assign student, teacher, or admin roles to users.
           </p>
-        </div>
+          <div className="mt-4 inline-flex rounded-full bg-green-500 px-4 py-2 text-xs font-bold text-white transition group-hover:bg-[#202c5c]">
+            Manage Roles →
+          </div>
+        </Link>
 
-        <div className="rounded-3xl bg-white p-5 shadow-sm">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff1ea] text-[#FF5A1F]">
+        <Link
+          href="/dashboard/admin/settings"
+          className="group rounded-3xl bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+        >
+          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff1ea] text-[#FF5A1F] transition group-hover:bg-[#FF5A1F] group-hover:text-white">
             <Settings size={24} />
           </div>
           <h3 className="text-lg font-bold text-[#202c5c]">System Settings</h3>
           <p className="mt-2 text-sm leading-6 text-gray-500">
             Manage platform settings, content approval, and access rules.
           </p>
-        </div>
+          <div className="mt-4 inline-flex rounded-full bg-[#FF5A1F] px-4 py-2 text-xs font-bold text-white transition group-hover:bg-[#202c5c]">
+            Open Settings →
+          </div>
+        </Link>
 
         <Link
           href="/dashboard/admin/cultural-stories"
