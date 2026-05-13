@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   BookOpen,
@@ -16,119 +16,187 @@ import {
   GraduationCap,
   ShieldCheck,
   PlayCircle,
-} from 'lucide-react'
+  Headphones,
+  Sparkles,
+} from "lucide-react";
 
-type UserRole = 'student' | 'teacher' | 'admin' | null
+type UserRole = "student" | "teacher" | "admin" | null;
 
 export default function MainSidebar({ role }: { role: UserRole }) {
-  const pathname = usePathname()
-  const [isOpen, setIsOpen] = useState(false)
+  const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
-  // Hide this main sidebar when inside lessons
-  if (pathname.startsWith('/dashboard/lessons')) {
-    return null
+  // Hide this main sidebar when inside lesson pages.
+  // Lesson pages use their own lesson sidebar.
+  if (pathname.startsWith("/dashboard/lessons")) {
+    return null;
   }
 
   const navLinks = [
-    { href: '/dashboard', icon: LayoutDashboard, label: 'Overview', exact: true },
-    { href: '/dashboard/lessons', icon: BookOpen, label: 'My Lessons' },
-    { href: '/dashboard/video-lessons', icon: PlayCircle, label: 'Video Lessons' },
-    { href: '/dashboard/conversation', icon: MessageCircle, label: 'Conversation' },
-    { href: '/dashboard/quizzes', icon: CheckCircle2, label: 'Quizzes' },
-    { href: '/dashboard/lessons/vocabulary', icon: Library, label: 'Vocabulary' },
-    { href: '/dashboard/cultural-hub', icon: Globe, label: 'Cultural Hub' },
-    { href: '/dashboard/achievements', icon: Trophy, label: 'Achievements' },
+    {
+      href: "/dashboard",
+      icon: LayoutDashboard,
+      label: "Overview",
+      exact: true,
+    },
+    {
+      href: "/dashboard/lessons",
+      icon: BookOpen,
+      label: "Lessons",
+    },
+    {
+      href: "/dashboard/video-lessons",
+      icon: PlayCircle,
+      label: "Video Lessons",
+    },
+    {
+      href: "/dashboard/listening",
+      icon: Headphones,
+      label: "Listening Practice",
+    },
+    {
+      href: "/dashboard/conversation",
+      icon: MessageCircle,
+      label: "Conversation Practice",
+    },
+    {
+      href: "/dashboard/quizzes",
+      icon: CheckCircle2,
+      label: "Quizzes",
+    },
+    {
+      href: "/dashboard/lessons/vocabulary",
+      icon: Library,
+      label: "Vocabulary",
+    },
+    {
+      href: "/dashboard/cultural-hub",
+      icon: Globe,
+      label: "Cultural Hub",
+    },
+    {
+      href: "/dashboard/achievements",
+      icon: Trophy,
+      label: "Achievements",
+    },
 
-    ...(role === 'teacher' || role === 'admin'
-      ? [{ href: '/dashboard/teacher', icon: GraduationCap, label: 'Teacher Panel' }]
+    ...(role === "teacher" || role === "admin"
+      ? [
+          {
+            href: "/dashboard/teacher",
+            icon: GraduationCap,
+            label: "Teacher Panel",
+          },
+        ]
       : []),
 
-    ...(role === 'admin'
-      ? [{ href: '/dashboard/admin', icon: ShieldCheck, label: 'Admin Panel' }]
+    ...(role === "admin"
+      ? [
+          {
+            href: "/dashboard/admin",
+            icon: ShieldCheck,
+            label: "Admin Panel",
+          },
+        ]
       : []),
-  ]
+  ];
 
   return (
     <>
       {/* Mobile toggle button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden fixed top-[22px] left-4 z-30 w-10 h-10 bg-white border border-gray-200 rounded-xl flex items-center justify-center shadow-sm text-[#202c5c]"
+        className="fixed left-4 top-[22px] z-30 flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-[#202c5c] shadow-sm md:hidden"
         aria-label="Toggle sidebar"
+        type="button"
       >
-        {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </button>
 
       {/* Overlay for mobile */}
       {isOpen && (
-        <div
-          className="md:hidden fixed inset-0 bg-black/30 z-10 backdrop-blur-sm"
+        <button
+          className="fixed inset-0 z-10 bg-black/30 backdrop-blur-sm md:hidden"
           onClick={() => setIsOpen(false)}
+          aria-label="Close sidebar"
+          type="button"
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`w-[260px] bg-[#f4f5f7] border-r border-gray-100 flex flex-col fixed h-full z-20 transition-transform duration-300 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed z-20 flex h-full w-[260px] flex-col border-r border-gray-100 bg-[#f4f5f7] transition-transform duration-300 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >
-        {/* Profile/Progress Section */}
-        <div className="pt-10 px-8 pb-6 border-b border-white">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 rounded-full border-2 border-[#5484a4] bg-[#42959b] overflow-hidden flex items-center justify-center shrink-0">
-              <div className="w-6 h-6 bg-[#ffe0bd] rounded-full mt-2 relative">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-1 bg-black/20 rounded-full"></div>
-              </div>
+        {/* Header Section */}
+        <div className="border-b border-white px-8 pb-6 pt-10">
+          <div className="mb-6 flex items-center gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#a54a5c] text-white shadow-sm">
+              <Sparkles className="h-6 w-6" />
             </div>
 
             <div>
-              <h2 className="text-[#202c5c] font-bold text-[15px] leading-tight">
-                Learning Path
+              <h2 className="text-[15px] font-bold leading-tight text-[#202c5c]">
+                Hanashi
               </h2>
-              <p className="text-gray-500 font-medium text-xs">Genki Level 1</p>
+              <p className="text-xs font-medium text-gray-500">
+                Learning Dashboard
+              </p>
             </div>
           </div>
 
-          <div className="w-full bg-[#f0f0f4] h-1.5 rounded-full overflow-hidden mb-2">
-            <div className="bg-[#7d505f] h-full w-[65%] rounded-full"></div>
+          <div className="rounded-2xl bg-white p-4 shadow-sm">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#a54a5c]">
+              Current Level
+            </p>
+            <p className="mt-1 text-sm font-bold text-[#202c5c]">
+              Beginner Japanese
+            </p>
+            <p className="mt-2 text-xs leading-5 text-gray-500">
+              Learn through lessons, quizzes, listening, videos, and
+              conversation practice.
+            </p>
           </div>
-
-          <p className="text-[#7d505f] font-bold tracking-widest text-[9px] uppercase">
-            65% Mastered
-          </p>
         </div>
 
         {/* Navigation */}
-        <nav className="flex flex-col py-4 px-4 gap-1">
+        <nav className="flex flex-col gap-1 px-4 py-4">
           {navLinks.map(({ href, icon: Icon, label, exact }) => {
-            const isActive = exact ? pathname === href : pathname.startsWith(href)
+            const isActive = exact
+              ? pathname === href
+              : pathname.startsWith(href);
 
             return (
               <Link
                 key={href}
                 href={href}
                 onClick={() => setIsOpen(false)}
-                className={`flex items-center gap-4 px-4 py-3 rounded-2xl transition-all ${
+                className={`flex items-center gap-4 rounded-2xl px-4 py-3 transition-all ${
                   isActive
-                    ? 'bg-[#a54a5c] text-white font-bold shadow-sm'
-                    : 'text-[#59668d] hover:bg-gray-100 font-medium'
+                    ? "bg-[#a54a5c] font-bold text-white shadow-sm"
+                    : "font-medium text-[#59668d] hover:bg-white"
                 }`}
               >
-                <Icon className="w-[18px] h-[18px]" />
+                <Icon className="h-[18px] w-[18px]" />
                 <span>{label}</span>
               </Link>
-            )
+            );
           })}
         </nav>
 
-        {/* Upgrade Plan */}
-        <div className="p-6 mt-auto">
-          <button className="w-full bg-[#394676] text-white text-[10px] tracking-widest uppercase font-bold py-3.5 rounded-full hover:bg-[#202c5c] transition-colors shadow-md">
-            Upgrade to Pro
-          </button>
+        {/* Bottom Note */}
+        <div className="mt-auto p-6">
+          <div className="rounded-2xl bg-white p-4 shadow-sm">
+            <p className="text-xs font-bold text-[#202c5c]">
+              Daily practice matters
+            </p>
+            <p className="mt-1 text-xs leading-5 text-gray-500">
+              Continue practising Japanese step by step with Hanashi.
+            </p>
+          </div>
         </div>
       </aside>
     </>
-  )
+  );
 }
