@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from "next/link";
 import {
   BookOpenCheck,
   Languages,
@@ -8,82 +8,84 @@ import {
   ArrowRight,
   Clock,
   Trophy,
-} from 'lucide-react'
+} from "lucide-react";
 
 const quizModes = [
   {
-    id: 'hiragana-practice',
-    title: 'Hiragana Practice',
-    subtitle: 'ひらがな',
+    id: "hiragana-practice",
+    title: "Hiragana Practice",
+    subtitle: "ひらがな",
     description:
-      'Practice Hiragana characters using Kana → Romaji and Romaji → Kana questions.',
-    category: 'Kana Basics',
-    level: 'Beginner',
+      "Practice Hiragana characters using Kana to Romaji and Romaji to Kana questions.",
+    category: "Kana Basics",
+    level: "Beginner",
     questions: 10,
-    duration: '5 min',
+    duration: "5 min",
     icon: BookOpenCheck,
-    href: '/dashboard/quizzes/hiragana-practice',
+    href: "/dashboard/quizzes/hiragana-practice",
     available: true,
   },
   {
-    id: 'katakana-practice',
-    title: 'Katakana Practice',
-    subtitle: 'カタカナ',
+    id: "katakana-practice",
+    title: "Katakana Practice",
+    subtitle: "カタカナ",
     description:
-      'Learn Katakana recognition with simple character and romaji conversion questions.',
-    category: 'Kana Basics',
-    level: 'Beginner',
+      "Learn Katakana recognition with simple character and Romaji conversion questions.",
+    category: "Kana Basics",
+    level: "Beginner",
     questions: 10,
-    duration: '5 min',
+    duration: "5 min",
     icon: Languages,
-    href: '/dashboard/quizzes/katakana-practice',
+    href: "/dashboard/quizzes/katakana-practice",
     available: true,
   },
   {
-    id: 'match-kana',
-    title: 'Match Kana',
-    subtitle: 'かな マッチ',
+    id: "match-kana",
+    title: "Match Kana",
+    subtitle: "かな マッチ",
     description:
-      'Match Hiragana characters with their correct Katakana versions.',
-    category: 'Matching',
-    level: 'Beginner',
+      "Match Hiragana characters with their correct Katakana versions.",
+    category: "Matching",
+    level: "Beginner",
     questions: 8,
-    duration: '6 min',
+    duration: "6 min",
     icon: Shuffle,
-    href: '/dashboard/quizzes/match-kana',
+    href: "/dashboard/quizzes/match-kana",
     available: true,
   },
   {
-    id: 'word-challenge',
-    title: 'Word Challenge',
-    subtitle: 'ことば',
+    id: "word-challenge",
+    title: "Word Challenge",
+    subtitle: "ことば",
     description:
-      'Practice simple Japanese words like ねこ, いぬ, すし, コーヒー, and テレビ.',
-    category: 'Vocabulary',
-    level: 'N5',
+      "Practice simple Japanese words such as ねこ, いぬ, すし, コーヒー, and テレビ.",
+    category: "Vocabulary",
+    level: "N5",
     questions: 10,
-    duration: '7 min',
+    duration: "7 min",
     icon: Sparkles,
-    href: '/dashboard/quizzes/word-challenge',
+    href: "/dashboard/quizzes/word-challenge",
     available: true,
   },
   {
-    id: 'listening-quiz',
-    title: 'Listening Quiz',
-    subtitle: 'リスニング',
+    id: "listening-quiz",
+    title: "Listening Quiz",
+    subtitle: "リスニング",
     description:
-      'Listen to Japanese sounds and choose the correct kana or word. Coming soon.',
-    category: 'Audio Practice',
-    level: 'Beginner',
+      "Listening-based quiz activities will be added in a future improvement of the platform.",
+    category: "Audio Practice",
+    level: "Beginner",
     questions: 0,
-    duration: 'Soon',
+    duration: "Soon",
     icon: Headphones,
-    href: '#',
     available: false,
   },
-]
+];
 
 export default function QuizzesPage() {
+  const availableModes = quizModes.filter((mode) => mode.available).length;
+  const comingSoonModes = quizModes.length - availableModes;
+
   return (
     <div className="min-h-screen bg-[#fafafc] px-6 py-8 md:px-10">
       <div className="mb-8">
@@ -96,7 +98,7 @@ export default function QuizzesPage() {
         </h1>
 
         <p className="mt-3 max-w-3xl text-sm leading-6 text-gray-500">
-          Choose a quiz mode and practice Japanese step by step. Start with
+          Choose a quiz mode and practise Japanese step by step. Start with
           Hiragana and Katakana, then move into matching, vocabulary, and
           listening practice.
         </p>
@@ -106,16 +108,16 @@ export default function QuizzesPage() {
         <div className="rounded-3xl border border-pink-100 bg-white p-5 shadow-sm">
           <p className="text-sm font-medium text-gray-500">Available Modes</p>
           <h2 className="mt-2 text-3xl font-extrabold text-[#202c5c]">
-            4
+            {availableModes}
           </h2>
-          <p className="mt-1 text-xs text-gray-400">1 coming soon</p>
+          <p className="mt-1 text-xs text-gray-400">
+            {comingSoonModes} coming soon
+          </p>
         </div>
 
         <div className="rounded-3xl border border-pink-100 bg-white p-5 shadow-sm">
           <p className="text-sm font-medium text-gray-500">Focus Area</p>
-          <h2 className="mt-2 text-3xl font-extrabold text-[#202c5c]">
-            N5
-          </h2>
+          <h2 className="mt-2 text-3xl font-extrabold text-[#202c5c]">N5</h2>
           <p className="mt-1 text-xs text-gray-400">Beginner friendly</p>
         </div>
 
@@ -130,15 +132,15 @@ export default function QuizzesPage() {
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {quizModes.map((mode) => {
-          const Icon = mode.icon
+          const Icon = mode.icon;
 
           return (
             <div
               key={mode.id}
-              className={`group relative overflow-hidden rounded-4xl border bg-white p-6 shadow-sm transition ${
+              className={`group relative overflow-hidden rounded-3xl border bg-white p-6 shadow-sm transition ${
                 mode.available
-                  ? 'border-pink-100 hover:-translate-y-1 hover:shadow-lg'
-                  : 'border-gray-100 opacity-75'
+                  ? "border-pink-100 hover:-translate-y-1 hover:shadow-lg"
+                  : "border-gray-100 opacity-75"
               }`}
             >
               <div className="absolute right-0 top-0 h-28 w-28 rounded-bl-[4rem] bg-[#f8e9ed]" />
@@ -151,11 +153,11 @@ export default function QuizzesPage() {
                 <span
                   className={`rounded-full px-3 py-1 text-xs font-bold ${
                     mode.available
-                      ? 'bg-[#eef1ff] text-[#202c5c]'
-                      : 'bg-gray-100 text-gray-400'
+                      ? "bg-[#eef1ff] text-[#202c5c]"
+                      : "bg-gray-100 text-gray-400"
                   }`}
                 >
-                  {mode.available ? mode.level : 'Coming Soon'}
+                  {mode.available ? mode.level : "Coming Soon"}
                 </span>
               </div>
 
@@ -179,7 +181,7 @@ export default function QuizzesPage() {
                 <div className="flex items-center gap-2">
                   <Trophy className="h-4 w-4 text-[#c77d9b]" />
                   <span>
-                    {mode.available ? `${mode.questions} Questions` : 'Locked'}
+                    {mode.available ? `${mode.questions} Questions` : "Locked"}
                   </span>
                 </div>
 
@@ -191,7 +193,7 @@ export default function QuizzesPage() {
 
               {mode.available ? (
                 <Link
-                  href={mode.href}
+                 href={mode.href ?? "/dashboard/quizzes"}
                   className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#202c5c] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#c77d9b]"
                 >
                   Start Practice
@@ -201,14 +203,15 @@ export default function QuizzesPage() {
                 <button
                   disabled
                   className="mt-6 w-full cursor-not-allowed rounded-full bg-gray-100 px-5 py-3 text-sm font-bold text-gray-400"
+                  type="button"
                 >
                   Coming Soon
                 </button>
               )}
             </div>
-          )
+          );
         })}
       </div>
     </div>
-  )
+  );
 }
