@@ -1,588 +1,297 @@
 "use client";
 
 import PublishedLessons from "@/components/PublishedLessons";
-import { useState } from "react";
 import Link from "next/link";
 import {
-  Flame,
-  BookOpen,
-  Star,
-  PenTool,
-  BookHeart,
-  Network,
-  Activity,
-  Lock,
   ArrowRight,
-  Grid,
-  Briefcase,
-  MessageSquare,
-  Compass,
+  BookOpen,
+  BookText,
+  CheckCircle2,
   FileText,
+  GraduationCap,
+  Languages,
+  Library,
+  MessageCircle,
+  PlayCircle,
+  Sparkles,
 } from "lucide-react";
 
-export default function MyLessonsPage() {
-  const [activeLevel, setActiveLevel] = useState<"beginner" | "advanced">(
-    "beginner"
-  );
+export default function LessonsPage() {
+  const beginnerLessons = [
+    {
+      title: "Hiragana",
+      subtitle: "ひらがな",
+      description:
+        "Learn the basic Japanese Hiragana writing system with simple character practice.",
+      href: "/dashboard/lessons/hiragana",
+      icon: BookOpen,
+      status: "Start here",
+    },
+    {
+      title: "Katakana",
+      subtitle: "カタカナ",
+      description:
+        "Practise Katakana characters used for foreign words, names, and loanwords.",
+      href: "/dashboard/lessons/katakana",
+      icon: FileText,
+      status: "Beginner",
+    },
+    {
+      title: "Vocabulary",
+      subtitle: "ことば",
+      description:
+        "Build useful beginner Japanese vocabulary for daily communication.",
+      href: "/dashboard/lessons/vocabulary",
+      icon: Library,
+      status: "N5",
+    },
+    {
+      title: "Grammar",
+      subtitle: "文法",
+      description:
+        "Understand basic sentence patterns, particles, tenses, and polite forms.",
+      href: "/dashboard/lessons/grammar",
+      icon: BookText,
+      status: "N5",
+    },
+    {
+      title: "Kanji",
+      subtitle: "漢字",
+      description:
+        "Start learning simple beginner Kanji with meaning and reading support.",
+      href: "/dashboard/lessons/kanji",
+      icon: Languages,
+      status: "Basic",
+    },
+    {
+      title: "Quizzes",
+      subtitle: "練習",
+      description:
+        "Check your understanding through Hiragana, Katakana, matching, and word quizzes.",
+      href: "/dashboard/quizzes",
+      icon: CheckCircle2,
+      status: "Practice",
+    },
+  ];
 
-  const CIRCUMFERENCE = 2 * Math.PI * 36;
+  const learningPath = [
+    "Start with Hiragana characters",
+    "Continue with Katakana characters",
+    "Learn beginner vocabulary",
+    "Study basic grammar patterns",
+    "Practise using quizzes",
+    "Improve through conversation practice",
+  ];
 
   return (
-    <div className="max-w-6xl mx-auto font-sans">
-      {/* Breadcrumb & Toggle */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-        <div className="text-[10px] font-black text-gray-400 tracking-widest uppercase flex items-center gap-2">
+    <div className="min-h-screen bg-[#fafafc] px-4 py-8 md:px-8">
+      <div className="mx-auto max-w-7xl">
+        {/* Breadcrumb */}
+        <div className="mb-6 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.25em] text-gray-400">
           <Link
             href="/dashboard"
-            className="hover:text-hanashi-primary transition-colors"
+            className="transition hover:text-[#a54a5c]"
           >
             Dashboard
           </Link>
-          <span>›</span>
-          <span className="text-hanashi-primary">My Lessons</span>
+          <span>/</span>
+          <span className="text-[#a54a5c]">Lessons</span>
         </div>
 
-        <div className="flex bg-gray-100 p-1 rounded-xl w-fit">
-          <button
-            onClick={() => setActiveLevel("beginner")}
-            className={`px-5 py-2 rounded-lg font-bold text-sm transition-all ${
-              activeLevel === "beginner"
-                ? "bg-white text-hanashi-dark shadow-sm"
-                : "text-gray-500 hover:text-hanashi-dark"
-            }`}
-          >
-            Beginner
-          </button>
-          <button
-            onClick={() => setActiveLevel("advanced")}
-            className={`px-5 py-2 rounded-lg font-bold text-sm transition-all ${
-              activeLevel === "advanced"
-                ? "bg-white text-hanashi-dark shadow-sm"
-                : "text-gray-500 hover:text-hanashi-dark"
-            }`}
-          >
-            Advanced
-          </button>
-        </div>
-      </div>
+        {/* Header */}
+        <section className="mb-8 rounded-3xl bg-white p-6 shadow-sm md:p-8">
+          <div className="grid gap-8 lg:grid-cols-[1.3fr_0.8fr] lg:items-center">
+            <div>
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-[#a54a5c]">
+                Hanashi Learning Path
+              </p>
 
-      {activeLevel === "beginner" ? (
-        <div className="animate-in fade-in duration-500">
-          {/* Header Area */}
-          <div className="flex flex-col md:flex-row md:items-start justify-between gap-8 mb-10">
-            <div className="max-w-xl">
-              <h1 className="text-4xl font-black text-hanashi-dark mb-3 tracking-tight">
-                Beginner Level{" "}
-                <span className="text-hanashi-primary font-jp ml-1">初級</span>
+              <h1 className="text-3xl font-extrabold tracking-tight text-[#202c5c] md:text-5xl">
+                Learn Japanese step by step
               </h1>
-              <p className="text-gray-500 font-medium leading-relaxed">
-                Master the fundamentals of Japanese language through our
-                structured learning path. Each module builds upon the previous
-                one.
-              </p>
-            </div>
 
-            {/* Overall Progress Card */}
-            <div className="bg-white rounded-3xl p-5 border border-gray-100 shadow-sm flex items-center gap-6 min-w-[280px]">
-              <div className="relative w-[80px] h-[80px] shrink-0">
-                <svg className="w-full h-full transform -rotate-90">
-                  <circle
-                    cx="40"
-                    cy="40"
-                    r="36"
-                    stroke="currentColor"
-                    strokeWidth="8"
-                    fill="transparent"
-                    className="text-gray-50"
-                  />
-                  <circle
-                    cx="40"
-                    cy="40"
-                    r="36"
-                    stroke="currentColor"
-                    strokeWidth="8"
-                    fill="transparent"
-                    strokeDasharray={CIRCUMFERENCE}
-                    strokeDashoffset={
-                      CIRCUMFERENCE - CIRCUMFERENCE * 0.35
-                    }
-                    strokeLinecap="round"
-                    className="text-hanashi-primary"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center text-sm font-black text-hanashi-primary">
-                  35%
-                </div>
-              </div>
-              <div>
-                <p className="text-[10px] font-black text-gray-400 tracking-widest uppercase mb-1">
-                  Overall Progress
-                </p>
-                <p className="text-lg font-black text-hanashi-dark">
-                  12 of 40 Lessons
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Lessons Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            {/* Module 1: Alphabet */}
-            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgb(0,0,0,0.06)] transition-all flex flex-col">
-              <div className="flex justify-between items-start mb-6">
-                <div className="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center text-hanashi-dark relative overflow-hidden">
-                  <span className="font-bold text-lg leading-none absolute top-3 left-3">
-                    A
-                  </span>
-                  <span className="font-bold text-sm leading-none absolute bottom-3 right-3 font-jp">
-                    あ
-                  </span>
-                </div>
-                <div className="bg-green-100/80 text-green-700 text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest">
-                  In Progress
-                </div>
-              </div>
-
-              <h4 className="font-black text-hanashi-dark text-xl mb-1 mt-auto">
-                1. Alphabet - Hiragana and Katakana
-              </h4>
-              <p className="text-gray-500 text-sm font-medium mb-8">
-                Basic Japanese syllabaries{" "}
-                <span className="font-jp text-xs opacity-70">(あ/ア)</span>
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-gray-500 md:text-base">
+                Start with Japanese writing systems, then continue with
+                vocabulary, grammar, quizzes, cultural learning, video lessons,
+                and conversation practice. This path is designed for beginner
+                learners.
               </p>
 
-              <div className="mt-auto">
-                <div className="flex justify-between text-xs font-bold text-gray-500 mb-2">
-                  <span>Completion</span>
-                  <span>80%</span>
-                </div>
-                <div className="w-full bg-gray-100 rounded-full h-2 mb-6">
-                  <div
-                    className="bg-hanashi-primary h-2 rounded-full"
-                    style={{ width: "80%" }}
-                  />
-                </div>
+              <div className="mt-6 flex flex-wrap gap-3">
                 <Link
                   href="/dashboard/lessons/hiragana"
-                  className="w-full bg-hanashi-primary text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-opacity-90 transition-all shadow-md shadow-hanashi-primary/20 hover:-translate-y-0.5"
+                  className="inline-flex items-center gap-2 rounded-2xl bg-[#a54a5c] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#913f50]"
                 >
-                  Continue Learning <ArrowRight className="w-4 h-4" />
+                  Start Hiragana
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+
+                <Link
+                  href="/dashboard/quizzes"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-6 py-3 text-sm font-bold text-[#202c5c] transition hover:bg-gray-50"
+                >
+                  Try Quizzes
                 </Link>
               </div>
             </div>
 
-            {/* Module 2: Kanji */}
-            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgb(0,0,0,0.06)] transition-all flex flex-col">
-              <div className="flex justify-between items-start mb-6">
-                <div className="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center text-hanashi-dark">
-                  <PenTool className="w-6 h-6" />
+            <div className="rounded-3xl bg-[#fafafc] p-6">
+              <div className="mb-5 flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#202c5c] text-white">
+                  <Sparkles className="h-6 w-6" />
                 </div>
-                <div className="bg-green-100/80 text-green-700 text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest">
-                  In Progress
+
+                <div>
+                  <h2 className="text-xl font-extrabold text-[#202c5c]">
+                    Beginner Focus
+                  </h2>
+                  <p className="text-sm text-gray-500">
+                    Suitable for new Japanese learners
+                  </p>
                 </div>
               </div>
 
-              <h4 className="font-black text-hanashi-dark text-xl mb-1 mt-auto">
-                2. Kanji
-              </h4>
-              <p className="text-gray-500 text-sm font-medium mb-8">
-                Basic Characters{" "}
-                <span className="font-jp text-xs opacity-70">(漢字)</span>
-              </p>
-
-              <div className="mt-auto">
-                <div className="flex justify-between text-xs font-bold text-gray-500 mb-2">
-                  <span>Completion</span>
-                  <span>45%</span>
-                </div>
-                <div className="w-full bg-gray-100 rounded-full h-2 mb-6">
+              <div className="space-y-3">
+                {learningPath.map((item, index) => (
                   <div
-                    className="bg-hanashi-primary h-2 rounded-full"
-                    style={{ width: "45%" }}
-                  />
-                </div>
-                <Link
-                  href="/dashboard/lessons/kanji"
-                  className="w-full bg-hanashi-primary text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-opacity-90 transition-all shadow-md shadow-hanashi-primary/20 hover:-translate-y-0.5"
-                >
-                  Continue Learning <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Module 3: Vocabulary */}
-            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgb(0,0,0,0.06)] transition-all flex flex-col">
-              <div className="flex justify-between items-start mb-6">
-                <div className="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center text-hanashi-dark">
-                  <BookHeart className="w-6 h-6" />
-                </div>
-                <div className="bg-emerald-50 text-emerald-600 border border-emerald-100/50 text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest">
-                  Started
-                </div>
-              </div>
-
-              <h4 className="font-black text-hanashi-dark text-xl mb-1 mt-auto">
-                3. Vocabulary
-              </h4>
-              <p className="text-gray-500 text-sm font-medium mb-8">
-                Daily Essentials{" "}
-                <span className="font-jp text-xs opacity-70">(単語)</span>
-              </p>
-
-              <div className="mt-auto">
-                <div className="flex justify-between text-xs font-bold text-gray-500 mb-2">
-                  <span>Completion</span>
-                  <span>20%</span>
-                </div>
-                <div className="w-full bg-gray-100 rounded-full h-2 mb-6">
-                  <div
-                    className="bg-hanashi-primary h-2 rounded-full"
-                    style={{ width: "20%" }}
-                  />
-                </div>
-                <Link
-                  href="/dashboard/lessons/vocabulary"
-                  className="w-full bg-hanashi-primary text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-opacity-90 transition-all shadow-md shadow-hanashi-primary/20 hover:-translate-y-0.5"
-                >
-                  Continue Learning <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Module 4: Grammar */}
-            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgb(0,0,0,0.06)] transition-all flex flex-col">
-              <div className="flex justify-between items-start mb-4">
-                <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500">
-                  <Network className="w-6 h-6" />
-                </div>
-                <div className="bg-blue-50 text-blue-600 border border-blue-100/50 text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest">
-                  Up Next
-                </div>
-              </div>
-
-              <h4 className="font-black text-hanashi-dark text-xl mb-1 mt-auto">
-                4. Grammar
-              </h4>
-              <p className="text-gray-500 text-sm font-medium mb-4">
-                Basic Sentence Patterns{" "}
-                <span className="font-jp text-xs opacity-70">(文法)</span>
-              </p>
-
-              <ul className="text-sm font-medium text-gray-500 space-y-2 mb-6 flex-1">
-                <li className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-300 rounded-full" />
-                  Essential Particles (は, が, を)
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-300 rounded-full" />
-                  Question Words & Pronouns
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-300 rounded-full" />
-                  Basic Noun Sentences
-                </li>
-              </ul>
-
-              <div className="mt-auto">
-                <div className="flex justify-between text-xs font-bold text-gray-500 mb-2">
-                  <span>Completion</span>
-                  <span>0%</span>
-                </div>
-                <div className="w-full bg-gray-100 rounded-full h-2 mb-6">
-                  <div
-                    className="bg-blue-500 h-2 rounded-full"
-                    style={{ width: "0%" }}
-                  />
-                </div>
-                <Link
-                  href="/dashboard/lessons/grammar"
-                  className="w-full bg-white border-2 border-blue-100 text-blue-600 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-blue-50 transition-all shadow-sm"
-                >
-                  Start Module <ArrowRight className="w-4 h-4" />
-                </Link>
+                    key={item}
+                    className="flex items-center gap-3 rounded-2xl bg-white p-3"
+                  >
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-pink-100 text-sm font-extrabold text-[#a54a5c]">
+                      {index + 1}
+                    </div>
+                    <p className="text-sm font-semibold text-gray-600">
+                      {item}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
+        </section>
 
-          {/* Bottom Stats Banner */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div className="bg-hanashi-accent/30 rounded-3xl p-6 flex items-center gap-5 border border-hanashi-secondary/40">
-              <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-hanashi-primary shadow-sm border border-hanashi-secondary/40">
-                <Flame className="w-7 h-7" />
-              </div>
-              <div>
-                <p className="text-[10px] font-black text-hanashi-secondary tracking-widest uppercase mb-1">
-                  Day Streak
-                </p>
-                <p className="text-2xl font-black text-hanashi-dark tracking-tight">
-                  14 Days
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-gray-50/80 rounded-3xl p-6 flex items-center gap-5 border border-gray-100">
-              <div className="w-14 h-14 bg-hanashi-primary rounded-2xl flex items-center justify-center text-white shadow-sm hover:shadow-md transition-shadow">
-                <BookOpen className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-[10px] font-black text-gray-400 tracking-widest uppercase mb-1">
-                  Words Learned
-                </p>
-                <p className="text-2xl font-black text-hanashi-dark tracking-tight">
-                  245 Words
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-gray-50/80 rounded-3xl p-6 flex items-center gap-5 border border-gray-100">
-              <div className="w-14 h-14 bg-hanashi-primary rounded-2xl flex items-center justify-center text-white shadow-sm hover:shadow-md transition-shadow">
-                <Star className="w-6 h-6" />
-              </div>
-              <div>
-                <p className="text-[10px] font-black text-gray-400 tracking-widest uppercase mb-1">
-                  Skill Score
-                </p>
-                <p className="text-2xl font-black text-hanashi-dark tracking-tight">
-                  850 XP
-                </p>
-              </div>
+        {/* Lesson Cards */}
+        <section className="mb-8">
+          <div className="mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h2 className="text-2xl font-extrabold text-[#202c5c]">
+                Beginner Lessons
+              </h2>
+              <p className="mt-2 text-sm text-gray-500">
+                Choose a topic and continue your Japanese learning journey.
+              </p>
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="animate-in fade-in duration-500">
-          {/* Advanced Level Content */}
-          <div className="max-w-2xl mb-8">
-            <h1 className="text-3xl md:text-4xl font-black text-hanashi-dark mb-4 tracking-tight flex items-center gap-2">
-              Advanced Level 上級 (Jōkyū)
-            </h1>
-            <p className="text-gray-500 font-medium leading-relaxed text-[15px]">
-              Refine your fluency and master complex linguistic structures. This
-              level focuses on professional communication, literature, and
-              advanced JLPT N1/N2 preparation.
+
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {beginnerLessons.map((lesson) => {
+              const Icon = lesson.icon;
+
+              return (
+                <Link
+                  key={lesson.title}
+                  href={lesson.href}
+                  className="group rounded-3xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                >
+                  <div className="mb-5 flex items-start justify-between gap-4">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-pink-100 text-[#a54a5c]">
+                      <Icon className="h-7 w-7" />
+                    </div>
+
+                    <span className="rounded-full bg-[#fafafc] px-3 py-1 text-xs font-bold text-gray-500">
+                      {lesson.status}
+                    </span>
+                  </div>
+
+                  <p className="text-sm font-bold text-[#a54a5c]">
+                    {lesson.subtitle}
+                  </p>
+
+                  <h3 className="mt-2 text-2xl font-extrabold text-[#202c5c]">
+                    {lesson.title}
+                  </h3>
+
+                  <p className="mt-3 min-h-[72px] text-sm leading-7 text-gray-500">
+                    {lesson.description}
+                  </p>
+
+                  <p className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#a54a5c]">
+                    Open Lesson
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                  </p>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Extra Practice */}
+        <section className="mb-8 grid gap-5 lg:grid-cols-3">
+          <Link
+            href="/dashboard/video-lessons"
+            className="rounded-3xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+          >
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100 text-[#202c5c]">
+              <PlayCircle className="h-6 w-6" />
+            </div>
+            <h3 className="text-xl font-extrabold text-[#202c5c]">
+              Video Lessons
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-gray-500">
+              Watch visual lessons to support Japanese learning topics.
+            </p>
+          </Link>
+
+          <Link
+            href="/dashboard/conversation"
+            className="rounded-3xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+          >
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-green-100 text-green-700">
+              <MessageCircle className="h-6 w-6" />
+            </div>
+            <h3 className="text-xl font-extrabold text-[#202c5c]">
+              Conversation Practice
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-gray-500">
+              Practise speaking and communication through conversation-based
+              activities.
+            </p>
+          </Link>
+
+          <Link
+            href="/dashboard/ai-chat"
+            className="rounded-3xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+          >
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-yellow-100 text-yellow-700">
+              <GraduationCap className="h-6 w-6" />
+            </div>
+            <h3 className="text-xl font-extrabold text-[#202c5c]">
+              AI Tutor
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-gray-500">
+              Ask for Japanese grammar help, translation support, and sentence
+              correction.
+            </p>
+          </Link>
+        </section>
+
+        {/* Teacher Published Lessons */}
+        <section className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
+          <div className="mb-6">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-[#a54a5c]">
+              Teacher Content
+            </p>
+            <h2 className="text-2xl font-extrabold text-[#202c5c]">
+              Published Lessons
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-gray-500">
+              Lessons published by teachers will appear below for students.
             </p>
           </div>
 
-          {/* Advanced Overall Progress Horizontal Card */}
-          <div className="bg-white rounded-3xl p-6 md:p-8 border border-gray-100 shadow-sm flex flex-col md:flex-row items-center gap-8 mb-10">
-            <div className="relative w-28 h-28 shrink-0">
-              <svg className="w-full h-full transform -rotate-90">
-                <circle
-                  cx="56"
-                  cy="56"
-                  r="50"
-                  stroke="currentColor"
-                  strokeWidth="8"
-                  fill="transparent"
-                  className="text-gray-50"
-                />
-                <circle
-                  cx="56"
-                  cy="56"
-                  r="50"
-                  stroke="currentColor"
-                  strokeWidth="8"
-                  fill="transparent"
-                  strokeDasharray={2 * Math.PI * 50}
-                  strokeDashoffset={
-                    2 * Math.PI * 50 - 2 * Math.PI * 50 * 0.15
-                  }
-                  strokeLinecap="round"
-                  className="text-orange-600"
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center text-xl font-black text-hanashi-dark">
-                15%
-              </div>
-            </div>
-
-            <div className="flex-1 text-center md:text-left">
-              <p className="text-[10px] font-black text-gray-400 tracking-widest uppercase mb-1">
-                Overall Progress
-              </p>
-              <p className="text-2xl font-black text-hanashi-dark tracking-tight mb-2">
-                6 of 40 Lessons Completed
-              </p>
-              <p className="text-gray-500 font-medium text-sm mb-4">
-                You&apos;re making steady progress through the Jōkyū syllabus.
-                Focus on High-stroke Kanji to boost your score.
-              </p>
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
-                <span className="bg-orange-50 text-orange-600 text-xs font-bold px-3 py-1.5 rounded-full">
-                  3 Lessons this week
-                </span>
-                <span className="bg-gray-100 text-gray-600 text-xs font-bold px-3 py-1.5 rounded-full">
-                  Top 5% at this level
-                </span>
-              </div>
-            </div>
-
-            <div className="w-full md:w-auto shrink-0">
-              <button className="w-full md:w-auto bg-[#ea580c] text-white px-8 py-3.5 rounded-xl font-bold hover:bg-orange-700 transition-colors shadow-md shadow-orange-600/20">
-                Continue Learning
-              </button>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 mb-6">
-            <Grid className="w-5 h-5 text-orange-600" />
-            <h3 className="text-xl font-black text-hanashi-dark">
-              Lesson Modules
-            </h3>
-          </div>
-
-          {/* Advanced Lessons Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgb(0,0,0,0.06)] transition-all flex flex-col h-full">
-              <div className="flex justify-between items-start mb-6">
-                <div className="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-600">
-                  <PenTool className="w-5 h-5" />
-                </div>
-                <div className="bg-orange-50 text-orange-600 text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest">
-                  In Progress
-                </div>
-              </div>
-              <h4 className="font-black text-hanashi-dark text-lg mb-2">
-                Advanced Kanji
-              </h4>
-              <p className="text-gray-500 text-sm font-medium mb-8">
-                High-stroke count, literary characters and academic compounds.
-              </p>
-
-              <div className="mt-auto pt-4 border-t border-gray-50">
-                <div className="flex justify-between text-[11px] font-bold text-gray-800 mb-3">
-                  <span>40% Complete</span>
-                  <span className="text-orange-600">8/20 Kanji</span>
-                </div>
-                <div className="w-full bg-gray-100 rounded-full h-1.5">
-                  <div
-                    className="bg-orange-600 h-1.5 rounded-full"
-                    style={{ width: "40%" }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_4px_25px_rgb(0,0,0,0.06)] transition-all flex flex-col h-full">
-              <div className="flex justify-between items-start mb-6">
-                <div className="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-600">
-                  <Briefcase className="w-5 h-5" />
-                </div>
-                <div className="bg-white border border-gray-200 text-gray-500 text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm">
-                  Started
-                </div>
-              </div>
-              <h4 className="font-black text-hanashi-dark text-lg mb-2">
-                Business Japanese
-              </h4>
-              <p className="text-gray-500 text-sm font-medium mb-8">
-                Mastering Keigo (honorifics), formal email writing, and office
-                etiquette.
-              </p>
-
-              <div className="mt-auto pt-4 border-t border-gray-50">
-                <div className="flex justify-between text-[11px] font-bold text-gray-800 mb-3">
-                  <span>10% Complete</span>
-                  <span className="text-gray-400">Resume soon</span>
-                </div>
-                <div className="w-full bg-gray-100 rounded-full h-1.5">
-                  <div
-                    className="bg-orange-600 h-1.5 rounded-full"
-                    style={{ width: "10%" }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gray-50/50 rounded-3xl p-6 border border-gray-100 border-dashed flex flex-col h-full bg-blend-soft-light relative">
-              <div className="flex justify-between items-start mb-6 opacity-60">
-                <div className="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center text-gray-500">
-                  <BookOpen className="w-5 h-5" />
-                </div>
-                <Lock className="w-4 h-4 text-gray-400" />
-              </div>
-              <h4 className="font-black text-gray-500 text-lg mb-2">
-                Literature & Media
-              </h4>
-              <p className="text-gray-400 text-sm font-medium mb-8">
-                Analyzing modern news articles, essays, and classic modern
-                fiction.
-              </p>
-
-              <div className="mt-auto pt-4 border-t border-gray-100">
-                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                  Next Up (Started)
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gray-50/50 rounded-3xl p-6 border border-gray-100 flex flex-col h-full opacity-60">
-              <div className="flex justify-between items-start mb-6">
-                <div className="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center text-gray-400">
-                  <MessageSquare className="w-5 h-5" />
-                </div>
-                <Lock className="w-4 h-4 text-gray-400" />
-              </div>
-              <h4 className="font-black text-gray-500 text-lg mb-2">
-                Dialects & Nuance
-              </h4>
-              <p className="text-gray-400 text-sm font-medium mb-8">
-                Regional accents (Kansai-ben) and subtle contextual social cues.
-              </p>
-
-              <div className="mt-auto pt-4 border-t border-gray-100">
-                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                  Started
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gray-50/50 rounded-3xl p-6 border border-gray-100 flex flex-col h-full opacity-60">
-              <div className="flex justify-between items-start mb-6">
-                <div className="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center text-gray-400">
-                  <Compass className="w-5 h-5" />
-                </div>
-                <Lock className="w-4 h-4 text-gray-400" />
-              </div>
-              <h4 className="font-black text-gray-500 text-lg mb-2">
-                Abstract Grammar
-              </h4>
-              <p className="text-gray-400 text-sm font-medium mb-8">
-                Complex sentence structures, literary forms, and poetic grammar.
-              </p>
-
-              <div className="mt-auto pt-4 border-t border-gray-100">
-                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                  Started
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gray-50/50 rounded-3xl p-6 border border-gray-100 flex flex-col h-full opacity-60">
-              <div className="flex justify-between items-start mb-6">
-                <div className="w-12 h-12 bg-gray-100 rounded-2xl flex items-center justify-center text-gray-400">
-                  <FileText className="w-5 h-5" />
-                </div>
-                <Lock className="w-4 h-4 text-gray-400" />
-              </div>
-              <h4 className="font-black text-gray-500 text-lg mb-2">
-                Academic Writing
-              </h4>
-              <p className="text-gray-400 text-sm font-medium mb-8">
-                Structuring arguments, logical flow, and formal essay writing.
-              </p>
-
-              <div className="mt-auto pt-4 border-t border-gray-100">
-                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                  Started
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <PublishedLessons />
+          <PublishedLessons />
+        </section>
+      </div>
     </div>
   );
 }
