@@ -1,45 +1,45 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { Menu, X, User } from 'lucide-react'
+import { useState } from "react";
+import Link from "next/link";
+import { Menu, X, User } from "lucide-react";
 
-export default function MobileMenuButton({ isLoggedIn }: { isLoggedIn: boolean }) {
-  const [isOpen, setIsOpen] = useState(false)
+export default function MobileMenuButton({
+  isLoggedIn,
+}: {
+  isLoggedIn: boolean;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const closeMenu = () => setIsOpen(false);
 
   return (
     <div className="md:hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-10 h-10 flex items-center justify-center rounded-xl text-hanashi-dark hover:bg-gray-100 transition-colors"
+        className="flex h-10 w-10 items-center justify-center rounded-xl text-hanashi-dark transition-colors hover:bg-gray-100"
         aria-label="Toggle menu"
+        type="button"
       >
-        {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </button>
 
-      {/* Mobile Dropdown */}
       {isOpen && (
-        <div className="absolute top-16 left-0 right-0 bg-white border-b border-gray-100 shadow-lg py-4 px-6 flex flex-col gap-3 animate-in slide-in-from-top-2 duration-200 z-50">
+        <div className="absolute left-0 right-0 top-16 z-50 flex flex-col gap-3 border-b border-gray-100 bg-white px-6 py-4 shadow-lg">
+          <Link
+            href="/"
+            onClick={closeMenu}
+            className="border-b border-gray-50 py-3 text-sm font-bold text-gray-600 transition-colors hover:text-hanashi-primary"
+          >
+            Home
+          </Link>
+
           <Link
             href="#features"
-            onClick={() => setIsOpen(false)}
-            className="py-3 font-bold text-sm text-gray-600 hover:text-hanashi-primary transition-colors border-b border-gray-50"
+            onClick={closeMenu}
+            className="border-b border-gray-50 py-3 text-sm font-bold text-gray-600 transition-colors hover:text-hanashi-primary"
           >
             Features
-          </Link>
-          <Link
-            href="#lessons"
-            onClick={() => setIsOpen(false)}
-            className="py-3 font-bold text-sm text-gray-600 hover:text-hanashi-primary transition-colors border-b border-gray-50"
-          >
-            Lessons
-          </Link>
-          <Link
-            href="#culture"
-            onClick={() => setIsOpen(false)}
-            className="py-3 font-bold text-sm text-gray-600 hover:text-hanashi-primary transition-colors border-b border-gray-50"
-          >
-            Culture
           </Link>
 
           <div className="flex flex-col gap-3 pt-2">
@@ -47,17 +47,18 @@ export default function MobileMenuButton({ isLoggedIn }: { isLoggedIn: boolean }
               <>
                 <Link
                   href="/dashboard"
-                  onClick={() => setIsOpen(false)}
-                  className="py-3 text-center font-bold text-sm text-hanashi-primary"
+                  onClick={closeMenu}
+                  className="py-3 text-center text-sm font-bold text-hanashi-primary"
                 >
                   Dashboard
                 </Link>
+
                 <Link
                   href="/profile"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center gap-2 bg-hanashi-secondary text-white px-6 py-3 rounded-xl font-bold text-sm"
+                  onClick={closeMenu}
+                  className="flex items-center justify-center gap-2 rounded-xl bg-hanashi-secondary px-6 py-3 text-sm font-bold text-white"
                 >
-                  <User className="w-4 h-4" />
+                  <User className="h-4 w-4" />
                   Profile
                 </Link>
               </>
@@ -65,15 +66,16 @@ export default function MobileMenuButton({ isLoggedIn }: { isLoggedIn: boolean }
               <>
                 <Link
                   href="/login"
-                  onClick={() => setIsOpen(false)}
-                  className="py-3 text-center font-bold text-sm text-hanashi-primary"
+                  onClick={closeMenu}
+                  className="py-3 text-center text-sm font-bold text-hanashi-primary"
                 >
                   Login
                 </Link>
+
                 <Link
                   href="/register"
-                  onClick={() => setIsOpen(false)}
-                  className="bg-hanashi-secondary text-white px-6 py-3 rounded-xl font-bold text-sm text-center"
+                  onClick={closeMenu}
+                  className="rounded-xl bg-hanashi-secondary px-6 py-3 text-center text-sm font-bold text-white"
                 >
                   Register
                 </Link>
@@ -83,5 +85,5 @@ export default function MobileMenuButton({ isLoggedIn }: { isLoggedIn: boolean }
         </div>
       )}
     </div>
-  )
+  );
 }

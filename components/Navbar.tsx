@@ -1,58 +1,72 @@
 import Link from "next/link";
-import { Castle, User } from "lucide-react"; 
+import { Castle, User } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
 import MobileMenuButton from "./MobileMenuButton";
 
 export default async function Navbar() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
-    <nav className="w-full h-16 md:h-24 px-4 md:px-12 flex items-center justify-between bg-white/80 backdrop-blur-sm fixed top-0 z-50">
+    <nav className="fixed top-0 z-50 flex h-16 w-full items-center justify-between bg-white/85 px-4 shadow-sm backdrop-blur-md md:h-20 md:px-12">
       {/* Logo */}
-      <div className="flex items-center gap-2 shrink-0">
-        <Castle className="w-5 h-5 text-hanashi-primary" />
-        <span className="font-extrabold text-lg md:text-xl text-hanashi-primary tracking-tight">
-          Hanashi <span className="font-jp font-medium text-hanashi-primary/80 opacity-80 text-base md:text-lg hidden sm:inline">(話し)</span>
+      <Link href="/" className="flex shrink-0 items-center gap-2">
+        <Castle className="h-5 w-5 text-hanashi-primary" />
+        <span className="text-lg font-extrabold tracking-tight text-hanashi-primary md:text-xl">
+          Hanashi{" "}
+          <span className="hidden text-base font-medium text-hanashi-primary/80 opacity-80 sm:inline md:text-lg">
+            (話し)
+          </span>
         </span>
-      </div>
+      </Link>
 
-      {/* Nav Links - Desktop only */}
-      <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-10 font-bold text-[13px] tracking-wider uppercase text-black">
-        <Link href="#features" className="hover:text-hanashi-primary transition-colors">
+      {/* Desktop Navigation */}
+      <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 text-[13px] font-bold uppercase tracking-wider text-gray-800 md:flex">
+        <Link href="/" className="transition-colors hover:text-hanashi-primary">
+          Home
+        </Link>
+
+        <Link
+          href="#features"
+          className="transition-colors hover:text-hanashi-primary"
+        >
           Features
-        </Link>
-        <Link href="#lessons" className="hover:text-hanashi-primary transition-colors">
-          Lessons
-        </Link>
-        <Link href="#culture" className="hover:text-hanashi-primary transition-colors">
-          Culture
         </Link>
       </div>
 
       {/* Auth Buttons - Desktop */}
-      <div className="hidden md:flex items-center gap-6 font-bold text-[13px] tracking-wider uppercase">
+      <div className="hidden items-center gap-5 text-[13px] font-bold uppercase tracking-wider md:flex">
         {user ? (
           <>
-            <Link href="/dashboard" className="text-hanashi-primary hover:text-hanashi-secondary transition-colors">
+            <Link
+              href="/dashboard"
+              className="text-hanashi-primary transition-colors hover:text-hanashi-secondary"
+            >
               Dashboard
             </Link>
+
             <Link
               href="/profile"
-              className="flex items-center gap-2 bg-hanashi-secondary text-white px-6 py-2.5 rounded-xl hover:bg-opacity-90 transition-colors shadow-sm"
+              className="flex items-center gap-2 rounded-xl bg-hanashi-secondary px-5 py-2.5 text-sm font-semibold normal-case tracking-normal text-white shadow-sm transition hover:bg-opacity-90"
             >
-              <User className="w-4 h-4" />
+              <User className="h-4 w-4" />
               Profile
             </Link>
           </>
         ) : (
           <>
-            <Link href="/login" className="text-hanashi-primary hover:text-hanashi-secondary transition-colors">
+            <Link
+              href="/login"
+              className="text-hanashi-primary transition-colors hover:text-hanashi-secondary"
+            >
               Login
             </Link>
+
             <Link
               href="/register"
-              className="bg-hanashi-secondary text-white px-6 py-2.5 rounded-xl hover:bg-opacity-90 transition-colors shadow-sm tracking-normal text-sm font-semibold whitespace-nowrap"
+              className="whitespace-nowrap rounded-xl bg-hanashi-secondary px-5 py-2.5 text-sm font-semibold normal-case tracking-normal text-white shadow-sm transition hover:bg-opacity-90"
             >
               Register
             </Link>
