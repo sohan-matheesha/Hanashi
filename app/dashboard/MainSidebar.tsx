@@ -16,7 +16,6 @@ import {
   GraduationCap,
   ShieldCheck,
   PlayCircle,
-  Headphones,
   Sparkles,
 } from "lucide-react";
 
@@ -26,8 +25,6 @@ export default function MainSidebar({ role }: { role: UserRole }) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
-  // Hide this main sidebar when inside lesson pages.
-  // Lesson pages use their own lesson sidebar.
   if (pathname.startsWith("/dashboard/lessons")) {
     return null;
   }
@@ -48,11 +45,6 @@ export default function MainSidebar({ role }: { role: UserRole }) {
       href: "/dashboard/video-lessons",
       icon: PlayCircle,
       label: "Video Lessons",
-    },
-    {
-      href: "/dashboard/listening",
-      icon: Headphones,
-      label: "Listening Practice",
     },
     {
       href: "/dashboard/conversation",
@@ -103,7 +95,6 @@ export default function MainSidebar({ role }: { role: UserRole }) {
 
   return (
     <>
-      {/* Mobile toggle button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed left-4 top-[22px] z-30 flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-[#202c5c] shadow-sm md:hidden"
@@ -113,7 +104,6 @@ export default function MainSidebar({ role }: { role: UserRole }) {
         {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </button>
 
-      {/* Overlay for mobile */}
       {isOpen && (
         <button
           className="fixed inset-0 z-10 bg-black/30 backdrop-blur-sm md:hidden"
@@ -123,13 +113,11 @@ export default function MainSidebar({ role }: { role: UserRole }) {
         />
       )}
 
-      {/* Sidebar */}
       <aside
         className={`fixed z-20 flex h-full w-[260px] flex-col border-r border-gray-100 bg-[#f4f5f7] transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >
-        {/* Header Section */}
         <div className="border-b border-white px-8 pb-6 pt-10">
           <div className="mb-6 flex items-center gap-4">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#a54a5c] text-white shadow-sm">
@@ -154,13 +142,11 @@ export default function MainSidebar({ role }: { role: UserRole }) {
               Beginner Japanese
             </p>
             <p className="mt-2 text-xs leading-5 text-gray-500">
-              Learn through lessons, quizzes, listening, videos, and
-              conversation practice.
+              Learn through lessons, quizzes, videos, and conversation practice.
             </p>
           </div>
         </div>
 
-        {/* Navigation */}
         <nav className="flex flex-col gap-1 px-4 py-4">
           {navLinks.map(({ href, icon: Icon, label, exact }) => {
             const isActive = exact
@@ -185,7 +171,6 @@ export default function MainSidebar({ role }: { role: UserRole }) {
           })}
         </nav>
 
-        {/* Bottom Note */}
         <div className="mt-auto p-6">
           <div className="rounded-2xl bg-white p-4 shadow-sm">
             <p className="text-xs font-bold text-[#202c5c]">
