@@ -21,21 +21,44 @@ export default async function AdminUsersPage({
     query = query.eq("role", selectedRole);
   }
 
-  const { data: profiles } = await query;
+  const { data: profiles, error } = await query;
   const users = profiles ?? [];
+
+  const filters = [
+    { label: "All", href: "/dashboard/admin/users", role: undefined },
+    {
+      label: "Students",
+      href: "/dashboard/admin/users?role=student",
+      role: "student",
+    },
+    {
+      label: "Teachers",
+      href: "/dashboard/admin/users?role=teacher",
+      role: "teacher",
+    },
+    {
+      label: "Admins",
+      href: "/dashboard/admin/users?role=admin",
+      role: "admin",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-[#fafafc] px-4 py-6 md:px-8">
-      <div className="mb-6 rounded-3xl bg-white p-6 shadow-sm">
+      <section className="mb-6 rounded-3xl bg-white p-6 shadow-sm">
         <Link
           href="/dashboard/admin"
-          className="mb-5 inline-flex items-center gap-2 rounded-full bg-[#202c5c] px-5 py-2 text-sm font-bold text-white transition hover:bg-[#FF5A1F]"
+          className="mb-5 inline-flex items-center gap-2 rounded-full bg-[#202c5c] px-5 py-2 text-sm font-bold text-white transition hover:bg-[#a54a5c]"
         >
           <ArrowLeft size={16} />
           Back to Admin Panel
         </Link>
 
-        <h1 className="text-3xl font-bold text-[#202c5c]">
+        <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-[#a54a5c]">
+          Admin Users
+        </p>
+
+        <h1 className="text-3xl font-extrabold text-[#202c5c]">
           {selectedRole
             ? `${
                 selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)
@@ -43,47 +66,47 @@ export default async function AdminUsersPage({
             : "User Management"}
         </h1>
 
-        <p className="mt-2 text-gray-500">
+        <p className="mt-2 text-sm text-gray-500">
           {users.length} user{users.length === 1 ? "" : "s"} found.
         </p>
 
         <div className="mt-5 flex flex-wrap gap-3">
-          <Link
-            href="/dashboard/admin/users"
-            className="rounded-full bg-gray-100 px-5 py-2 text-sm font-bold text-[#202c5c]"
-          >
-            All
-          </Link>
+          {filters.map((filter) => {
+            const isActive = selectedRole === filter.role;
 
-          <Link
-            href="/dashboard/admin/users?role=student"
-            className="rounded-full bg-blue-50 px-5 py-2 text-sm font-bold text-blue-700"
-          >
-            Students
-          </Link>
-
-          <Link
-            href="/dashboard/admin/users?role=teacher"
-            className="rounded-full bg-green-50 px-5 py-2 text-sm font-bold text-green-700"
-          >
-            Teachers
-          </Link>
-
-          <Link
-            href="/dashboard/admin/users?role=admin"
-            className="rounded-full bg-purple-50 px-5 py-2 text-sm font-bold text-purple-700"
-          >
-            Admins
-          </Link>
+            return (
+              <Link
+                key={filter.label}
+                href={filter.href}
+                className={`rounded-full px-5 py-2 text-sm font-bold transition ${
+                  isActive
+                    ? "bg-[#a54a5c] text-white"
+                    : "bg-gray-100 text-[#202c5c] hover:bg-pink-100"
+                }`}
+              >
+                {filter.label}
+              </Link>
+            );
+          })}
         </div>
-      </div>
+      </section>
 
-      <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
+      {error && (
+        <div className="mb-6 rounded-3xl border border-red-100 bg-red-50 p-5 text-sm font-semibold text-red-700">
+          Could not load users from Supabase. Please check the profiles table.
+        </div>
+      )}
+
+      <section className="overflow-hidden rounded-3xl bg-white shadow-sm">
         <div className="border-b border-gray-100 p-5">
-          <h2 className="flex items-center gap-2 text-lg font-bold text-[#202c5c]">
-            <Users size={20} />
+          <h2 className="flex items-center gap-2 text-lg font-extrabold text-[#202c5c]">
+            <Users size={20} className="text-[#a54a5c]" />
             User List
           </h2>
+
+          <p className="mt-2 text-sm text-gray-500">
+            View registered users and filter them by role.
+          </p>
         </div>
 
         <div className="overflow-x-auto">
@@ -99,18 +122,19 @@ export default async function AdminUsersPage({
             <tbody className="divide-y divide-gray-100">
               {users.map((user) => {
                 const role = user.role || "student";
+                const displayName = user.full_name || "Unnamed User";
 
                 return (
-                  <tr key={user.id} className="transition hover:bg-orange-50/40">
+                  <tr key={user.id} className="transition hover:bg-pink-50/40">
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#fff1ea] font-bold text-[#FF5A1F]">
-                          {(user.full_name || "U").charAt(0).toUpperCase()}
+                        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-pink-100 font-bold text-[#a54a5c]">
+                          {displayName.charAt(0).toUpperCase()}
                         </div>
 
                         <div>
                           <p className="font-bold text-[#202c5c]">
-                            {user.full_name || "Unnamed User"}
+                            {displayName}
                           </p>
                           <p className="text-xs text-gray-400">
                             ID: {user.id.slice(0, 8)}...
@@ -125,8 +149,8 @@ export default async function AdminUsersPage({
                           role === "admin"
                             ? "bg-purple-50 text-purple-700"
                             : role === "teacher"
-                            ? "bg-green-50 text-green-700"
-                            : "bg-blue-50 text-blue-700"
+                              ? "bg-green-50 text-green-700"
+                              : "bg-blue-50 text-blue-700"
                         }`}
                       >
                         {role}
@@ -145,12 +169,12 @@ export default async function AdminUsersPage({
           </table>
 
           {users.length === 0 && (
-            <div className="p-8 text-center text-gray-500">
+            <div className="p-8 text-center text-sm text-gray-500">
               No users found.
             </div>
           )}
         </div>
-      </div>
+      </section>
     </div>
   );
 }
