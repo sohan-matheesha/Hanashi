@@ -148,7 +148,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="grid gap-6 md:grid-cols-[260px_1fr]">
-              <div className="flex min-h-56 items-center justify-center rounded-3xl bg-gradient-to-br from-[#202c5c] to-[#a54a5c] p-6 text-white">
+              <div className="flex min-h-56 items-center justify-center rounded-3xl bg-linear-to-br from-[#202c5c] to-[#a54a5c] p-6 text-white">
                 <div className="text-center">
                   <Sparkles className="mx-auto mb-4 h-12 w-12" />
                   <p className="text-sm font-bold uppercase tracking-[0.25em]">
