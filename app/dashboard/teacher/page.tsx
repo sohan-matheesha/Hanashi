@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   BookOpen,
   CalendarDays,
@@ -15,31 +16,34 @@ import {
 const teacherFeatures = [
   {
     title: "Manage Lessons",
-    description:
-      "Create and manage Japanese learning materials for students.",
+    description: "Create and manage Japanese learning materials for students.",
     icon: BookOpen,
-    status: "Available after approval",
+    status: "Open",
+    href: "/dashboard/teacher/lessons",
   },
   {
     title: "Live Sessions",
     description:
       "Plan live learning sessions and conversation practice activities.",
     icon: CalendarDays,
-    status: "Teacher feature",
+    status: "Open",
+    href: "/dashboard/teacher/live-sessions",
   },
   {
     title: "Student Support",
     description:
       "Support learners by providing guidance, practice tasks, and feedback.",
     icon: Users,
-    status: "Teacher feature",
+    status: "Open",
+    href: "/dashboard/teacher/students",
   },
   {
     title: "Progress Review",
     description:
       "Review student learning progress and quiz-based practice results.",
     icon: BarChart3,
-    status: "Future improvement",
+    status: "Open",
+    href: "/dashboard/teacher/progress",
   },
 ];
 
@@ -81,7 +85,7 @@ export default function TeacherPage() {
       }
 
       setSuccessMessage(
-        "Your teacher approval request has been submitted successfully. Please wait for admin review.",
+        "Your teacher approval request has been submitted successfully. Please wait for admin review."
       );
       form.reset();
     } catch (error) {
@@ -155,15 +159,16 @@ export default function TeacherPage() {
           </div>
         </section>
 
-        {/* Feature Cards */}
+        {/* Clickable Teacher Feature Cards */}
         <section className="mb-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           {teacherFeatures.map((feature) => {
             const Icon = feature.icon;
 
             return (
-              <div
+              <Link
                 key={feature.title}
-                className="rounded-3xl bg-white p-6 shadow-sm"
+                href={feature.href}
+                className="group rounded-3xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
               >
                 <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-pink-100 text-[#a54a5c]">
                   <Icon className="h-7 w-7" />
@@ -177,10 +182,14 @@ export default function TeacherPage() {
                   {feature.description}
                 </p>
 
-                <span className="mt-5 inline-flex rounded-full bg-[#fafafc] px-3 py-1 text-xs font-bold text-gray-500">
+                <span className="mt-5 inline-flex rounded-full bg-[#fafafc] px-3 py-1 text-xs font-bold text-[#a54a5c]">
                   {feature.status}
                 </span>
-              </div>
+
+                <p className="mt-4 text-sm font-bold text-[#a54a5c] transition group-hover:translate-x-1">
+                  Open →
+                </p>
+              </Link>
             );
           })}
         </section>
