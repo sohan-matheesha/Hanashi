@@ -1,28 +1,84 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #2d2a32;
-  --hanashi-primary: #c3829e;
-  --hanashi-secondary: #e9b1cd;
-  --hanashi-accent: #ffe7de;
-  --hanashi-dark: #32253a;
+  --background: #070b2d;
+  --foreground: #17123f;
+
+  --hanashi-primary: #7c3aed;
+  --hanashi-secondary: #ec4899;
+  --hanashi-accent: #f8f5ff;
+  --hanashi-dark: #070b2d;
+  --hanashi-card: #ffffff;
+  --hanashi-muted: #6b5b95;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --color-hanashi-primary: var(--hanashi-primary);
   --color-hanashi-secondary: var(--hanashi-secondary);
   --color-hanashi-accent: var(--hanashi-accent);
   --color-hanashi-dark: var(--hanashi-dark);
+  --color-hanashi-card: var(--hanashi-card);
+  --color-hanashi-muted: var(--hanashi-muted);
+
   --font-sans: var(--font-sans), "Inter", sans-serif;
   --font-serif: var(--font-serif), "Noto Serif JP", serif;
   --font-jp: var(--font-noto-sans-jp), ui-sans-serif, system-ui, sans-serif;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(236, 72, 153, 0.18), transparent 32%),
+    radial-gradient(circle at top right, rgba(124, 58, 237, 0.25), transparent 38%),
+    linear-gradient(135deg, #070b2d 0%, #130a3d 45%, #2e1465 100%);
   color: var(--foreground);
   font-family: var(--font-sans);
+}
+
+::selection {
+  background: rgba(236, 72, 153, 0.35);
+  color: #ffffff;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hanashi-glass {
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 20px 60px rgba(70, 38, 120, 0.14);
+  backdrop-filter: blur(18px);
+}
+
+.hanashi-purple-card {
+  background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+  color: #ffffff;
+}
+
+.hanashi-pink-purple {
+  background: linear-gradient(135deg, #ec4899 0%, #7c3aed 100%);
+}
+
+.hanashi-text-muted {
+  color: #6b5b95;
+}
+
+.hanashi-sakura-bg {
+  background:
+    radial-gradient(circle at 15% 20%, rgba(236, 72, 153, 0.24), transparent 28%),
+    radial-gradient(circle at 85% 10%, rgba(124, 58, 237, 0.28), transparent 32%),
+    linear-gradient(135deg, #070b2d 0%, #160b45 45%, #3b1c89 100%);
 }

@@ -17,7 +17,10 @@ import {
   ShieldCheck,
   PlayCircle,
   Sparkles,
+  Flame,
+  ChevronRight,
 } from "lucide-react";
+import { div } from "framer-motion/client";
 
 type UserRole = "student" | "teacher" | "admin" | null;
 
@@ -97,7 +100,7 @@ export default function MainSidebar({ role }: { role: UserRole }) {
     <>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed left-4 top-[22px] z-30 flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-[#202c5c] shadow-sm md:hidden"
+        className="fixed left-4 top-4 z-40 flex h-11 w-11 items-center justify-center rounded-2xl border border-white/20 bg-[#120a3d]/90 text-white shadow-lg backdrop-blur-xl md:hidden"
         aria-label="Toggle sidebar"
         type="button"
       >
@@ -106,7 +109,7 @@ export default function MainSidebar({ role }: { role: UserRole }) {
 
       {isOpen && (
         <button
-          className="fixed inset-0 z-10 bg-black/30 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-20 bg-black/50 backdrop-blur-sm md:hidden"
           onClick={() => setIsOpen(false)}
           aria-label="Close sidebar"
           type="button"
@@ -114,71 +117,117 @@ export default function MainSidebar({ role }: { role: UserRole }) {
       )}
 
       <aside
-        className={`fixed z-20 flex h-full w-[260px] flex-col border-r border-gray-100 bg-[#f4f5f7] transition-transform duration-300 ${
+        className={`fixed left-0 top-0 z-30 flex h-screen w-[282px] flex-col overflow-hidden border-r border-white/10 bg-[#060b2d] text-white shadow-[20px_0_70px_rgba(4,7,35,0.45)] transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >
-        <div className="border-b border-white px-8 pb-6 pt-10">
-          <div className="mb-6 flex items-center gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#a54a5c] text-white shadow-sm">
-              <Sparkles className="h-6 w-6" />
-            </div>
-
-            <div>
-              <h2 className="text-[15px] font-bold leading-tight text-[#202c5c]">
-                Hanashi
-              </h2>
-              <p className="text-xs font-medium text-gray-500">
-                Learning Dashboard
-              </p>
-            </div>
-          </div>
-
-          <div className="rounded-2xl bg-white p-4 shadow-sm">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-[#a54a5c]">
-              Current Level
-            </p>
-            <p className="mt-1 text-sm font-bold text-[#202c5c]">
-              Beginner Japanese
-            </p>
-            <p className="mt-2 text-xs leading-5 text-gray-500">
-              Learn through lessons, quizzes, videos, and conversation practice.
-            </p>
-          </div>
+        {/* Background glow */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(236,72,153,0.24),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(124,58,237,0.28),transparent_40%)]" />
+        <div className="pointer-events-none absolute bottom-8 right-4 text-6xl opacity-10">
+          🌸
+        </div>
+        <div className="pointer-events-none absolute right-8 top-24 text-5xl opacity-10">
+          花
         </div>
 
-        <nav className="flex flex-col gap-1 px-4 py-4">
-          {navLinks.map(({ href, icon: Icon, label, exact }) => {
-            const isActive = exact
-              ? pathname === href
-              : pathname.startsWith(href);
+        <div className="relative z-10 flex h-full flex-col">
+          {/* Logo */}
+          <div className="px-7 pb-5 pt-8">
+            <Link
+              href="/dashboard"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-4"
+            >
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[24px] bg-linear-to-br from-[#ec4899] via-[#b83280] to-[#4c1d95] text-white shadow-[0_18px_35px_rgba(236,72,153,0.35)]">
+                <Sparkles className="h-8 w-8" />
+              </div>
 
-            return (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setIsOpen(false)}
-                className={`flex items-center gap-4 rounded-2xl px-4 py-3 transition-all ${
-                  isActive
-                    ? "bg-[#a54a5c] font-bold text-white shadow-sm"
-                    : "font-medium text-[#59668d] hover:bg-white"
-                }`}
-              >
-                <Icon className="h-[18px] w-[18px]" />
-                <span>{label}</span>
-              </Link>
-            );
-          })}
-        </nav>
+              <div>
+                <h2 className="text-2xl font-extrabold leading-tight tracking-tight text-white">
+                  Hanashi
+                </h2>
+                <p className="mt-1 text-sm font-medium leading-5 text-purple-100">
+                  Japanese Learning
+                  <br />
+                  Platform
+                </p>
+              </div>
+            </Link>
+          </div>
 
-        <div className="mt-auto p-6">
-          <div className="rounded-2xl bg-white p-4 shadow-sm">
-            <p className="text-xs font-bold text-[#202c5c]">
-              Daily practice matters
-            </p>
-            <p className="mt-1 text-xs leading-5 text-gray-500">
-              Continue practising Japanese step by step with Hanashi.
-            </p>
+          {/* Navigation */}
+          <nav className="relative z-10 flex flex-col gap-2 px-5 py-4">
+            {navLinks.map(({ href, icon: Icon, label, exact }) => {
+              const isActive = exact
+                ? pathname === href
+                : pathname.startsWith(href);
+
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setIsOpen(false)}
+                  className={`group flex items-center gap-4 rounded-2xl px-4 py-3.5 text-[15px] transition-all ${
+                    isActive
+                      ? "bg-linear-to-r from-[#7c3aed] to-[#4c1d95] font-extrabold text-white shadow-[0_16px_35px_rgba(124,58,237,0.35)]"
+                      : "font-semibold text-purple-100/90 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  <span
+                    className={`flex h-8 w-8 items-center justify-center rounded-xl transition ${
+                      isActive
+                        ? "bg-white/16 text-white"
+                        : "text-purple-100 group-hover:bg-white/10"
+                    }`}
+                  >
+                    <Icon className="h-[19px] w-[19px]" />
+                  </span>
+
+                  <span className="leading-tight">{label}</span>
+
+                  {isActive && (
+                    <ChevronRight className="ml-auto h-4 w-4 text-white/80" />
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Bottom profile card */}
+          <div className="relative z-10 mt-auto space-y-4 p-5">
+            <div className="rounded-3xl border border-white/10 bg-white/8 p-4 shadow-lg backdrop-blur-xl">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br from-[#ec4899] to-[#7c3aed] text-lg font-extrabold text-white shadow-lg">
+                  H
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-extrabold text-white">
+                    Hanashi User
+                  </p>
+                  <p className="mt-0.5 text-xs capitalize text-purple-100">
+                    {role ?? "student"}
+                  </p>
+                </div>
+
+                <ChevronRight className="h-4 w-4 text-purple-100" />
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-white/10 bg-white/8 p-4 shadow-lg backdrop-blur-xl">
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-orange-500/15 text-orange-300">
+                  <Flame className="h-6 w-6" />
+                </div>
+
+                <div>
+                  <p className="text-lg font-extrabold text-white">7</p>
+                  <p className="text-xs font-medium text-purple-100">
+                    Day Streak
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </aside>
