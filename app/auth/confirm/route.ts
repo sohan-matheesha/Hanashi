@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   const code = requestUrl.searchParams.get("code");
   const tokenHash = requestUrl.searchParams.get("token_hash");
   const type = requestUrl.searchParams.get("type") as EmailOtpType | null;
-  const next = requestUrl.searchParams.get("next") ?? "/auth/redirect";
+  const next = requestUrl.searchParams.get("next") || "/auth/redirect";
 
   const supabase = await createClient();
 
@@ -19,6 +19,12 @@ export async function GET(request: NextRequest) {
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`);
     }
+
+    return NextResponse.redirect(
+      `${origin}/login?message=${encodeURIComponent(
+        "Could not confirm your account. Please try again.",
+      )}`,
+    );
   }
 
   if (tokenHash && type) {
@@ -30,9 +36,17 @@ export async function GET(request: NextRequest) {
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`);
     }
+
+    return NextResponse.redirect(
+      `${origin}/login?message=${encodeURIComponent(
+        "Email confirmation link expired. Please register again or request a new confirmation email.",
+      )}`,
+    );
   }
 
   return NextResponse.redirect(
-    `${origin}/login?message=Email confirmation link expired. Please register again or request a new confirmation email.`
+    `${origin}/login?message=${encodeURIComponent(
+      "Invalid confirmation link. Please try again.",
+    )}`,
   );
 }

@@ -1,16 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import {
   BookOpen,
   CalendarDays,
-  GraduationCap,
-  Loader2,
-  Send,
   ShieldCheck,
   Users,
   BarChart3,
+  Video,
 } from "lucide-react";
 
 const teacherFeatures = [
@@ -45,61 +42,20 @@ const teacherFeatures = [
     status: "Open",
     href: "/dashboard/teacher/progress",
   },
+  {
+    title: "Video Lessons",
+    description:
+      "Add, manage, and delete Japanese video lessons for students.",
+    icon: Video,
+    status: "Open",
+    href: "/dashboard/teacher/video-lessons",
+  },
 ];
 
 export default function TeacherPage() {
-  const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    setSuccessMessage("");
-
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-
-    const data = {
-      full_name: formData.get("full_name"),
-      email: formData.get("email"),
-      phone: formData.get("phone"),
-      qualification: formData.get("qualification"),
-      experience: formData.get("experience"),
-      message: formData.get("message"),
-    };
-
-    try {
-      const response = await fetch("/api/teacher-request", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        alert(result.error || "Something went wrong. Please try again.");
-        return;
-      }
-
-      setSuccessMessage(
-        "Your teacher approval request has been submitted successfully. Please wait for admin review."
-      );
-      form.reset();
-    } catch (error) {
-      console.error(error);
-      alert("Failed to submit teacher request. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <main className="min-h-screen bg-[#fafafc] px-4 py-8 md:px-8">
       <div className="mx-auto max-w-7xl">
-        {/* Header */}
         <section className="mb-8 rounded-3xl bg-white p-6 shadow-sm md:p-8">
           <div className="grid gap-8 lg:grid-cols-[1.3fr_0.8fr] lg:items-center">
             <div>
@@ -108,14 +64,13 @@ export default function TeacherPage() {
               </p>
 
               <h1 className="text-3xl font-extrabold tracking-tight text-[#202c5c] md:text-5xl">
-                Teacher verification and learning management
+                Teaching tools and learning management
               </h1>
 
               <p className="mt-4 max-w-3xl text-sm leading-7 text-gray-500 md:text-base">
-                Teachers can support students by managing learning materials,
-                planning practice activities, and guiding beginner Japanese
-                learners. New teachers must submit an approval request before
-                gaining access to teaching tools.
+                Manage Japanese lessons, video resources, live sessions,
+                student support, and learning progress from one teacher
+                dashboard.
               </p>
             </div>
 
@@ -127,20 +82,20 @@ export default function TeacherPage() {
 
                 <div>
                   <h2 className="text-xl font-extrabold text-[#202c5c]">
-                    Approval Required
+                    Teacher Access Active
                   </h2>
                   <p className="text-sm text-gray-500">
-                    Admin review protects content quality
+                    You can manage student learning content
                   </p>
                 </div>
               </div>
 
               <div className="space-y-3">
                 {[
-                  "Submit teacher details",
-                  "Admin reviews the request",
-                  "Approved teachers access teaching tools",
-                  "Teachers manage learning content",
+                  "Create and publish lessons",
+                  "Add video lesson resources",
+                  "Schedule live learning sessions",
+                  "Review student support and progress",
                 ].map((item, index) => (
                   <div
                     key={item}
@@ -159,8 +114,7 @@ export default function TeacherPage() {
           </div>
         </section>
 
-        {/* Clickable Teacher Feature Cards */}
-        <section className="mb-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-5">
           {teacherFeatures.map((feature) => {
             const Icon = feature.icon;
 
@@ -192,130 +146,6 @@ export default function TeacherPage() {
               </Link>
             );
           })}
-        </section>
-
-        {/* Request Form */}
-        <section className="rounded-3xl bg-white p-6 shadow-sm md:p-8">
-          <div className="mb-8">
-            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#a54a5c] text-white">
-              <GraduationCap className="h-7 w-7" />
-            </div>
-
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#a54a5c]">
-              Teacher Verification
-            </p>
-
-            <h2 className="mt-3 text-3xl font-extrabold text-[#202c5c]">
-              Submit Teacher Approval Request
-            </h2>
-
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-gray-500">
-              Fill in your teaching details. After submitting, the admin can
-              review the request before approving teacher access.
-            </p>
-          </div>
-
-          {successMessage && (
-            <div className="mb-6 rounded-2xl border border-green-100 bg-green-50 p-4 text-sm font-semibold text-green-700">
-              {successMessage}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="grid gap-5 lg:grid-cols-2">
-            <div>
-              <label className="mb-2 block text-sm font-bold text-gray-700">
-                Full Name
-              </label>
-              <input
-                name="full_name"
-                type="text"
-                required
-                placeholder="Enter your full name"
-                className="w-full rounded-2xl border border-gray-200 bg-[#fafafc] px-4 py-3 text-sm outline-none transition focus:border-[#a54a5c] focus:bg-white"
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-bold text-gray-700">
-                Email
-              </label>
-              <input
-                name="email"
-                type="email"
-                required
-                placeholder="Enter your email"
-                className="w-full rounded-2xl border border-gray-200 bg-[#fafafc] px-4 py-3 text-sm outline-none transition focus:border-[#a54a5c] focus:bg-white"
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-bold text-gray-700">
-                Phone Number
-              </label>
-              <input
-                name="phone"
-                type="text"
-                placeholder="Enter your phone number"
-                className="w-full rounded-2xl border border-gray-200 bg-[#fafafc] px-4 py-3 text-sm outline-none transition focus:border-[#a54a5c] focus:bg-white"
-              />
-            </div>
-
-            <div>
-              <label className="mb-2 block text-sm font-bold text-gray-700">
-                Qualification
-              </label>
-              <input
-                name="qualification"
-                type="text"
-                placeholder="Example: JLPT N3 / Japanese Diploma / Teaching Certificate"
-                className="w-full rounded-2xl border border-gray-200 bg-[#fafafc] px-4 py-3 text-sm outline-none transition focus:border-[#a54a5c] focus:bg-white"
-              />
-            </div>
-
-            <div className="lg:col-span-2">
-              <label className="mb-2 block text-sm font-bold text-gray-700">
-                Teaching Experience
-              </label>
-              <textarea
-                name="experience"
-                rows={4}
-                placeholder="Briefly describe your teaching experience"
-                className="w-full resize-none rounded-2xl border border-gray-200 bg-[#fafafc] px-4 py-3 text-sm outline-none transition focus:border-[#a54a5c] focus:bg-white"
-              />
-            </div>
-
-            <div className="lg:col-span-2">
-              <label className="mb-2 block text-sm font-bold text-gray-700">
-                Message to Admin
-              </label>
-              <textarea
-                name="message"
-                rows={4}
-                placeholder="Add any extra message for the admin"
-                className="w-full resize-none rounded-2xl border border-gray-200 bg-[#fafafc] px-4 py-3 text-sm outline-none transition focus:border-[#a54a5c] focus:bg-white"
-              />
-            </div>
-
-            <div className="lg:col-span-2">
-              <button
-                type="submit"
-                disabled={loading}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#202c5c] px-6 py-4 text-sm font-bold text-white transition hover:bg-[#162044] disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Submitting...
-                  </>
-                ) : (
-                  <>
-                    <Send className="h-4 w-4" />
-                    Submit for Approval
-                  </>
-                )}
-              </button>
-            </div>
-          </form>
         </section>
       </div>
     </main>

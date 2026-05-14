@@ -8,6 +8,7 @@ import {
   Search,
   CheckCircle2,
   ImagePlus,
+  Video,
 } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
 import { updateUserRole } from "./actions";
@@ -49,12 +50,12 @@ export default async function AdminDashboardPage() {
       button: "Manage Roles",
     },
     {
-      title: "System Settings",
-      description: "Review platform settings, access rules, and system notes.",
-      href: "/dashboard/admin/settings",
-      icon: Settings,
-      color: "bg-orange-50 text-orange-600",
-      button: "Open Settings",
+      title: "Video Lessons",
+      description: "Add and delete video lesson links shown to students.",
+      href: "/dashboard/teacher/video-lessons",
+      icon: Video,
+      color: "bg-purple-50 text-purple-700",
+      button: "Manage Videos",
     },
     {
       title: "Cultural Hub Stories",
@@ -64,11 +65,18 @@ export default async function AdminDashboardPage() {
       color: "bg-pink-50 text-pink-600",
       button: "Manage Stories",
     },
+    {
+      title: "System Settings",
+      description: "Review platform settings, access rules, and system notes.",
+      href: "/dashboard/admin/settings",
+      icon: Settings,
+      color: "bg-orange-50 text-orange-600",
+      button: "Open Settings",
+    },
   ];
 
   return (
     <div className="min-h-screen bg-[#fafafc] px-4 py-6 md:px-8">
-      {/* Header */}
       <section className="mb-8 rounded-3xl bg-linear-to-r from-[#202c5c] to-[#394676] p-6 text-white shadow-sm md:p-8">
         <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
           <div>
@@ -81,8 +89,8 @@ export default async function AdminDashboardPage() {
             </h1>
 
             <p className="mt-3 max-w-2xl text-sm leading-7 text-white/85 md:text-base">
-              Manage users, assign roles, review teacher access, and control
-              platform-level management areas from one place.
+              Manage users, assign roles, review platform content, and control
+              admin-level management areas from one place.
             </p>
           </div>
 
@@ -93,7 +101,6 @@ export default async function AdminDashboardPage() {
         </div>
       </section>
 
-      {/* Stats */}
       <section className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Link
           href="/dashboard/admin/users"
@@ -138,9 +145,7 @@ export default async function AdminDashboardPage() {
             {teacherCount}
           </h2>
           <p className="mt-1 font-bold text-[#202c5c]">Teachers</p>
-          <p className="mt-2 text-sm text-gray-500">
-            Teaching role accounts
-          </p>
+          <p className="mt-2 text-sm text-gray-500">Teaching role accounts</p>
         </Link>
 
         <Link
@@ -160,8 +165,7 @@ export default async function AdminDashboardPage() {
         </Link>
       </section>
 
-      {/* Admin Tools */}
-      <section className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <section className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         {adminTools.map((tool) => {
           const Icon = tool.icon;
 
@@ -193,19 +197,18 @@ export default async function AdminDashboardPage() {
         })}
       </section>
 
-      {/* Search UI */}
       <section className="mb-6 rounded-3xl bg-white p-4 shadow-sm">
         <div className="relative">
           <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
-            placeholder="Search UI preview: name, role, or user id..."
-            className="w-full rounded-2xl bg-gray-50 py-3 pl-11 pr-4 text-sm text-[#202c5c] outline-none focus:ring-2 focus:ring-[#202c5c]/20"
+            placeholder="Search preview: use the user management page for full filtering"
+            disabled
+            className="w-full cursor-not-allowed rounded-2xl bg-gray-50 py-3 pl-11 pr-4 text-sm text-gray-400 outline-none"
           />
         </div>
       </section>
 
-      {/* Users Table */}
       <section className="overflow-hidden rounded-3xl bg-white shadow-sm">
         <div className="border-b border-gray-100 p-5">
           <h2 className="flex items-center gap-2 text-lg font-extrabold text-[#202c5c]">

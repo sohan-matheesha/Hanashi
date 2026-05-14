@@ -1,34 +1,57 @@
-import { createClient } from '@/utils/supabase/server'
-import { NextResponse } from 'next/server'
+import { createClient } from "@/utils/supabase/server";
+import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url)
-  const code = searchParams.get('code')
-  const token_hash = searchParams.get('token_hash')
-  const type = searchParams.get('type') as 'signup' | 'recovery' | 'invite' | 'email' | null
-  const next = searchParams.get('next') ?? '/dashboard'
+  const requestUrl = new URL(request.url);
 
-  const supabase = await createClient()
+  const code = requestUrl.searchParams.get("code");
+  const tokenHash = requestUrl.searchParams.get("token_hash");
+  const type = requestUrl.searchParams.get("type") as
+    | "signup"
+    | "recovery"
+    | "invite"
+    | "email"
+    | null;
 
-  // Handle PKCE flow (code exchange)
+  const next = requestUrl.searchParams.get("next") || "/auth/redirect";
+  const origin = requestUrl.origin;
+
+  const supabase = await createClient();
+
   if (code) {
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`)
+      return NextResponse.redirect(`${origin}${next}`);
     }
+
+    return NextResponse.redirect(
+      `${origin}/login?message=${encodeURIComponent(
+        "Could not verify login session. Please try again.",
+      )}`,
+    );
   }
 
-  // Handle email confirmation via token_hash (non-PKCE flow)
-  if (token_hash && type) {
+  if (tokenHash && type) {
     const { error } = await supabase.auth.verifyOtp({
       type,
-      token_hash,
-    })
+      token_hash: tokenHash,
+    });
+
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`)
+      return NextResponse.redirect(`${origin}${next}`);
     }
+
+    return NextResponse.redirect(
+      `${origin}/login?message=${encodeURIComponent(
+        "Could not verify email. Please try again.",
+      )}`,
+    );
   }
 
-  // If we get here, something went wrong
-  return NextResponse.redirect(`${origin}/login?message=Could not verify email. Please try again.`)
+  return NextResponse.redirect(
+    `${origin}/login?message=${encodeURIComponent(
+      "Invalid confirmation link. Please try again.",
+    )}`,
+  );
 }

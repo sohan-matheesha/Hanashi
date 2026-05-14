@@ -10,19 +10,24 @@ export default async function AdminLayout({
 
   const {
     data: { user },
+    error: userError,
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/register");
+  if (userError || !user) {
+    redirect("/login");
   }
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("role")
+    .select("id, role")
     .eq("id", user.id)
-    .single();
+    .maybeSingle();
 
-  if (profile?.role !== "admin") {
+  if (profileError || !profile) {
+    redirect("/dashboard");
+  }
+
+  if (profile.role !== "admin") {
     redirect("/dashboard");
   }
 

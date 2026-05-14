@@ -1,60 +1,76 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 
-export async function GET() {
+function getBaseUrl(request: NextRequest) {
+  const origin = request.headers.get("origin");
+
+  if (origin) {
+    return origin;
+  }
+
+  const host = request.headers.get("host");
+
+  if (host) {
+    const protocol = host.includes("localhost") ? "http" : "https";
+    return `${protocol}://${host}`;
+  }
+
+  return process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+}
+
+function getDashboardPath(role: string | null | undefined) {
+  if (role === "admin") {
+    return "/dashboard/admin";
+  }
+
+  if (role === "teacher") {
+    return "/dashboard/teacher";
+  }
+
+  return "/dashboard";
+}
+
+export async function GET(request: NextRequest) {
   const supabase = await createClient();
+  const baseUrl = getBaseUrl(request);
 
   const {
     data: { user },
+    error: userError,
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    return NextResponse.redirect(new URL("/login", process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"));
+  if (userError || !user) {
+    return NextResponse.redirect(new URL("/login", baseUrl));
   }
 
-  const { data: profile, error } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("role, profile_completed, teacher_verification_status")
+    .select("id, full_name, role")
     .eq("id", user.id)
-    .single();
+    .maybeSingle();
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-
-  if (error || !profile) {
-    return NextResponse.redirect(new URL("/onboarding/choose-role", baseUrl));
+  if (profileError) {
+    return NextResponse.redirect(
+      new URL(
+        `/login?message=${encodeURIComponent(
+          "Could not load profile. Please try again.",
+        )}`,
+        baseUrl,
+      ),
+    );
   }
 
-  if (!profile.role) {
-    return NextResponse.redirect(new URL("/onboarding/choose-role", baseUrl));
-  }
-
-  if (profile.role === "student") {
-    if (!profile.profile_completed) {
-      return NextResponse.redirect(new URL("/onboarding/student-profile", baseUrl));
-    }
+  if (!profile) {
+    await supabase.from("profiles").insert({
+      id: user.id,
+      full_name: user.email?.split("@")[0] || "Student",
+      role: "student",
+    });
 
     return NextResponse.redirect(new URL("/dashboard", baseUrl));
   }
 
-  if (profile.role === "teacher") {
-    if (!profile.profile_completed) {
-      return NextResponse.redirect(new URL("/onboarding/teacher-profile", baseUrl));
-    }
+  const dashboardPath = getDashboardPath(profile.role);
 
-    if (profile.teacher_verification_status === "approved") {
-      return NextResponse.redirect(new URL("/dashboard/teacher", baseUrl));
-    }
-
-    if (profile.teacher_verification_status === "rejected") {
-      return NextResponse.redirect(new URL("/onboarding/teacher-profile", baseUrl));
-    }
-
-    return NextResponse.redirect(new URL("/onboarding/teacher-pending", baseUrl));
-  }
-
-  if (profile.role === "admin") {
-    return NextResponse.redirect(new URL("/dashboard/admin", baseUrl));
-  }
-
-  return NextResponse.redirect(new URL("/onboarding/choose-role", baseUrl));
+  return NextResponse.redirect(new URL(dashboardPath, baseUrl));
 }

@@ -10,36 +10,35 @@ export default async function TeacherLayout({
 
   const {
     data: { user },
+    error: userError,
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (userError || !user) {
     redirect("/login");
   }
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("role, profile_completed, teacher_verification_status")
+    .select("id, full_name, role")
     .eq("id", user.id)
-    .single();
+    .maybeSingle();
 
-  if (!profile) {
-    redirect("/onboarding/choose-role");
-  }
-
-  if (profile.role === "admin") {
-    return <>{children}</>;
-  }
-
-  if (profile.role !== "teacher") {
+  if (profileError) {
     redirect("/dashboard");
   }
 
-  if (!profile.profile_completed) {
-    redirect("/onboarding/teacher-profile");
+  if (!profile) {
+    await supabase.from("profiles").insert({
+      id: user.id,
+      full_name: user.email?.split("@")[0] || "Student",
+      role: "student",
+    });
+
+    redirect("/dashboard");
   }
 
-  if (profile.teacher_verification_status !== "approved") {
-    redirect("/onboarding/teacher-pending");
+  if (profile.role !== "teacher" && profile.role !== "admin") {
+    redirect("/dashboard");
   }
 
   return <>{children}</>;

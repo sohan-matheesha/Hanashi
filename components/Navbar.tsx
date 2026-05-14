@@ -5,6 +5,7 @@ import MobileMenuButton from "./MobileMenuButton";
 
 export default async function Navbar() {
   const supabase = await createClient();
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -14,6 +15,7 @@ export default async function Navbar() {
       {/* Logo */}
       <Link href="/" className="flex shrink-0 items-center gap-2">
         <Castle className="h-5 w-5 text-hanashi-primary" />
+
         <span className="text-lg font-extrabold tracking-tight text-hanashi-primary md:text-xl">
           Hanashi{" "}
           <span className="hidden text-base font-medium text-hanashi-primary/80 opacity-80 sm:inline md:text-lg">
@@ -23,16 +25,30 @@ export default async function Navbar() {
       </Link>
 
       {/* Desktop Navigation */}
-      <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 text-[13px] font-bold uppercase tracking-wider text-gray-800 md:flex">
+      <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 text-[13px] font-bold uppercase tracking-wider text-gray-800 md:flex">
         <Link href="/" className="transition-colors hover:text-hanashi-primary">
-          Home
+          HOME
         </Link>
 
         <Link
-          href="#features"
+          href="/#features"
           className="transition-colors hover:text-hanashi-primary"
         >
-          Features
+          FEATURES
+        </Link>
+
+        <Link
+          href="/dashboard/cultural-hub"
+          className="transition-colors hover:text-hanashi-primary"
+        >
+          CULTURAL HUB
+        </Link>
+
+        <Link
+          href="/dashboard/conversation"
+          className="transition-colors hover:text-hanashi-primary"
+        >
+          CONVERSATION
         </Link>
       </div>
 
@@ -44,8 +60,8 @@ export default async function Navbar() {
               href="/dashboard"
               className="text-hanashi-primary transition-colors hover:text-hanashi-secondary"
             >
-              Dashboard
-            </Link>
+              dashboard         
+           </Link>
 
             <Link
               href="/profile"
@@ -61,7 +77,7 @@ export default async function Navbar() {
               href="/login"
               className="text-hanashi-primary transition-colors hover:text-hanashi-secondary"
             >
-              Login
+              LOGIN
             </Link>
 
             <Link

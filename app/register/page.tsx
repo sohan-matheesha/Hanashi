@@ -1,69 +1,23 @@
-"use client";
-
-import { createClient } from "@/utils/supabase/client";
-import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Mail, Lock } from "lucide-react";
+import { signup } from "../login/actions";
+import { Mail, Lock, UserRound } from "lucide-react";
 
-export default function RegisterPage() {
-  const router = useRouter();
-  const supabase = createClient();
+export default async function RegisterPage(props: {
+  searchParams: Promise<{ message?: string }>;
+}) {
+  const searchParams = await props.searchParams;
+  const message = searchParams.message;
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (password.length < 6) {
-      alert("Password must be at least 6 characters long.");
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-     const origin = window.location.origin;
-
-const { data, error } = await supabase.auth.signUp({
-  email,
-  password,
-  options: {
-    emailRedirectTo: `${origin}/auth/confirm?next=/auth/redirect`,
-  },
-});
-
-      if (error) {
-        console.error("Register error:", error);
-        alert(error.message);
-        return;
-      }
-
-      if (!data.session) {
-        alert(
-          "Account created. Please check your email to confirm your account, then login."
-        );
-        router.push("/login");
-        return;
-      }
-
-      router.push("/auth/redirect");
-    } catch (error) {
-      console.error("Unexpected register error:", error);
-      alert("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const isSuccessMessage =
+    message?.toLowerCase().includes("success") ||
+    message?.toLowerCase().includes("check") ||
+    message?.toLowerCase().includes("created");
 
   return (
-    <main className="min-h-screen bg-[#f8f6f7] flex items-center justify-center px-4 py-8">
+    <main className="flex min-h-screen items-center justify-center bg-[#f8f6f7] px-4 py-8">
       <div className="w-full max-w-6xl overflow-hidden rounded-4xl bg-white shadow-[0_20px_60px_rgba(0,0,0,0.08)] md:grid md:grid-cols-2">
-        {/* Left Image Panel */}
         <div
-          className="relative hidden min-h-[700px] overflow-hidden rounded-l-[28px] md:block"
+          className="relative hidden min-h-[700px] overflow-hidden md:block"
           style={{
             backgroundImage: "url('/images/login-japanese-bg.jpg')",
             backgroundSize: "cover",
@@ -71,14 +25,14 @@ const { data, error } = await supabase.auth.signUp({
             backgroundRepeat: "no-repeat",
           }}
         >
-          <div className="absolute inset-0 bg-linear-to-b from-[#c96c9a]/30 to-[#8d4f87]/20" />
+          <div className="absolute inset-0 bg-linear-to-b from-[#c96c9a]/35 to-[#8d4f87]/25" />
 
           <div className="absolute inset-x-0 top-0 p-8">
-            <h2 className="max-w-[260px] text-5xl font-bold leading-tight text-white drop-shadow-sm">
+            <h2 className="max-w-[280px] text-5xl font-bold leading-tight text-white drop-shadow-sm">
               Master the art of language.
             </h2>
 
-            <p className="mt-6 max-w-[260px] text-lg leading-8 text-white/90">
+            <p className="mt-6 max-w-[290px] text-lg leading-8 text-white/90">
               Learn Japanese in the most elegant and effective way with Hanashi.
             </p>
           </div>
@@ -90,10 +44,8 @@ const { data, error } = await supabase.auth.signUp({
           </div>
         </div>
 
-        {/* Right Form Panel */}
         <div className="flex items-center justify-center bg-white px-6 py-10 sm:px-10 md:px-12">
           <div className="w-full max-w-md">
-            {/* Logo */}
             <div className="mb-8 flex items-center gap-3">
               <span className="text-3xl font-bold text-pink-500">⛩</span>
               <h1 className="text-3xl font-bold text-[#111827]">
@@ -105,53 +57,85 @@ const { data, error } = await supabase.auth.signUp({
               Create Account
             </h2>
 
-            <p className="mt-4 text-xl leading-8 text-[#667085]">
+            <p className="mt-4 text-lg leading-8 text-[#667085]">
               Start your Japanese learning journey today.
             </p>
 
-            <form onSubmit={handleRegister} className="mt-10 space-y-6">
-              {/* Email */}
+            {message && (
+              <div
+                className={`mt-6 rounded-2xl border p-4 text-center text-sm font-semibold ${
+                  isSuccessMessage
+                    ? "border-green-200 bg-green-50 text-green-700"
+                    : "border-red-200 bg-red-50 text-red-600"
+                }`}
+              >
+                {message}
+              </div>
+            )}
+
+            <form className="mt-8 space-y-6">
               <div>
                 <label
-                  htmlFor="email"
-                  className="mb-3 block text-xl font-semibold text-[#1f2937]"
+                  htmlFor="full_name"
+                  className="mb-3 block text-base font-semibold text-[#1f2937]"
                 >
-                  Email address
+                  Full Name
                 </label>
 
-                <div className="flex h-16 items-center gap-3 rounded-2xl border border-[#e5e7eb] bg-white px-5 shadow-sm focus-within:border-pink-400">
-                  <Mail className="h-6 w-6 text-[#667085]" />
+                <div className="flex h-14 items-center gap-3 rounded-2xl border border-[#e5e7eb] bg-white px-5 shadow-sm transition focus-within:border-pink-400 focus-within:ring-1 focus-within:ring-pink-400">
+                  <UserRound className="h-5 w-5 text-[#667085]" />
                   <input
-                    id="email"
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    id="full_name"
+                    name="full_name"
+                    type="text"
+                    placeholder="Enter your full name"
                     required
-                    className="w-full bg-transparent text-lg text-[#111827] outline-none placeholder:text-[#98a2b3]"
+                    className="w-full bg-transparent text-base text-[#111827] outline-none placeholder:text-[#98a2b3]"
                   />
                 </div>
               </div>
 
-              {/* Password */}
+              <div>
+                <label
+                  htmlFor="email"
+                  className="mb-3 block text-base font-semibold text-[#1f2937]"
+                >
+                  Email address
+                </label>
+
+                <div className="flex h-14 items-center gap-3 rounded-2xl border border-[#e5e7eb] bg-white px-5 shadow-sm transition focus-within:border-pink-400 focus-within:ring-1 focus-within:ring-pink-400">
+                  <Mail className="h-5 w-5 text-[#667085]" />
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    autoComplete="email"
+                    required
+                    className="w-full bg-transparent text-base text-[#111827] outline-none placeholder:text-[#98a2b3]"
+                  />
+                </div>
+              </div>
+
               <div>
                 <label
                   htmlFor="password"
-                  className="mb-3 block text-xl font-semibold text-[#1f2937]"
+                  className="mb-3 block text-base font-semibold text-[#1f2937]"
                 >
                   Password
                 </label>
 
-                <div className="flex h-16 items-center gap-3 rounded-2xl border border-[#e5e7eb] bg-white px-5 shadow-sm focus-within:border-pink-400">
-                  <Lock className="h-6 w-6 text-[#667085]" />
+                <div className="flex h-14 items-center gap-3 rounded-2xl border border-[#e5e7eb] bg-white px-5 shadow-sm transition focus-within:border-pink-400 focus-within:ring-1 focus-within:ring-pink-400">
+                  <Lock className="h-5 w-5 text-[#667085]" />
                   <input
                     id="password"
+                    name="password"
                     type="password"
                     placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="new-password"
+                    minLength={6}
                     required
-                    className="w-full bg-transparent text-lg text-[#111827] outline-none placeholder:text-[#98a2b3]"
+                    className="w-full bg-transparent text-base text-[#111827] outline-none placeholder:text-[#98a2b3]"
                   />
                 </div>
 
@@ -161,15 +145,21 @@ const { data, error } = await supabase.auth.signUp({
               </div>
 
               <button
-                type="submit"
-                disabled={loading}
-                className="flex h-16 w-full items-center justify-center rounded-2xl bg-linear-to-r from-pink-400 to-pink-500 text-xl font-semibold text-white shadow-lg transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70"
+                formAction={signup}
+                className="flex h-14 w-full items-center justify-center rounded-2xl bg-linear-to-r from-pink-400 to-pink-500 text-base font-semibold text-white shadow-lg transition hover:opacity-95"
               >
-                {loading ? "Creating..." : "Create Account"}
+                Create Student Account
               </button>
             </form>
 
-            <p className="mt-8 text-center text-lg text-[#667085]">
+            <div className="mt-8 rounded-2xl bg-pink-50 p-4 text-center">
+              <p className="text-sm font-medium leading-6 text-[#8a4b65]">
+                New accounts are created as <b>student</b> accounts. Teacher
+                access must be approved by the admin.
+              </p>
+            </div>
+
+            <p className="mt-8 text-center text-base text-[#667085]">
               Already have an account?{" "}
               <Link
                 href="/login"

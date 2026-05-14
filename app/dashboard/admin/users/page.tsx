@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowLeft, Users } from "lucide-react";
+import { ArrowLeft, Users, CheckCircle2 } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
+import { updateUserRole } from "../actions";
 
 export default async function AdminUsersPage({
   searchParams,
@@ -105,17 +106,20 @@ export default async function AdminUsersPage({
           </h2>
 
           <p className="mt-2 text-sm text-gray-500">
-            View registered users and filter them by role.
+            View registered users, filter them by role, and update account
+            access.
           </p>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[750px] text-left">
+          <table className="w-full min-w-[950px] text-left">
             <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
               <tr>
                 <th className="px-5 py-4">User</th>
                 <th className="px-5 py-4">Role</th>
+                <th className="px-5 py-4">Status</th>
                 <th className="px-5 py-4">Joined Date</th>
+                <th className="px-5 py-4">Change Role</th>
               </tr>
             </thead>
 
@@ -157,10 +161,40 @@ export default async function AdminUsersPage({
                       </span>
                     </td>
 
+                    <td className="px-5 py-4">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 text-xs font-bold text-green-700">
+                        <CheckCircle2 size={13} />
+                        Active
+                      </span>
+                    </td>
+
                     <td className="px-5 py-4 text-sm text-gray-600">
                       {user.created_at
                         ? new Date(user.created_at).toLocaleDateString()
                         : "N/A"}
+                    </td>
+
+                    <td className="px-5 py-4">
+                      <form action={updateUserRole} className="flex gap-2">
+                        <input type="hidden" name="userId" value={user.id} />
+
+                        <select
+                          name="role"
+                          defaultValue={role}
+                          className="rounded-2xl bg-gray-50 px-4 py-2 text-sm font-semibold text-[#202c5c] outline-none focus:ring-2 focus:ring-[#a54a5c]/20"
+                        >
+                          <option value="student">student</option>
+                          <option value="teacher">teacher</option>
+                          <option value="admin">admin</option>
+                        </select>
+
+                        <button
+                          type="submit"
+                          className="rounded-2xl bg-[#a54a5c] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#913f50]"
+                        >
+                          Update
+                        </button>
+                      </form>
                     </td>
                   </tr>
                 );

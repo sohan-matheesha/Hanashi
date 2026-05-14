@@ -19,8 +19,8 @@ import {
   Sparkles,
   Flame,
   ChevronRight,
+  Castle,
 } from "lucide-react";
-import { div } from "framer-motion/client";
 
 type UserRole = "student" | "teacher" | "admin" | null;
 
@@ -134,24 +134,18 @@ export default function MainSidebar({ role }: { role: UserRole }) {
           {/* Logo */}
           <div className="px-7 pb-5 pt-8">
             <Link
-              href="/dashboard"
+              href="/"
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-4"
+              className="flex items-center gap-3"
             >
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[24px] bg-linear-to-br from-[#ec4899] via-[#b83280] to-[#4c1d95] text-white shadow-[0_18px_35px_rgba(236,72,153,0.35)]">
-                <Sparkles className="h-8 w-8" />
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/90 text-[#7c3aed] shadow-lg">
+                <Castle className="h-7 w-7" />
               </div>
 
-              <div>
-                <h2 className="text-2xl font-extrabold leading-tight tracking-tight text-white">
-                  Hanashi
-                </h2>
-                <p className="mt-1 text-sm font-medium leading-5 text-purple-100">
-                  Japanese Learning
-                  <br />
-                  Platform
-                </p>
-              </div>
+              <h1 className="text-2xl font-extrabold tracking-tight text-white">
+                Hanashi{" "}
+                <span className="font-semibold text-purple-200">(話し)</span>
+              </h1>
             </Link>
           </div>
 

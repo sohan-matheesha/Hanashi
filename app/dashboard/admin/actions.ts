@@ -4,15 +4,17 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
+const allowedRoles = ["student", "teacher", "admin"] as const;
+
 export async function updateUserRole(formData: FormData) {
-  const userId = formData.get("userId") as string;
-  const role = formData.get("role") as string;
+  const userId = String(formData.get("userId") || "").trim();
+  const role = String(formData.get("role") || "").trim();
 
   if (!userId || !role) {
     throw new Error("User ID and role are required");
   }
 
-  if (!["student", "teacher", "admin"].includes(role)) {
+  if (!allowedRoles.includes(role as (typeof allowedRoles)[number])) {
     throw new Error("Invalid role selected");
   }
 
@@ -20,19 +22,20 @@ export async function updateUserRole(formData: FormData) {
 
   const {
     data: { user },
+    error: userError,
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/register");
+  if (userError || !user) {
+    redirect("/login");
   }
 
-  const { data: adminProfile } = await supabase
+  const { data: adminProfile, error: adminProfileError } = await supabase
     .from("profiles")
     .select("role")
     .eq("id", user.id)
-    .single();
+    .maybeSingle();
 
-  if (adminProfile?.role !== "admin") {
+  if (adminProfileError || adminProfile?.role !== "admin") {
     redirect("/dashboard");
   }
 
@@ -47,4 +50,8 @@ export async function updateUserRole(formData: FormData) {
   }
 
   revalidatePath("/dashboard/admin");
+  revalidatePath("/dashboard/admin/users");
+  revalidatePath("/dashboard/admin/roles");
+  revalidatePath("/dashboard/teacher");
+  revalidatePath("/dashboard");
 }

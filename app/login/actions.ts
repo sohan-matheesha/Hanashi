@@ -1,49 +1,116 @@
-'use server'
+"use server";
 
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
-import { headers } from 'next/headers'
-import { createClient } from '@/utils/supabase/server'
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
+import { createClient } from "@/utils/supabase/server";
+
+function getRedirectPath(role: string | null | undefined) {
+  if (role === "admin") {
+    return "/dashboard/admin";
+  }
+
+  if (role === "teacher") {
+    return "/dashboard/teacher";
+  }
+
+  return "/dashboard";
+}
 
 export async function login(formData: FormData) {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
+  const email = String(formData.get("email") || "").trim();
+  const password = String(formData.get("password") || "");
+
+  if (!email || !password) {
+    redirect("/login?message=Please enter email and password");
+  }
 
   const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
-  })
+  });
 
   if (error) {
-    return redirect('/login?message=Could not authenticate user')
+    redirect("/login?message=Could not authenticate user");
   }
 
-  revalidatePath('/', 'layout')
-  redirect('/auth/redirect')
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login?message=Login failed. Please try again");
+  }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("id, role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (!profile) {
+    await supabase.from("profiles").insert({
+      id: user.id,
+      role: "student",
+      full_name: user.email?.split("@")[0] || "Student",
+    });
+
+    revalidatePath("/", "layout");
+    redirect("/dashboard");
+  }
+
+  const redirectPath = getRedirectPath(profile.role);
+
+  revalidatePath("/", "layout");
+  redirect(redirectPath);
 }
 
 export async function signup(formData: FormData) {
-  const supabase = await createClient()
-  const headersList = await headers()
-  const origin = headersList.get('origin') || headersList.get('x-forwarded-host') || ''
+  const supabase = await createClient();
+  const headersList = await headers();
 
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
+  const origin =
+    headersList.get("origin") || headersList.get("x-forwarded-host") || "";
 
-  const { error } = await supabase.auth.signUp({
+  const siteUrl = origin.startsWith("http") ? origin : `https://${origin}`;
+
+  const email = String(formData.get("email") || "").trim();
+  const password = String(formData.get("password") || "");
+  const fullName = String(formData.get("full_name") || "").trim();
+
+  if (!email || !password) {
+    redirect("/register?message=Please enter email and password");
+  }
+
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      emailRedirectTo: `${origin.startsWith('http') ? origin : `https://${origin}`}/auth/callback`,
+      emailRedirectTo: `${siteUrl}/auth/callback`,
+      data: {
+        full_name: fullName || email.split("@")[0],
+        role: "student",
+      },
     },
-  })
+  });
 
   if (error) {
-  return redirect('/login?message=Could not authenticate user')
-}
+    redirect(`/register?message=${encodeURIComponent(error.message)}`);
+  }
 
-revalidatePath('/', 'layout')
-redirect('/auth/redirect')
+  if (data.user) {
+    await supabase.from("profiles").upsert({
+      id: data.user.id,
+      full_name: fullName || email.split("@")[0],
+      role: "student",
+    });
+  }
+
+  revalidatePath("/", "layout");
+
+  redirect(
+    "/login?message=Account created successfully. Please check your email and login",
+  );
 }
