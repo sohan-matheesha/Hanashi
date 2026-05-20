@@ -1,3 +1,4 @@
+import CreateConversationAlertButton from "@/components/CreateConversationAlertButton";
 import Link from "next/link";
 import { Bot, MessageCircle, Mic, Video, Wifi } from "lucide-react";
 
@@ -77,6 +78,7 @@ export default function ConversationPage() {
             </span>
           </div>
 
+          <CreateConversationAlertButton />
           <div className="overflow-hidden rounded-3xl border border-pink-100 bg-black">
             <iframe
               src="https://meet.jit.si/Hanashi-Fyp-Nsbm-2026-Basic-Speaking-Practice"
