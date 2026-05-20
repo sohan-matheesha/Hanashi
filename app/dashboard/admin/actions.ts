@@ -1,57 +1,65 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-
-const allowedRoles = ["student", "teacher", "admin"] as const;
+import { createClient } from "@/utils/supabase/server";
+import { createClient as createSupabaseAdminClient } from "@supabase/supabase-js";
 
 export async function updateUserRole(formData: FormData) {
-  const userId = String(formData.get("userId") || "").trim();
-  const role = String(formData.get("role") || "").trim();
+  const userId = formData.get("userId") as string;
+  const role = formData.get("role") as string;
 
   if (!userId || !role) {
-    throw new Error("User ID and role are required");
+    throw new Error("Missing user ID or role.");
   }
 
-  if (!allowedRoles.includes(role as (typeof allowedRoles)[number])) {
-    throw new Error("Invalid role selected");
+  if (!["student", "teacher", "admin"].includes(role)) {
+    throw new Error("Invalid role selected.");
   }
 
   const supabase = await createClient();
 
   const {
     data: { user },
-    error: userError,
+    error: authError,
   } = await supabase.auth.getUser();
 
-  if (userError || !user) {
-    redirect("/login");
+  if (authError || !user) {
+    throw new Error("You must be logged in.");
   }
 
-  const { data: adminProfile, error: adminProfileError } = await supabase
+  const { data: currentProfile, error: profileError } = await supabase
     .from("profiles")
     .select("role")
     .eq("id", user.id)
-    .maybeSingle();
+    .single();
 
-  if (adminProfileError || adminProfile?.role !== "admin") {
-    redirect("/dashboard");
+  if (profileError || currentProfile?.role !== "admin") {
+    throw new Error("Only admins can update user roles.");
   }
 
-  const { error } = await supabase
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceRoleKey) {
+    throw new Error("Missing Supabase service role environment variable.");
+  }
+
+  const adminSupabase = createSupabaseAdminClient(
+    supabaseUrl,
+    serviceRoleKey
+  );
+
+  const { error: updateError } = await adminSupabase
     .from("profiles")
     .update({ role })
     .eq("id", userId);
 
-  if (error) {
-    console.error("Role update error:", error);
-    throw new Error("Failed to update user role");
+  if (updateError) {
+    console.error("Role update error:", updateError);
+    throw new Error("Failed to update user role.");
   }
 
   revalidatePath("/dashboard/admin");
   revalidatePath("/dashboard/admin/users");
   revalidatePath("/dashboard/admin/roles");
-  revalidatePath("/dashboard/teacher");
-  revalidatePath("/dashboard");
 }
