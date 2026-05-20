@@ -155,7 +155,7 @@ export default async function DashboardPage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#f8f5ff] px-4 py-6 text-[#17123f] md:px-8">
       <div
-        className="absolute inset-x-0 top-0 h-[390px] overflow-hidden rounded-b-[48px] bg-[#070b2d]"
+        className="absolute inset-x-0 top-0 h-97.5 overflow-hidden rounded-b-[48px] bg-[#070b2d]"
         style={{
           backgroundImage:
             "linear-gradient(rgba(7, 11, 45, 0.45), rgba(76, 29, 149, 0.55)), url('/images/dashboard-bg.jpeg')",

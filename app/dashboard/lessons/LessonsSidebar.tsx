@@ -31,7 +31,7 @@ export default function LessonsSidebar() {
   ];
 
   return (
-    <aside className="fixed left-0 top-[88px] z-10 flex h-[calc(100vh-88px)] w-[240px] flex-col border-r border-gray-100 bg-[#f4f5f7] lg:flex">
+    <aside className="fixed left-0 top-22 z-10 flex h-[calc(100vh-88px)] w-60 flex-col border-r border-gray-100 bg-[#f4f5f7] lg:flex">
       <div className="p-6">
         <Link
           href={backHref}
@@ -72,7 +72,7 @@ export default function LessonsSidebar() {
                   : "font-medium text-gray-500 hover:bg-white/50 hover:text-[#2a3b7c]"
               }`}
             >
-              <Icon className="h-[18px] w-[18px]" strokeWidth={2.5} />
+              <Icon className="h-4 w-4" strokeWidth={2.5} />
               <span>{link.name}</span>
             </Link>
           );

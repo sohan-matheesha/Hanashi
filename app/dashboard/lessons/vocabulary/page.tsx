@@ -182,7 +182,7 @@ export default function VocabularyPage() {
           <Link 
             key={idx} 
             href={`/dashboard/lessons/vocabulary/${module.id}`}
-            className={`${module.bgColor} rounded-4xl p-8 md:p-10 flex flex-col justify-between min-h-85 group cursor-pointer border border-transparent hover:border-gray-200 transition-all duration-300 relative block`}
+            className={`${module.bgColor} rounded-4xl p-8 md:p-10 flex flex-col justify-between min-h-85 group cursor-pointer border border-transparent hover:border-gray-200 transition-all duration-300 relative`}
           >
             {/* Background image for food */}
             {module.isImage && (

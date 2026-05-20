@@ -78,7 +78,7 @@ export default function VocabularyDetailPage() {
 
               {/* Responsive Table Wrapper */}
               <div className="w-full overflow-x-auto">
-                <table className="w-full min-w-[950px] border-collapse text-center">
+                <table className="w-full min-w-237.5 border-collapse text-center">
                   <thead>
                     <tr className="bg-gray-100 text-sm text-gray-900">
                       <th className="border border-gray-200 px-4 py-4 font-bold">
@@ -177,7 +177,7 @@ export default function VocabularyDetailPage() {
 
               {/* Responsive Table Wrapper */}
               <div className="w-full overflow-x-auto">
-                <table className="w-full min-w-[950px] border-collapse text-center">
+                <table className="w-full min-w-237.5 border-collapse text-center">
                   <thead>
                     <tr className="bg-gray-100 text-sm text-gray-900">
                       <th className="border border-gray-200 px-4 py-4 font-bold">
@@ -304,7 +304,7 @@ export default function VocabularyDetailPage() {
               </div>
 
               <div className="w-full overflow-x-auto">
-                <table className="w-full min-w-[650px] border-collapse text-center">
+                <table className="w-full min-w-162.5 border-collapse text-center">
                   <thead>
                     <tr className="bg-gray-100 text-sm text-gray-900">
                       <th className="border border-gray-200 px-4 py-4 font-bold">English</th>
@@ -362,7 +362,7 @@ export default function VocabularyDetailPage() {
               </div>
 
               <div className="w-full overflow-x-auto">
-                <table className="w-full min-w-[650px] border-collapse text-center">
+                <table className="w-full min-w-162.5 border-collapse text-center">
                   <thead>
                     <tr className="bg-gray-100 text-sm text-gray-900">
                       <th className="border border-gray-200 px-4 py-4 font-bold">English</th>
@@ -413,7 +413,7 @@ export default function VocabularyDetailPage() {
               </div>
 
               <div className="w-full overflow-x-auto">
-                <table className="w-full min-w-[650px] border-collapse text-center">
+                <table className="w-full min-w-162.5 border-collapse text-center">
                   <thead>
                     <tr className="bg-gray-100 text-sm text-gray-900">
                       <th className="border border-gray-200 px-4 py-4 font-bold">English</th>
@@ -463,7 +463,7 @@ export default function VocabularyDetailPage() {
               </div>
 
               <div className="w-full overflow-x-auto">
-                <table className="w-full min-w-[800px] border-collapse text-center">
+                <table className="w-full min-w-200 border-collapse text-center">
                   <thead>
                     <tr className="bg-gray-100 text-sm text-gray-900">
                       <th className="border border-gray-200 px-4 py-4 font-bold">English</th>
@@ -548,7 +548,7 @@ export default function VocabularyDetailPage() {
               </div>
 
               <div className="w-full overflow-x-auto">
-                <table className="w-full min-w-[650px] border-collapse text-center">
+                <table className="w-full min-w-162.5 border-collapse text-center">
                   <thead>
                     <tr className="bg-gray-100 text-sm text-gray-900">
                       <th className="border border-gray-200 px-4 py-4 font-bold">
@@ -606,7 +606,7 @@ export default function VocabularyDetailPage() {
               </div>
 
               <div className="w-full overflow-x-auto">
-                <table className="w-full min-w-[650px] border-collapse text-center">
+                <table className="w-full min-w-162.5 border-collapse text-center">
                   <thead>
                     <tr className="bg-gray-100 text-sm text-gray-900">
                       <th className="border border-gray-200 px-4 py-4 font-bold">

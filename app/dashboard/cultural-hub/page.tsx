@@ -316,15 +316,15 @@ export default async function CulturalHubPage() {
       <section className="mb-8 grid gap-6 xl:grid-cols-[1.4fr_0.8fr]">
         <article className="overflow-hidden rounded-[36px] bg-white shadow-sm">
           <div className="grid lg:grid-cols-[1fr_0.9fr]">
-            <div className="relative min-h-[420px] overflow-hidden bg-[#202c5c]">
+            <div className="relative min-h-105 overflow-hidden bg-[#202c5c]">
               {featuredStory.image_url ? (
                 <img
                   src={featuredStory.image_url}
                   alt={featuredStory.title}
-                  className="h-full min-h-[420px] w-full object-cover"
+                  className="h-full min-h-105 w-full object-cover"
                 />
               ) : (
-                <div className="flex h-full min-h-[420px] items-center justify-center bg-linear-to-br from-[#202c5c] to-[#be185d] text-7xl">
+                <div className="flex h-full min-h-105 items-center justify-center bg-linear-to-br from-[#202c5c] to-[#be185d] text-7xl">
                   🌸
                 </div>
               )}
@@ -443,7 +443,7 @@ export default async function CulturalHubPage() {
         {otherStories.map((story, index) => (
           <article
             key={story.id}
-            className={`group overflow-hidden rounded-[32px] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl ${
+            className={`group overflow-hidden rounded-4xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl ${
               index % 4 === 0
                 ? "border-t-8 border-t-pink-400"
                 : index % 4 === 1
@@ -485,7 +485,7 @@ export default async function CulturalHubPage() {
                 {story.title}
               </h3>
 
-              <p className="mt-3 min-h-[112px] text-sm leading-7 text-gray-500">
+              <p className="mt-3 min-h-28 text-sm leading-7 text-gray-500">
                 {story.description}
               </p>
 

@@ -9,9 +9,9 @@ export default function VocabularyLayout({ children }: { children: React.ReactNo
   const pathname = usePathname()
 
   return (
-    <div className="max-w-[1400px] mx-auto w-full min-h-[900px] bg-[#f8f9fc] rounded-[2rem] shadow-2xl flex flex-col md:flex-row overflow-hidden font-sans border-8 border-white/60 mb-20 relative">
+    <div className="max-w-[1400px] mx-auto w-full min-h-[900px] bg-[#f8f9fc] rounded-4xl shadow-2xl flex flex-col md:flex-row overflow-hidden font-sans border-8 border-white/60 mb-20 relative">
        {/* Main Content */}
-       <div className="flex-1 flex flex-col relative w-full h-[900px] overflow-y-auto bg-[#fdfdfd]">
+       <div className="flex-1 flex flex-col relative w-full min-h-[900px] overflow-y-auto bg-[#fdfdfd]">
          {/* Top Navigation Bar */}
          <div className="sticky top-0 z-20 flex items-center justify-between px-10 pt-8 pb-4 bg-gradient-to-b from-[#fdfdfd] to-[#fdfdfd]/0 backdrop-blur-sm">
            <div className="flex items-center gap-2">

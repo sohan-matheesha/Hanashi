@@ -211,7 +211,7 @@ export default function LessonsPage() {
                     {lesson.title}
                   </h3>
 
-                  <p className="mt-3 min-h-[72px] text-sm leading-7 text-gray-500">
+                  <p className="mt-3 min-h-18 text-sm leading-7 text-gray-500">
                     {lesson.description}
                   </p>
 
