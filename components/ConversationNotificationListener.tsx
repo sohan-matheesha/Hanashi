@@ -26,38 +26,44 @@ export default function ConversationNotificationListener({
 
     const supabase = createClient();
 
-    const channel = supabase
-      .channel("conversation-alerts-listener")
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "conversation_alerts",
-        },
-        (payload) => {
-          const newAlert = payload.new as ConversationAlert;
+    async function checkLatestAlert() {
+      const { data, error } = await supabase
+        .from("conversation_alerts")
+        .select("id, title, message, room_link, created_by, created_at")
+        .eq("status", "active")
+        .gt("expires_at", new Date().toISOString())
+        .neq("created_by", currentUserId)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
 
-          if (newAlert.created_by === currentUserId) return;
+      if (error || !data) return;
 
-          setAlert(newAlert);
+      const lastSeenId = localStorage.getItem("last_seen_conversation_alert");
 
-          setTimeout(() => {
-            setAlert(null);
-          }, 15000);
-        }
-      )
-      .subscribe();
+      if (lastSeenId === data.id) return;
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
+      localStorage.setItem("last_seen_conversation_alert", data.id);
+      setAlert(data as ConversationAlert);
+
+      setTimeout(() => {
+        setAlert(null);
+      }, 15000);
+    }
+
+    checkLatestAlert();
+
+    const interval = setInterval(() => {
+      checkLatestAlert();
+    }, 8000);
+
+    return () => clearInterval(interval);
   }, [currentUserId]);
 
   if (!alert) return null;
 
   return (
-    <div className="fixed right-5 top-24 z-[9999] w-[340px] rounded-3xl border border-pink-100 bg-white p-4 shadow-2xl">
+    <div className="fixed right-5 top-24 z-9999 w-85 rounded-3xl border border-pink-100 bg-white p-4 shadow-2xl">
       <div className="flex items-start gap-3">
         <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-pink-50 text-[#c3829e]">
           <BellRing className="h-5 w-5" />

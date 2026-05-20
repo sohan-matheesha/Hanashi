@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { Resend } from "resend";
+import { createClient as createSupabaseAdminClient } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/server";
 
 export async function POST() {
