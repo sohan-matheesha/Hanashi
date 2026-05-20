@@ -190,9 +190,16 @@ export default async function CulturalHubPage() {
 
   return (
     <main className="min-h-screen bg-[#fff7fb] px-4 py-8 md:px-8">
-      <section className="relative mb-8 overflow-hidden rounded-[36px] bg-[#20124d] p-8 text-white shadow-xl md:p-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(236,72,153,0.45),transparent_28%),radial-gradient(circle_at_85%_15%,rgba(251,146,60,0.38),transparent_24%),linear-gradient(135deg,#20124d_0%,#4c1d95_45%,#be185d_100%)]" />
-
+      <section
+        className="relative mb-8 overflow-hidden rounded-4xl p-10 text-white shadow-xl"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(20, 10, 35, 0.45), rgba(20, 10, 35, 0.45)), url('/images/culture-hub-bg.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <div className="pointer-events-none absolute right-8 top-6 text-8xl opacity-20">
           文化
         </div>
@@ -230,7 +237,7 @@ export default async function CulturalHubPage() {
             </div>
           </div>
 
-          <div className="rounded-[32px] border border-white/20 bg-white/15 p-6 backdrop-blur-xl">
+          <div className="rounded-4xl border border-white/25 bg-white/15 p-6 shadow-xl backdrop-blur-xl">
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#be185d]">
               <Sparkles className="h-7 w-7" />
             </div>
