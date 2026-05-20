@@ -9,6 +9,8 @@ import {
   Trash2,
   UserRound,
   Users,
+  Clock,
+  CheckCircle2,
 } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
 
@@ -26,6 +28,17 @@ type SupportRecord = {
   support_type: string;
   title: string;
   message: string;
+  created_at: string;
+};
+
+type StudentQuestion = {
+  id: string;
+  student_id: string;
+  issue_type: string;
+  subject: string;
+  message: string;
+  status: string | null;
+  teacher_reply: string | null;
   created_at: string;
 };
 
@@ -78,21 +91,55 @@ async function deleteStudentSupport(formData: FormData) {
   revalidatePath("/dashboard/teacher/students");
 }
 
+async function replyToStudentQuestion(formData: FormData) {
+  "use server";
+
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const requestId = String(formData.get("request_id") || "").trim();
+  const teacherReply = String(formData.get("teacher_reply") || "").trim();
+
+  if (!requestId || !teacherReply) {
+    return;
+  }
+
+  await supabase
+    .from("student_teacher_requests")
+    .update({
+      teacher_reply: teacherReply,
+      status: "resolved",
+    })
+    .eq("id", requestId);
+
+  revalidatePath("/dashboard/teacher/students");
+}
+
 const supportItems = [
   {
     title: "Student Questions",
     description:
       "Teachers can review student questions and provide learning guidance.",
+    href: "#student-questions",
   },
   {
     title: "Practice Feedback",
     description:
       "Teachers can support learners by giving feedback for lessons and practice tasks.",
+    href: null,
   },
   {
     title: "Learning Support",
     description:
       "Teachers can help students improve grammar, vocabulary, and speaking confidence.",
+    href: null,
   },
 ];
 
@@ -122,6 +169,15 @@ export default async function TeacherStudentsPage() {
     .order("created_at", { ascending: false });
 
   const supportRecords = (supportData ?? []) as SupportRecord[];
+
+  const { data: requestsData, error: requestsError } = await supabase
+    .from("student_teacher_requests")
+    .select(
+      "id, student_id, issue_type, subject, message, status, teacher_reply, created_at",
+    )
+    .order("created_at", { ascending: false });
+
+  const requests = (requestsData ?? []) as StudentQuestion[];
 
   const studentNameMap = new Map(
     students.map((student) => [
@@ -171,21 +227,41 @@ export default async function TeacherStudentsPage() {
       </div>
 
       <div className="grid gap-5 md:grid-cols-3">
-        {supportItems.map((item) => (
-          <div key={item.title} className="rounded-3xl bg-white p-6 shadow-sm">
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-pink-100 text-[#a54a5c]">
-              <MessageCircle className="h-6 w-6" />
+        {supportItems.map((item) => {
+          const cardContent = (
+            <>
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-pink-100 text-[#a54a5c]">
+                <MessageCircle className="h-6 w-6" />
+              </div>
+
+              <h2 className="text-xl font-extrabold text-[#202c5c]">
+                {item.title}
+              </h2>
+
+              <p className="mt-3 text-sm leading-7 text-gray-500">
+                {item.description}
+              </p>
+            </>
+          );
+
+          if (item.href) {
+            return (
+              <Link
+                key={item.title}
+                href={item.href}
+                className="rounded-3xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+              >
+                {cardContent}
+              </Link>
+            );
+          }
+
+          return (
+            <div key={item.title} className="rounded-3xl bg-white p-6 shadow-sm">
+              {cardContent}
             </div>
-
-            <h2 className="text-xl font-extrabold text-[#202c5c]">
-              {item.title}
-            </h2>
-
-            <p className="mt-3 text-sm leading-7 text-gray-500">
-              {item.description}
-            </p>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[420px_1fr]">
@@ -409,6 +485,110 @@ export default async function TeacherStudentsPage() {
           </div>
         </div>
       </div>
+
+      <section
+        id="student-questions"
+        className="mt-8 rounded-3xl border border-purple-100 bg-white/95 p-6 shadow-sm"
+      >
+        <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="text-2xl font-extrabold text-[#202c5c]">
+              Student Questions
+            </h2>
+            <p className="mt-2 text-sm text-gray-500">
+              Questions sent by students will appear here. Teachers can reply
+              and mark questions as resolved.
+            </p>
+          </div>
+
+          <span className="w-fit rounded-full bg-pink-50 px-4 py-2 text-sm font-bold text-[#a54a5c]">
+            {requests.length} Questions
+          </span>
+        </div>
+
+        {requestsError && (
+          <div className="mb-4 rounded-2xl bg-red-50 p-4 text-sm font-semibold text-red-600">
+            Failed to load student questions. Check the
+            student_teacher_requests table or Supabase policies.
+          </div>
+        )}
+
+        {requests.length === 0 ? (
+          <div className="rounded-3xl border border-dashed border-pink-200 bg-pink-50/40 p-6 text-center">
+            <MessageCircle className="mx-auto mb-3 h-8 w-8 text-[#a54a5c]" />
+            <p className="text-sm font-semibold text-gray-500">
+              No student questions yet.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {requests.map((request) => (
+              <div
+                key={request.id}
+                className="rounded-3xl border border-pink-100 bg-white p-5"
+              >
+                <div className="mb-3 flex flex-wrap gap-2">
+                  <span className="rounded-full bg-pink-50 px-3 py-1 text-xs font-bold text-[#a54a5c]">
+                    {request.issue_type}
+                  </span>
+
+                  <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-500">
+                    {studentNameMap.get(request.student_id) || "Unknown Student"}
+                  </span>
+
+                  <span className="inline-flex items-center gap-1 rounded-full bg-purple-50 px-3 py-1 text-xs font-bold text-[#6b5b95]">
+                    {request.status === "resolved" ? (
+                      <CheckCircle2 className="h-3 w-3 text-emerald-600" />
+                    ) : (
+                      <Clock className="h-3 w-3 text-orange-500" />
+                    )}
+                    {request.status || "pending"}
+                  </span>
+                </div>
+
+                <h3 className="text-lg font-extrabold text-[#202c5c]">
+                  {request.subject}
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-gray-500">
+                  {request.message}
+                </p>
+
+                {request.teacher_reply ? (
+                  <div className="mt-4 rounded-2xl bg-emerald-50 p-4">
+                    <p className="mb-1 text-xs font-extrabold uppercase tracking-[0.18em] text-emerald-600">
+                      Teacher Reply
+                    </p>
+                    <p className="text-sm leading-6 text-[#4b3c72]">
+                      {request.teacher_reply}
+                    </p>
+                  </div>
+                ) : (
+                  <form action={replyToStudentQuestion} className="mt-5 space-y-3">
+                    <input type="hidden" name="request_id" value={request.id} />
+
+                    <textarea
+                      name="teacher_reply"
+                      rows={4}
+                      required
+                      placeholder="Write your reply to the student..."
+                      className="w-full resize-none rounded-2xl border border-pink-100 px-4 py-3 text-sm leading-6 outline-none focus:border-[#a54a5c]"
+                    />
+
+                    <button
+                      type="submit"
+                      className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#a54a5c] px-5 py-3 text-sm font-extrabold text-white shadow-sm transition hover:bg-[#8f3d4e]"
+                    >
+                      <Send className="h-4 w-4" />
+                      Send Reply
+                    </button>
+                  </form>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }

@@ -154,9 +154,18 @@ export default async function DashboardPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#f8f5ff] px-4 py-6 text-[#17123f] md:px-8">
-      <div className="absolute inset-x-0 top-0 h-[390px] overflow-hidden rounded-b-[48px] bg-[#070b2d]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(236,72,153,0.42),transparent_28%),radial-gradient(circle_at_75%_25%,rgba(124,58,237,0.45),transparent_30%),linear-gradient(135deg,#070b2d_0%,#1b0b4d_45%,#4c1d95_100%)]" />
-        <div className="absolute inset-0 opacity-35 bg-[linear-gradient(120deg,transparent_0%,rgba(255,255,255,0.16)_45%,transparent_70%)]" />
+      <div
+        className="absolute inset-x-0 top-0 h-[390px] overflow-hidden rounded-b-[48px] bg-[#070b2d]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(7, 11, 45, 0.45), rgba(76, 29, 149, 0.55)), url('/images/dashboard-bg.jpeg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(236,72,153,0.25),transparent_28%),radial-gradient(circle_at_75%_25%,rgba(124,58,237,0.25),transparent_30%)]" />
+        <div className="absolute inset-0 bg-black/20" />
 
         <div className="absolute left-8 top-8 text-5xl opacity-80">🌸</div>
         <div className="absolute right-16 top-10 text-6xl opacity-80">🌸</div>
@@ -248,7 +257,8 @@ export default async function DashboardPage() {
                     Continue Learning
                   </h2>
                   <p className="mt-2 text-sm text-[#6b5b95]">
-                    Pick up where you left off and build your Japanese skills step by step.
+                    Pick up where you left off and build your Japanese skills
+                    step by step.
                   </p>
                 </div>
 
@@ -262,8 +272,12 @@ export default async function DashboardPage() {
 
               <div className="grid gap-6 md:grid-cols-[280px_1fr]">
                 <div className="relative min-h-64 overflow-hidden rounded-3xl bg-linear-to-br from-[#24105f] via-[#4c1d95] to-[#ec4899] p-6 text-white shadow-xl">
-                  <div className="absolute right-4 top-4 text-4xl opacity-70">🌸</div>
-                  <div className="absolute bottom-3 right-4 text-6xl opacity-25">⛩️</div>
+                  <div className="absolute right-4 top-4 text-4xl opacity-70">
+                    🌸
+                  </div>
+                  <div className="absolute bottom-3 right-4 text-6xl opacity-25">
+                    ⛩️
+                  </div>
                   <div className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-pink-400/30 blur-2xl" />
 
                   <div className="relative z-10 flex h-full flex-col justify-between">
@@ -301,7 +315,9 @@ export default async function DashboardPage() {
                   <div className="mt-6">
                     <div className="mb-2 flex justify-between text-xs font-bold text-[#5b3aa4]">
                       <span>Your Progress</span>
-                      <span>{latestProgress?.lessons_completed ? "Updated" : "42%"}</span>
+                      <span>
+                        {latestProgress?.lessons_completed ? "Updated" : "42%"}
+                      </span>
                     </div>
                     <div className="h-2 rounded-full bg-purple-100">
                       <div className="h-2 w-[42%] rounded-full bg-linear-to-r from-[#7c3aed] to-[#ec4899]" />
@@ -476,6 +492,12 @@ export default async function DashboardPage() {
                 </div>
               )}
             </section>
+            <Link
+             href="/dashboard/support"
+             className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-[#4c1d95] to-[#7c3aed] px-5 py-4 text-sm font-extrabold text-white shadow-lg transition hover:-translate-y-0.5">
+             Ask Teacher for Help
+             <ArrowRight className="h-4 w-4" />
+            </Link>
 
             <section className="rounded-3xl border border-purple-100 bg-white/90 p-6 shadow-[0_18px_45px_rgba(70,38,120,0.10)] backdrop-blur-xl">
               <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600">
@@ -497,14 +519,18 @@ export default async function DashboardPage() {
                     </div>
 
                     <div className="rounded-2xl bg-purple-50 p-3 text-center">
-                      <p className="text-xs font-bold text-[#6b5b95]">Lessons</p>
+                      <p className="text-xs font-bold text-[#6b5b95]">
+                        Lessons
+                      </p>
                       <p className="mt-1 text-lg font-extrabold text-[#17123f]">
                         {latestProgress.lessons_completed ?? 0}
                       </p>
                     </div>
 
                     <div className="rounded-2xl bg-pink-50 p-3 text-center">
-                      <p className="text-xs font-bold text-[#6b5b95]">Practice</p>
+                      <p className="text-xs font-bold text-[#6b5b95]">
+                        Practice
+                      </p>
                       <p className="mt-1 text-lg font-extrabold text-[#17123f]">
                         {latestProgress.practice_minutes ?? 0}m
                       </p>
@@ -573,8 +599,8 @@ export default async function DashboardPage() {
               </h2>
 
               <p className="mt-3 text-sm leading-7 text-[#6b5b95]">
-                Explore Japanese culture, daily life, manners, and useful context
-                behind the language.
+                Explore Japanese culture, daily life, manners, and useful
+                context behind the language.
               </p>
 
               <Link
