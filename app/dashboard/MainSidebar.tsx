@@ -52,7 +52,7 @@ export default function MainSidebar({
     .trim();
 
   const canShowTeacherPanel =
-    normalizedRole === "teacher" && normalizedTeacherStatus === "approved";
+    normalizedRole === "teacher" || normalizedRole === "admin";
 
   const canShowAdminPanel = normalizedRole === "admin";
 

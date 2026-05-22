@@ -49,11 +49,9 @@ export default async function TeacherLayout({
     .trim();
 
   const isAdmin = role === "admin";
+  const isTeacher = role === "teacher";
 
-  const isApprovedTeacher =
-    role === "teacher" && teacherVerificationStatus === "approved";
-
-  if (!isAdmin && !isApprovedTeacher) {
+  if (!isAdmin && !isTeacher) {
     redirect("/dashboard");
   }
 
