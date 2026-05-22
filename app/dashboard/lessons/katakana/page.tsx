@@ -69,15 +69,15 @@ export default function KatakanaRootPage() {
     <div className="w-full max-w-250 mx-auto pb-16 animate-in fade-in duration-500">
       
       {/* Header */}
-      <div className="text-center mb-10 pt-4">
+      <div className="text-center mb-6 pt-4">
         <h1 className="text-3xl font-bold text-[#202c5c] mb-2 font-serif">Table of Katakana Letters</h1>
         <div className="w-16 h-1 bg-[#d65f3f] mx-auto rounded-full"></div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 items-start">
         
         {/* Left Column (Gojuon, Dakuon, Handakuon, Additional) */}
-        <div className="flex-1 w-full flex flex-col gap-8">
+        <div className="flex-1 w-full flex flex-col gap-6">
           
           {/* gojūon */}
           <div>

@@ -65,6 +65,7 @@ export async function GET(request: NextRequest) {
       id: user.id,
       full_name: user.email?.split("@")[0] || "Student",
       role: "student",
+      student_id: `STU${Math.floor(1000000 + Math.random() * 9000000)}`,
     });
 
     return NextResponse.redirect(new URL("/dashboard", baseUrl));

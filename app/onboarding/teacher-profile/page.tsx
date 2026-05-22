@@ -1,30 +1,34 @@
 "use client";
 
-import { createClient } from "@/utils/supabase/client";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
-  Award,
-  Calendar,
-  Camera,
-  FileUp,
-  Globe2,
-  GraduationCap,
-  Mail,
-  Phone,
-  Send,
   Sparkles,
   User,
+  Camera,
+  Mail,
+  Phone,
+  Calendar,
+  Globe2,
+  Award,
+  GraduationCap,
+  FileUp,
+  Send,
+  CheckCircle2,
 } from "lucide-react";
+import { createClient } from "@/utils/supabase/client";
 
 export default function TeacherProfilePage() {
   const router = useRouter();
-  const supabase = useMemo(() => createClient(), []);
+  const supabase = createClient();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const certificateInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [certificateName, setCertificateName] = useState("");
@@ -33,19 +37,24 @@ export default function TeacherProfilePage() {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
-  const [country, setCountry] = useState("");
-  const [qualification, setQualification] = useState("JLPT N4");
-  const [experience, setExperience] = useState("Less than 1 year");
+  const [country, setCountry] = useState("Sri Lanka");
+
+  const [qualification, setQualification] = useState("JLPT N5");
+  const [experience, setExperience] = useState("No experience");
   const [highestEducation, setHighestEducation] = useState("");
   const [bio, setBio] = useState("");
+
+  const [role, setRole] = useState("student");
   const [verificationStatus, setVerificationStatus] = useState("pending");
 
-  const [saving, setSaving] = useState(false);
-  const [loadingProfile, setLoadingProfile] = useState(true);
+  const isApprovedTeacher =
+    role === "teacher" && verificationStatus === "approved";
 
   useEffect(() => {
-    const loadTeacherProfile = async () => {
+    const loadProfile = async () => {
       try {
+        setLoadingProfile(true);
+
         const {
           data: { user },
           error: userError,
@@ -56,72 +65,71 @@ export default function TeacherProfilePage() {
           return;
         }
 
-        const { data: profileData, error: profileLoadError } = await supabase
+        setEmail(user.email || "");
+
+        const { data: profile, error: profileError } = await supabase
           .from("profiles")
           .select(
-            "full_name, email, phone_number, date_of_birth, country, avatar_url, teacher_verification_status"
+            "id, full_name, email, phone_number, date_of_birth, country, role, teacher_verification_status"
           )
           .eq("id", user.id)
           .maybeSingle();
 
-        if (profileLoadError) {
-          console.error("Load teacher base profile error:", profileLoadError);
+        if (profileError) {
+          console.error("Profile load error:", profileError);
         }
 
-        if (profileData) {
-          setFullName(profileData.full_name || "");
-          setEmail(profileData.email || user.email || "");
-          setPhoneNumber(profileData.phone_number || "");
-          setDateOfBirth(profileData.date_of_birth || "");
-          setCountry(profileData.country || "");
-          setProfileImage(profileData.avatar_url || null);
-          setVerificationStatus(
-            profileData.teacher_verification_status || "pending"
-          );
-        } else {
-          setEmail(user.email || "");
+        const { data: teacherProfile, error: teacherProfileError } =
+          await supabase
+            .from("teacher_profiles")
+            .select(
+              "full_name, email, phone_number, date_of_birth, country, japanese_qualification, teaching_experience, highest_education, certificate_url, bio, verification_status"
+            )
+            .eq("user_id", user.id)
+            .maybeSingle();
+
+        if (teacherProfileError) {
+          console.error("Teacher profile load error:", teacherProfileError);
         }
 
-        const { data: teacherData, error: teacherError } = await supabase
-          .from("teacher_profiles")
-          .select(
-            "full_name, email, phone_number, date_of_birth, country, japanese_qualification, teaching_experience, highest_education, certificate_url, bio, verification_status"
-          )
-          .eq("user_id", user.id)
-          .maybeSingle();
+        const currentRole = profile?.role || "student";
+        const currentStatus =
+          profile?.teacher_verification_status ||
+          teacherProfile?.verification_status ||
+          "pending";
 
-        if (teacherError) {
-          console.error("Load teacher profile error:", teacherError);
-          return;
-        }
+        setRole(currentRole);
+        setVerificationStatus(currentStatus);
 
-        if (teacherData) {
-          setFullName(teacherData.full_name || profileData?.full_name || "");
-          setEmail(
-            teacherData.email || profileData?.email || user.email || ""
-          );
-          setPhoneNumber(
-            teacherData.phone_number || profileData?.phone_number || ""
-          );
-          setDateOfBirth(
-            teacherData.date_of_birth || profileData?.date_of_birth || ""
-          );
-          setCountry(teacherData.country || profileData?.country || "");
-          setQualification(teacherData.japanese_qualification || "JLPT N4");
-          setExperience(teacherData.teaching_experience || "Less than 1 year");
-          setHighestEducation(teacherData.highest_education || "");
-          setCertificateName(teacherData.certificate_url || "");
-          setBio(teacherData.bio || "");
-          setVerificationStatus(teacherData.verification_status || "pending");
-        }
+        setFullName(
+          teacherProfile?.full_name ||
+            profile?.full_name ||
+            user.email?.split("@")[0] ||
+            ""
+        );
+
+        setEmail(teacherProfile?.email || profile?.email || user.email || "");
+        setPhoneNumber(
+          teacherProfile?.phone_number || profile?.phone_number || ""
+        );
+        setDateOfBirth(
+          teacherProfile?.date_of_birth || profile?.date_of_birth || ""
+        );
+        setCountry(teacherProfile?.country || profile?.country || "Sri Lanka");
+
+        setQualification(teacherProfile?.japanese_qualification || "JLPT N5");
+        setExperience(teacherProfile?.teaching_experience || "No experience");
+        setHighestEducation(teacherProfile?.highest_education || "");
+        setCertificateName(teacherProfile?.certificate_url || "");
+        setBio(teacherProfile?.bio || "");
       } catch (error) {
-        console.error("Unexpected load error:", error);
+        console.error("Unexpected profile load error:", error);
       } finally {
         setLoadingProfile(false);
       }
     };
 
-    loadTeacherProfile();
+    loadProfile();
   }, [router, supabase]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -158,6 +166,10 @@ export default function TeacherProfilePage() {
         return;
       }
 
+      const nextVerificationStatus = isApprovedTeacher
+        ? "approved"
+        : "pending";
+
       const { error: profileError } = await supabase.from("profiles").upsert(
         {
           id: user.id,
@@ -168,7 +180,7 @@ export default function TeacherProfilePage() {
           country: country,
           role: "teacher",
           profile_completed: true,
-          teacher_verification_status: "pending",
+          teacher_verification_status: nextVerificationStatus,
         },
         {
           onConflict: "id",
@@ -196,7 +208,7 @@ export default function TeacherProfilePage() {
             highest_education: highestEducation,
             certificate_url: certificateName,
             bio: bio,
-            verification_status: "pending",
+            verification_status: nextVerificationStatus,
           },
           {
             onConflict: "user_id",
@@ -209,7 +221,15 @@ export default function TeacherProfilePage() {
         return;
       }
 
-      router.push("/onboarding/teacher-pending");
+      setRole("teacher");
+      setVerificationStatus(nextVerificationStatus);
+
+      if (nextVerificationStatus === "approved") {
+        alert("Teacher profile updated successfully.");
+        router.push("/dashboard/teacher");
+      } else {
+        router.push("/onboarding/teacher-pending");
+      }
     } catch (error) {
       console.error("Unexpected teacher save error:", error);
       alert("Something went wrong. Please try again.");
@@ -251,17 +271,27 @@ export default function TeacherProfilePage() {
 
       <main className="mx-auto max-w-6xl px-6 py-10">
         <div className="mb-10 text-center">
-          <div className="mx-auto mb-4 inline-flex items-center rounded-full bg-pink-100 px-4 py-2 text-sm font-semibold text-pink-600">
-            Teacher Verification
+          <div
+            className={`mx-auto mb-4 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold ${
+              isApprovedTeacher
+                ? "bg-emerald-100 text-emerald-700"
+                : "bg-pink-100 text-pink-600"
+            }`}
+          >
+            {isApprovedTeacher && <CheckCircle2 size={16} />}
+            {isApprovedTeacher ? "Teacher" : "Teacher Verification"}
           </div>
 
           <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
-            Complete your teacher profile
+            {isApprovedTeacher
+              ? "Your teacher profile"
+              : "Complete your teacher profile"}
           </h1>
 
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-gray-600">
-            Submit your qualification details so Hanashi can verify your
-            teaching profile before giving access to teacher tools.
+            {isApprovedTeacher
+              ? "Your teacher account has been approved. You can update your teacher profile details here."
+              : "Submit your qualification details so Hanashi can verify your teaching profile before giving access to teacher tools."}
           </p>
         </div>
 
@@ -303,7 +333,9 @@ export default function TeacherProfilePage() {
               </h2>
 
               <p className="mt-2 text-sm text-gray-500">
-                Your profile will be reviewed by an admin.
+                {isApprovedTeacher
+                  ? "Your profile is approved by admin."
+                  : "Your profile will be reviewed by an admin."}
               </p>
 
               <div className="mt-5 flex flex-wrap justify-center gap-2">
@@ -312,19 +344,20 @@ export default function TeacherProfilePage() {
                 </span>
 
                 <span
-                  className={`rounded-full px-4 py-1 text-sm font-semibold ${
-                    verificationStatus === "approved"
+                  className={`inline-flex items-center gap-1 rounded-full px-4 py-1 text-sm font-semibold ${
+                    isApprovedTeacher
                       ? "bg-emerald-100 text-emerald-700"
                       : verificationStatus === "rejected"
-                      ? "bg-red-100 text-red-700"
-                      : "bg-amber-100 text-amber-700"
+                        ? "bg-red-100 text-red-700"
+                        : "bg-amber-100 text-amber-700"
                   }`}
                 >
-                  {verificationStatus === "approved"
-                    ? "Approved"
+                  {isApprovedTeacher && <CheckCircle2 size={14} />}
+                  {isApprovedTeacher
+                    ? "Teacher"
                     : verificationStatus === "rejected"
-                    ? "Rejected"
-                    : "Pending Verification"}
+                      ? "Rejected"
+                      : "Pending Verification"}
                 </span>
               </div>
 
@@ -604,16 +637,26 @@ export default function TeacherProfilePage() {
 
               <div className="flex flex-col gap-3 border-t border-gray-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm text-gray-500">
-                  Your teacher access will be enabled after admin approval.
+                  {isApprovedTeacher
+                    ? "Your teacher account is approved. You can update your profile anytime."
+                    : "Your teacher access will be enabled after admin approval."}
                 </p>
 
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex items-center justify-center gap-2 rounded-2xl bg-pink-400 px-8 py-3 font-semibold text-white shadow-lg shadow-pink-200 transition hover:bg-pink-500 disabled:cursor-not-allowed disabled:opacity-70"
+                  className={`flex items-center justify-center gap-2 rounded-2xl px-8 py-3 font-semibold text-white shadow-lg transition disabled:cursor-not-allowed disabled:opacity-70 ${
+                    isApprovedTeacher
+                      ? "bg-emerald-500 shadow-emerald-200 hover:bg-emerald-600"
+                      : "bg-pink-400 shadow-pink-200 hover:bg-pink-500"
+                  }`}
                 >
                   <Send size={18} />
-                  {saving ? "Submitting..." : "Submit for Verification"}
+                  {saving
+                    ? "Saving..."
+                    : isApprovedTeacher
+                      ? "Update Teacher Profile"
+                      : "Submit for Verification"}
                 </button>
               </div>
             </form>

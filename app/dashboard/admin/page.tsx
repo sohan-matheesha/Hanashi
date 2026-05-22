@@ -11,14 +11,14 @@ import {
   Video,
 } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
-import { updateUserRole } from "./actions";
+import UpdateUserRoleForm from "./users/UpdateUserRoleForm";
 
 export default async function AdminDashboardPage() {
   const supabase = await createClient();
 
   const { data: profiles, error } = await supabase
     .from("profiles")
-    .select("id, full_name, role, created_at")
+    .select("id, full_name, role, teacher_verification_status, created_at")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -185,7 +185,7 @@ export default async function AdminDashboardPage() {
                 {tool.title}
               </h3>
 
-              <p className="mt-2 min-h-[72px] text-sm leading-6 text-gray-500">
+              <p className="mt-2 min-h-18 text-sm leading-6 text-gray-500">
                 {tool.description}
               </p>
 
@@ -222,7 +222,7 @@ export default async function AdminDashboardPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[900px] text-left">
+          <table className="w-full min-w-225 text-left">
             <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
               <tr>
                 <th className="px-5 py-4">User</th>
@@ -237,7 +237,14 @@ export default async function AdminDashboardPage() {
               {users.map((user) => {
                 const displayName = user.full_name || "Unnamed User";
                 const displayEmail = `User ID: ${user.id.slice(0, 8)}...`;
-                const currentRole = user.role || "student";
+                const currentRole = String(user.role || "student")
+                  .toLowerCase()
+                  .trim();
+                const teacherVerificationStatus = String(
+                  user.teacher_verification_status || "pending"
+                )
+                  .toLowerCase()
+                  .trim();
                 const joinedDate = user.created_at
                   ? new Date(user.created_at).toLocaleDateString()
                   : "N/A";
@@ -287,26 +294,11 @@ export default async function AdminDashboardPage() {
                     </td>
 
                     <td className="px-5 py-4">
-                      <form action={updateUserRole} className="flex gap-2">
-                        <input type="hidden" name="userId" value={user.id} />
-
-                        <select
-                          name="role"
-                          defaultValue={currentRole}
-                          className="rounded-2xl bg-gray-50 px-4 py-2 text-sm font-semibold text-[#202c5c] outline-none focus:ring-2 focus:ring-[#a54a5c]/20"
-                        >
-                          <option value="student">student</option>
-                          <option value="teacher">teacher</option>
-                          <option value="admin">admin</option>
-                        </select>
-
-                        <button
-                          type="submit"
-                          className="rounded-2xl bg-[#a54a5c] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#913f50]"
-                        >
-                          Update
-                        </button>
-                      </form>
+                      <UpdateUserRoleForm
+                        userId={user.id}
+                        currentRole={currentRole}
+                        teacherVerificationStatus={teacherVerificationStatus}
+                      />
                     </td>
                   </tr>
                 );

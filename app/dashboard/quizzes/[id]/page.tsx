@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -14,6 +14,8 @@ import {
   Medal,
   Home,
 } from "lucide-react";
+import { createClient } from "@/utils/supabase/client";
+import { useRouter } from "next/navigation";
 
 type Question = {
   question: string;
@@ -202,6 +204,63 @@ export default function QuizPage({
   const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const router = useRouter();
+  const supabase = createClient();
+
+  useEffect(() => {
+    if (!isFinished) return;
+
+    const saveResult = async () => {
+      try {
+        const total = quiz.questions.length;
+        const percentage = Math.round((score / total) * 100);
+
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser();
+
+        if (userError || !user) {
+          setSaveError("Please login to save quiz results.");
+          return;
+        }
+
+        const payload = {
+          user_id: user.id,
+          quiz_id: id,
+          quiz_title: quiz.title,
+          score: score,
+          total_questions: total,
+          percentage: percentage,
+          completed_at: new Date().toISOString(),
+        } as any;
+
+        const { error: insertError } = await supabase.from("quiz_results").insert(payload);
+
+        if (insertError) {
+          console.error("Failed to save quiz result:", insertError);
+          setSaveError(insertError.message || "Failed to save result.");
+          return;
+        }
+
+        setSaved(true);
+
+        try {
+          router.refresh();
+        } catch (e) {
+          // ignore
+        }
+      } catch (e) {
+        console.error("Unexpected save result error:", e);
+        setSaveError(String(e));
+      }
+    };
+
+    saveResult();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFinished]);
 
   if (!quiz) {
     return (
@@ -313,7 +372,7 @@ export default function QuizPage({
               </div>
             </div>
 
-            <div className="mx-auto mt-8 max-w-3xl rounded-[32px] border border-white/15 bg-white/15 p-6">
+            <div className="mx-auto mt-8 max-w-3xl rounded-4xl border border-white/15 bg-white/15 p-6">
               <div className="mb-4 flex items-center justify-center gap-2">
                 <Gift className="h-5 w-5 text-pink-200" />
                 <p className="text-xs font-extrabold uppercase tracking-[0.28em] text-pink-200">

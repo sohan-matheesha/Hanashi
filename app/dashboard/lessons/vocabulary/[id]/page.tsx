@@ -53,10 +53,10 @@ export default function VocabularyDetailPage() {
           </button>
         </div>
 
-        <section className="w-full px-4 py-10 md:px-8 lg:px-16 -mt-10">
+        <section className="w-full px-4 py-10 md:px-8 lg:px-16">
           <div className="mx-auto max-w-7xl">
             {/* Title Section */}
-            <div className="mb-8 text-center">
+            <div className="mb-4 text-center">
               <h2 className="text-3xl font-bold text-gray-900 md:text-4xl">
                 Japanese Counting System
               </h2>
@@ -156,7 +156,7 @@ export default function VocabularyDetailPage() {
             </div>
 
             {/* Note */}
-            <div className="mt-6 rounded-2xl bg-green-50 p-5 text-sm text-green-800">
+            <div className="mt-4 rounded-2xl bg-green-50 p-5 text-sm text-green-800">
               <p>
                 <span className="font-semibold">Note:</span> Japanese uses different
                 counters depending on the object. For example, 〜人 is used for people,
@@ -165,7 +165,7 @@ export default function VocabularyDetailPage() {
             </div>
 
             {/* SECOND TABLE CARD */}
-            <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-lg mt-12">
+            <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-lg mt-6">
               <div className="border-b border-gray-200 bg-linear-to-r from-green-50 to-white px-6 py-5">
                 <h3 className="text-xl font-semibold text-gray-900">
                   Japanese Counters Table 2
@@ -252,7 +252,7 @@ export default function VocabularyDetailPage() {
             </div>
 
             {/* Note 2 */}
-            <div className="mt-6 rounded-2xl bg-green-50 p-5 text-sm text-green-800">
+            <div className="mt-4 rounded-2xl bg-green-50 p-5 text-sm text-green-800">
               <p>
                 <span className="font-semibold">Note:</span> Japanese uses different
                 counters for different things. For example, 〜枚 is used for thin flat
@@ -283,7 +283,7 @@ export default function VocabularyDetailPage() {
         <section className="w-full px-4 py-10 md:px-8 lg:px-16 -mt-10">
           <div className="mx-auto max-w-6xl">
             {/* Page Title */}
-            <div className="mb-10 text-center">
+            <div className="mb-6 text-center">
               <h2 className="text-3xl font-bold text-gray-900 md:text-4xl">
                 Japanese Time Vocabulary
               </h2>
@@ -293,7 +293,7 @@ export default function VocabularyDetailPage() {
             </div>
 
             {/* Table 1: Time Vocabulary */}
-            <div className="mb-10 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-lg">
+            <div className="mb-6 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-lg">
               <div className="border-b border-gray-200 bg-linear-to-r from-green-50 to-white px-6 py-5">
                 <h3 className="text-xl font-semibold text-gray-900">
                   Time Vocabulary
@@ -351,7 +351,7 @@ export default function VocabularyDetailPage() {
             </div>
 
             {/* Table 2: Hours */}
-            <div className="mb-10 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-lg">
+            <div className="mb-6 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-lg">
               <div className="border-b border-gray-200 bg-linear-to-r from-green-50 to-white px-6 py-5">
                 <h3 className="text-xl font-semibold text-gray-900">
                   Hours

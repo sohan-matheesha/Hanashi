@@ -55,6 +55,7 @@ export async function login(formData: FormData) {
       id: user.id,
       role: "student",
       full_name: user.email?.split("@")[0] || "Student",
+      student_id: `STU${Math.floor(1000000 + Math.random() * 9000000)}`,
     });
 
     revalidatePath("/", "layout");
@@ -105,6 +106,7 @@ export async function signup(formData: FormData) {
       id: data.user.id,
       full_name: fullName || email.split("@")[0],
       role: "student",
+      student_id: `STU${Math.floor(1000000 + Math.random() * 9000000)}`,
     });
   }
 

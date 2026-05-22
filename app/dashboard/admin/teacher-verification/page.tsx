@@ -37,6 +37,8 @@ export default function TeacherVerificationPage() {
   const [teachers, setTeachers] = useState<TeacherProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchTeachers = async () => {
     try {
@@ -66,9 +68,12 @@ export default function TeacherVerificationPage() {
     teacher: TeacherProfile,
     status: "approved" | "rejected"
   ) => {
+    setMessage(null);
+    setError(null);
     try {
       setUpdatingId(teacher.id);
 
+      // 1. Update teacher_profiles
       const { error: teacherError } = await supabase
         .from("teacher_profiles")
         .update({
@@ -78,27 +83,37 @@ export default function TeacherVerificationPage() {
 
       if (teacherError) {
         console.error("Teacher status update error:", teacherError);
-        alert(teacherError.message);
+        setError(teacherError.message);
         return;
       }
 
+      // 2. Update profiles (status and role)
+      let profileUpdate: Record<string, string> = {
+        teacher_verification_status: status,
+      };
+      if (status === "approved") {
+        profileUpdate["role"] = "teacher";
+      }
       const { error: profileError } = await supabase
         .from("profiles")
-        .update({
-          teacher_verification_status: status,
-        })
+        .update(profileUpdate)
         .eq("id", teacher.user_id);
 
       if (profileError) {
         console.error("Profile status update error:", profileError);
-        alert(profileError.message);
+        setError(profileError.message);
         return;
       }
 
+      setMessage(
+        status === "approved"
+          ? "Teacher approved and user role updated."
+          : "Teacher request rejected."
+      );
       await fetchTeachers();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Unexpected update error:", error);
-      alert("Something went wrong while updating teacher status.");
+      setError("Something went wrong while updating teacher status.");
     } finally {
       setUpdatingId(null);
     }
@@ -191,6 +206,17 @@ export default function TeacherVerificationPage() {
           </div>
         </div>
 
+        {/* Success/Error messages */}
+        {message && (
+          <div className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700 font-semibold">
+            {message}
+          </div>
+        )}
+        {error && (
+          <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700 font-semibold">
+            {error}
+          </div>
+        )}
         {loading ? (
           <div className="rounded-3xl border border-pink-100 bg-white p-10 text-center shadow-sm">
             <p className="font-semibold text-gray-600">
@@ -291,7 +317,11 @@ export default function TeacherVerificationPage() {
                       onClick={() => updateTeacherStatus(teacher, "approved")}
                       className="flex items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-5 py-3 text-sm font-bold text-white shadow-sm hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-60"
                     >
-                      <CheckCircle2 size={18} />
+                      {updatingId === teacher.id ? (
+                        <svg className="animate-spin mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+                      ) : (
+                        <CheckCircle2 size={18} />
+                      )}
                       Approve
                     </button>
 
@@ -304,7 +334,11 @@ export default function TeacherVerificationPage() {
                       onClick={() => updateTeacherStatus(teacher, "rejected")}
                       className="flex items-center justify-center gap-2 rounded-2xl bg-red-500 px-5 py-3 text-sm font-bold text-white shadow-sm hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-60"
                     >
-                      <XCircle size={18} />
+                      {updatingId === teacher.id ? (
+                        <svg className="animate-spin mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+                      ) : (
+                        <XCircle size={18} />
+                      )}
                       Reject
                     </button>
                   </div>

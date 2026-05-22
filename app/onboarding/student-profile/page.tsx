@@ -32,6 +32,7 @@ export default function StudentProfilePage() {
   const [country, setCountry] = useState("");
   const [level, setLevel] = useState("Beginner");
   const [status, setStatus] = useState("University Student");
+  const [studentId, setStudentId] = useState("");
   const [saving, setSaving] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
 
@@ -51,7 +52,7 @@ export default function StudentProfilePage() {
         const { data, error } = await supabase
           .from("profiles")
           .select(
-            "full_name, email, phone_number, date_of_birth, country, japanese_level, current_status, avatar_url"
+            "full_name, email, phone_number, date_of_birth, country, japanese_level, current_status, avatar_url, student_id"
           )
           .eq("id", user.id)
           .maybeSingle();
@@ -71,6 +72,7 @@ export default function StudentProfilePage() {
           setLevel(data.japanese_level || "Beginner");
           setStatus(data.current_status || "University Student");
           setProfileImage(data.avatar_url || null);
+          setStudentId(data.student_id || "");
         } else {
           setEmail(user.email || "");
         }
@@ -110,6 +112,9 @@ export default function StudentProfilePage() {
         return;
       }
 
+      // Generate Student ID if it doesn't exist
+      const generatedStudentId = studentId || `STU${Math.floor(1000000 + Math.random() * 9000000)}`;
+
       const { error } = await supabase
         .from("profiles")
         .update({
@@ -123,6 +128,7 @@ export default function StudentProfilePage() {
           role: "student",
           profile_completed: true,
           teacher_verification_status: null,
+          student_id: generatedStudentId,
         })
         .eq("id", user.id);
 
@@ -228,6 +234,11 @@ export default function StudentProfilePage() {
               </p>
 
               <div className="mt-5 flex flex-wrap justify-center gap-2">
+                {studentId && (
+                  <span className="w-full rounded-full bg-purple-100 px-4 py-1 mb-2 text-sm font-semibold text-purple-700">
+                    ID: {studentId}
+                  </span>
+                )}
                 <span className="rounded-full bg-pink-100 px-4 py-1 text-sm font-semibold text-pink-600">
                   {level}
                 </span>
@@ -271,6 +282,24 @@ export default function StudentProfilePage() {
                 </div>
 
                 <div className="grid gap-5 md:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-sm font-semibold text-gray-600">
+                      Student ID
+                    </label>
+                    <div className="relative">
+                      <Briefcase
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                        size={18}
+                      />
+                      <input
+                        type="text"
+                        readOnly
+                        value={studentId || "Will be generated on save"}
+                        className="w-full rounded-2xl border border-gray-200 bg-gray-100 px-11 py-3 text-gray-500 outline-none cursor-not-allowed"
+                      />
+                    </div>
+                  </div>
+
                   <div>
                     <label className="mb-2 block text-sm font-semibold text-gray-600">
                       Full Name

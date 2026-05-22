@@ -149,10 +149,10 @@ const vocabularyModules = [
 
 export default function VocabularyPage() {
   return (
-    <div className="max-w-6xl mx-auto p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="max-w-6xl mx-auto p-4 md:p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 relative">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 relative">
         <div className="max-w-2xl relative z-10">
           <p className="text-[#848fa5] text-[10px] font-bold tracking-widest uppercase mb-6 flex items-center gap-4">
             <span>Word Bank</span>
@@ -177,7 +177,7 @@ export default function VocabularyPage() {
       </div>
 
       {/* Grid Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
         {vocabularyModules.map((module, idx) => (
           <Link 
             key={idx} 
@@ -224,7 +224,7 @@ export default function VocabularyPage() {
       </div>
 
       {/* Progress Footer */}
-      <div className="bg-[#f0f2f5] rounded-4xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 border border-gray-100 mt-16">
+      <div className="bg-[#f0f2f5] rounded-4xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 border border-gray-100 mt-8">
         <div>
           <h3 className="text-[#202c5c] text-xl font-bold mb-2">Your Progress</h3>
           <p className="text-gray-500 text-sm">You&apos;ve mastered 124 of 2,400 core vocabulary words.</p>

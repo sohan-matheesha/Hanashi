@@ -16,21 +16,52 @@ import {
   GraduationCap,
   ShieldCheck,
   PlayCircle,
-  Sparkles,
   Flame,
   ChevronRight,
   Castle,
 } from "lucide-react";
 
-type UserRole = "student" | "teacher" | "admin" | null;
+type UserRole = "student" | "teacher" | "admin" | null | string;
+type TeacherVerificationStatus =
+  | "pending"
+  | "approved"
+  | "rejected"
+  | null
+  | string;
 
-export default function MainSidebar({ role }: { role: UserRole }) {
+type MainSidebarProps = {
+  role: UserRole;
+  teacherVerificationStatus?: TeacherVerificationStatus;
+};
+
+export default function MainSidebar({
+  role,
+  teacherVerificationStatus = "pending",
+}: MainSidebarProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
   if (pathname.startsWith("/dashboard/lessons")) {
     return null;
   }
+
+  const normalizedRole = String(role || "student").toLowerCase().trim();
+
+  const normalizedTeacherStatus = String(teacherVerificationStatus || "pending")
+    .toLowerCase()
+    .trim();
+
+  const canShowTeacherPanel =
+    normalizedRole === "teacher" && normalizedTeacherStatus === "approved";
+
+  const canShowAdminPanel = normalizedRole === "admin";
+
+  const displayRole =
+    normalizedRole === "teacher"
+      ? normalizedTeacherStatus === "approved"
+        ? "teacher"
+        : "pending teacher"
+      : normalizedRole;
 
   const navLinks = [
     {
@@ -75,7 +106,7 @@ export default function MainSidebar({ role }: { role: UserRole }) {
       label: "Achievements",
     },
 
-    ...(role === "teacher" || role === "admin"
+    ...(canShowTeacherPanel
       ? [
           {
             href: "/dashboard/teacher",
@@ -85,7 +116,7 @@ export default function MainSidebar({ role }: { role: UserRole }) {
         ]
       : []),
 
-    ...(role === "admin"
+    ...(canShowAdminPanel
       ? [
           {
             href: "/dashboard/admin",
@@ -117,11 +148,10 @@ export default function MainSidebar({ role }: { role: UserRole }) {
       )}
 
       <aside
-        className={`fixed left-0 top-0 z-30 flex h-screen w-[282px] flex-col overflow-hidden border-r border-white/10 bg-[#060b2d] text-white shadow-[20px_0_70px_rgba(4,7,35,0.45)] transition-transform duration-300 ${
+        className={`fixed left-0 top-0 z-30 flex h-screen w-70.5 flex-col overflow-hidden border-r border-white/10 bg-[#060b2d] text-white shadow-[20px_0_70px_rgba(4,7,35,0.45)] transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >
-        {/* Background glow */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(236,72,153,0.24),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(124,58,237,0.28),transparent_40%)]" />
         <div className="pointer-events-none absolute bottom-8 right-4 text-6xl opacity-10">
           🌸
@@ -131,7 +161,6 @@ export default function MainSidebar({ role }: { role: UserRole }) {
         </div>
 
         <div className="relative z-10 flex h-full flex-col">
-          {/* Logo */}
           <div className="px-7 pb-5 pt-8">
             <Link
               href="/"
@@ -149,7 +178,6 @@ export default function MainSidebar({ role }: { role: UserRole }) {
             </Link>
           </div>
 
-          {/* Navigation */}
           <nav className="relative z-10 flex flex-col gap-2 px-5 py-4">
             {navLinks.map(({ href, icon: Icon, label, exact }) => {
               const isActive = exact
@@ -174,7 +202,7 @@ export default function MainSidebar({ role }: { role: UserRole }) {
                         : "text-purple-100 group-hover:bg-white/10"
                     }`}
                   >
-                    <Icon className="h-[19px] w-[19px]" />
+                    <Icon className="h-4.75 w-4.75" />
                   </span>
 
                   <span className="leading-tight">{label}</span>
@@ -187,7 +215,6 @@ export default function MainSidebar({ role }: { role: UserRole }) {
             })}
           </nav>
 
-          {/* Bottom profile card */}
           <div className="relative z-10 mt-auto space-y-4 p-5">
             <div className="rounded-3xl border border-white/10 bg-white/8 p-4 shadow-lg backdrop-blur-xl">
               <div className="flex items-center gap-3">
@@ -200,7 +227,7 @@ export default function MainSidebar({ role }: { role: UserRole }) {
                     Hanashi User
                   </p>
                   <p className="mt-0.5 text-xs capitalize text-purple-100">
-                    {role ?? "student"}
+                    {displayRole}
                   </p>
                 </div>
 

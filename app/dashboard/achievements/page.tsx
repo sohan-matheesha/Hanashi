@@ -7,47 +7,91 @@ import {
   Sparkles,
   Trophy,
 } from "lucide-react";
+import { createClient } from "@/utils/supabase/server";
 
-const achievements = [
-  {
-    title: "First Step",
-    description: "Start learning Japanese through Hanashi.",
-    icon: Sparkles,
-    status: "Available",
-  },
-  {
-    title: "Kana Beginner",
-    description: "Complete Hiragana and Katakana practice activities.",
-    icon: BookOpen,
-    status: "In Progress",
-  },
-  {
-    title: "Quiz Starter",
-    description: "Complete your first Japanese quiz.",
-    icon: CheckCircle2,
-    status: "In Progress",
-  },
-  {
-    title: "Speaking Practice",
-    description: "Practise Japanese through conversation activities.",
-    icon: GraduationCap,
-    status: "Available",
-  },
-  {
-    title: "Daily Learner",
-    description: "Build a regular Japanese learning habit.",
-    icon: Flame,
-    status: "Coming Soon",
-  },
-  {
-    title: "N5 Explorer",
-    description: "Continue learning beginner-level JLPT N5 topics.",
-    icon: Trophy,
-    status: "Coming Soon",
-  },
-];
+export default async function AchievementsPage() {
+  const supabase = await createClient();
 
-export default function AchievementsPage() {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    return (
+      <div className="min-h-screen bg-[#fafafc] px-4 py-8 md:px-8">
+        <div className="mx-auto max-w-7xl">
+          <section className="mb-8 rounded-3xl bg-white p-6 shadow-sm md:p-8">
+            <div>
+              <h1 className="text-2xl font-extrabold text-[#202c5c]">Achievements</h1>
+              <p className="mt-2 text-sm text-gray-500">Please log in to view your achievements.</p>
+            </div>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  const { data: resultsData } = await supabase
+    .from("quiz_results")
+    .select("id, quiz_id, quiz_title, score, total_questions, percentage, completed_at")
+    .eq("user_id", user.id)
+    .order("completed_at", { ascending: false });
+
+  const results = resultsData ?? [];
+
+  const totalCompleted = results.length;
+  const averageScore = totalCompleted
+    ? Math.round(
+        results.reduce((sum: number, r: any) => sum + (r.percentage || 0), 0) / totalCompleted
+      )
+    : 0;
+
+  const bestScore = totalCompleted ? Math.max(...results.map((r: any) => r.percentage || 0)) : 0;
+
+  const recentResults = results.slice(0, 5);
+
+  const unlocked = {
+    firstQuiz: totalCompleted >= 1,
+    quizBeginner: totalCompleted >= 3,
+    highScorer: results.some((r: any) => (r.percentage || 0) >= 80),
+    perfectScore: results.some((r: any) => (r.percentage || 0) === 100),
+    consistentLearner: totalCompleted >= 5,
+  };
+
+  const achievements = [
+    {
+      title: "First Quiz Completed",
+      description: "Complete your first quiz.",
+      icon: CheckCircle2,
+      unlocked: unlocked.firstQuiz,
+    },
+    {
+      title: "Quiz Beginner",
+      description: "Complete 3 quizzes.",
+      icon: BookOpen,
+      unlocked: unlocked.quizBeginner,
+    },
+    {
+      title: "High Scorer",
+      description: "Achieve 80% or above on any quiz.",
+      icon: Trophy,
+      unlocked: unlocked.highScorer,
+    },
+    {
+      title: "Perfect Score",
+      description: "Achieve 100% on any quiz.",
+      icon: Sparkles,
+      unlocked: unlocked.perfectScore,
+    },
+    {
+      title: "Consistent Learner",
+      description: "Complete 5 quizzes.",
+      icon: Flame,
+      unlocked: unlocked.consistentLearner,
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-[#fafafc] px-4 py-8 md:px-8">
       <div className="mx-auto max-w-7xl">
@@ -63,8 +107,7 @@ export default function AchievementsPage() {
               </h1>
 
               <p className="mt-4 max-w-3xl text-sm leading-7 text-gray-500 md:text-base">
-                Track learning milestones, quiz progress, and practice goals as
-                students continue learning Japanese through Hanashi.
+                Track learning milestones, quiz progress, and practice goals.
               </p>
             </div>
 
@@ -76,24 +119,21 @@ export default function AchievementsPage() {
 
         <section className="mb-8 grid gap-5 md:grid-cols-3">
           <div className="rounded-3xl bg-white p-6 shadow-sm">
-            <p className="text-sm font-medium text-gray-500">Achievement Type</p>
-            <h2 className="mt-2 text-3xl font-extrabold text-[#202c5c]">
-              Learning
-            </h2>
+            <p className="text-sm font-medium text-gray-500">Quizzes Completed</p>
+            <h2 className="mt-2 text-3xl font-extrabold text-[#202c5c]">{totalCompleted}</h2>
+            <p className="mt-1 text-xs text-gray-400">Total quizzes completed</p>
           </div>
 
           <div className="rounded-3xl bg-white p-6 shadow-sm">
-            <p className="text-sm font-medium text-gray-500">Main Focus</p>
-            <h2 className="mt-2 text-3xl font-extrabold text-[#202c5c]">
-              N5
-            </h2>
+            <p className="text-sm font-medium text-gray-500">Average Score</p>
+            <h2 className="mt-2 text-3xl font-extrabold text-[#202c5c]">{averageScore}%</h2>
+            <p className="mt-1 text-xs text-gray-400">Across completed quizzes</p>
           </div>
 
           <div className="rounded-3xl bg-white p-6 shadow-sm">
-            <p className="text-sm font-medium text-gray-500">Progress Mode</p>
-            <h2 className="mt-2 text-3xl font-extrabold text-[#202c5c]">
-              Badges
-            </h2>
+            <p className="text-sm font-medium text-gray-500">Best Score</p>
+            <h2 className="mt-2 text-3xl font-extrabold text-[#202c5c]">{bestScore}%</h2>
+            <p className="mt-1 text-xs text-gray-400">Highest quiz percentage</p>
           </div>
         </section>
 
@@ -113,38 +153,43 @@ export default function AchievementsPage() {
 
                   <span
                     className={`rounded-full px-3 py-1 text-xs font-bold ${
-                      achievement.status === "Coming Soon"
-                        ? "bg-gray-100 text-gray-400"
-                        : achievement.status === "In Progress"
-                          ? "bg-yellow-100 text-yellow-700"
-                          : "bg-green-100 text-green-700"
+                      achievement.unlocked ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-400"
                     }`}
                   >
-                    {achievement.status}
+                    {achievement.unlocked ? "Unlocked" : "Locked"}
                   </span>
                 </div>
 
-                <h2 className="text-xl font-extrabold text-[#202c5c]">
-                  {achievement.title}
-                </h2>
+                <h2 className="text-xl font-extrabold text-[#202c5c]">{achievement.title}</h2>
 
-                <p className="mt-3 text-sm leading-7 text-gray-500">
-                  {achievement.description}
-                </p>
+                <p className="mt-3 text-sm leading-7 text-gray-500">{achievement.description}</p>
               </div>
             );
           })}
         </section>
 
-        <section className="mt-8 rounded-3xl border border-dashed border-pink-200 bg-white p-6 text-center">
-          <h3 className="text-xl font-extrabold text-[#202c5c]">
-            Achievement tracking area
-          </h3>
+        <section className="mt-8 rounded-3xl border border-dashed border-pink-200 bg-white p-6">
+          <h3 className="text-xl font-extrabold text-[#202c5c]">Recent Quiz Results</h3>
 
-          <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-gray-500">
-            This section is prepared for future progress tracking, quiz results,
-            streaks, and badge-based gamification features.
-          </p>
+          <div className="mt-4 space-y-3">
+            {recentResults.length === 0 && (
+              <p className="text-sm text-gray-500">No quiz results yet. Complete a quiz to unlock achievements.</p>
+            )}
+
+            {recentResults.map((r: any) => (
+              <div key={r.id} className="flex items-center justify-between rounded-2xl border p-3">
+                <div>
+                  <div className="text-sm font-bold text-[#202c5c]">{r.quiz_title || r.quiz_id}</div>
+                  <div className="text-xs text-gray-400">{new Date(r.completed_at).toLocaleString()}</div>
+                </div>
+
+                <div className="text-right">
+                  <div className="text-sm font-extrabold">{r.percentage}%</div>
+                  <div className="text-xs text-gray-400">{r.score}/{r.total_questions}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
       </div>
     </div>

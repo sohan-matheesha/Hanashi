@@ -137,15 +137,15 @@ export default function KanjiRootPage() {
     <div className="w-full max-w-5xl mx-auto pb-16 animate-in fade-in duration-500 pt-8 px-6">
       
       {/* Header */}
-      <div className="text-center mb-16">
+      <div className="text-center mb-8">
         <h1 className="text-4xl font-bold text-[#202c5c] mb-3 font-serif">Kanji <span className="font-jp ml-2 opacity-80">漢字</span></h1>
         <div className="w-16 h-1 bg-[#1aa379] mx-auto rounded-full mb-4"></div>
         <p className="text-[#59668d] text-sm font-medium">Master the essential logographic characters.</p>
       </div>
 
       {/* Numbers Section */}
-      <div className="mb-12">
-        <div className="flex items-center gap-4 mb-8">
+      <div className="mb-6">
+        <div className="flex items-center gap-4 mb-4">
           <div className="w-10 h-10 rounded-xl bg-[#e6f4f0] text-[#1aa379] flex items-center justify-center text-xl font-bold font-jp">
             一
           </div>
@@ -203,8 +203,8 @@ export default function KanjiRootPage() {
       </div>
 
       {/* Time Section */}
-      <div className="mb-12">
-        <div className="flex items-center gap-4 mb-8">
+      <div className="mb-6">
+        <div className="flex items-center gap-4 mb-4">
           <div className="w-10 h-10 rounded-xl bg-[#e6f4f0] text-[#1aa379] flex items-center justify-center text-xl font-bold font-jp">
             時
           </div>

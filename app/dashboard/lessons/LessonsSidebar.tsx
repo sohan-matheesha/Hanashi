@@ -17,7 +17,6 @@ export default function LessonsSidebar() {
   const pathname = usePathname();
 
   const isLessonsHome = pathname === "/dashboard/lessons";
-
   const backHref = isLessonsHome ? "/dashboard" : "/dashboard/lessons";
   const backLabel = isLessonsHome ? "Back to Dashboard" : "Back to Lessons";
 
@@ -27,57 +26,47 @@ export default function LessonsSidebar() {
     { name: "Kanji", href: "/dashboard/lessons/kanji", icon: Languages },
     { name: "Vocabulary", href: "/dashboard/lessons/vocabulary", icon: BookText },
     { name: "Grammar", href: "/dashboard/lessons/grammar", icon: PenTool },
-    { name: "Review", href: "/dashboard/lessons/review", icon: RefreshCw },
   ];
 
   return (
-    <aside className="fixed left-0 top-22 z-10 flex h-[calc(100vh-88px)] w-60 flex-col border-r border-gray-100 bg-[#f4f5f7] lg:flex">
-      <div className="p-6">
-        <Link
-          href={backHref}
-          className="mb-7 flex items-center gap-3 text-sm font-bold text-gray-400 transition-all duration-300 hover:-translate-x-1 hover:text-[#4d6096]"
-        >
-          <ArrowLeft className="h-5 w-5" />
-          <span>{backLabel}</span>
-        </Link>
+    <aside className="fixed left-0 top-0 z-30 hidden h-screen w-60 flex-col border-r border-slate-100 bg-white/95 px-6 py-8 shadow-sm backdrop-blur lg:flex">
+      <Link
+        href={backHref}
+        className="mb-10 flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-[#b74b6b]"
+      >
+        <ArrowLeft size={16} />
+        {backLabel}
+      </Link>
 
-        <div className="flex items-center gap-3">
-          <div className="rounded-2xl bg-[#4d6096] p-2.5 text-white shadow-sm">
-            <GraduationCap className="h-7 w-7" />
-          </div>
-
-          <div>
-            <h2 className="text-[15px] font-bold leading-tight text-[#202c5c]">
-              Learning Path
-            </h2>
-            <p className="text-[13px] font-medium text-gray-500">
-              N5 Proficiency
-            </p>
-          </div>
+      <div className="mb-10 flex items-center gap-4">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#202c5c] text-white shadow-md">
+          <GraduationCap size={26} />
+        </div>
+        <div>
+          <h2 className="text-base font-bold text-[#202c5c]">Learning Path</h2>
+          <p className="text-sm text-slate-500">N5 Proficiency</p>
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col gap-2 px-3 py-1">
-        {links.map((link) => {
-          const Icon = link.icon;
-          const isActive = pathname.startsWith(link.href);
+      <nav className="space-y-2">
+        {links.map((item) => {
+          const Icon = item.icon;
+          const isActive = pathname.startsWith(item.href);
 
           return (
             <Link
-              key={link.name}
-              href={link.href}
-              className={`flex items-center gap-4 rounded-2xl px-4 py-3 transition-all duration-300 ease-out hover:scale-[1.03] ${
-                isActive
-                  ? "bg-white font-bold text-[#2a3b7c] shadow-sm"
-                  : "font-medium text-gray-500 hover:bg-white/50 hover:text-[#2a3b7c]"
+              key={item.name}
+              href={item.href}
+              className={`group flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition hover:bg-[#fff1f6] hover:text-[#b74b6b] ${
+                isActive ? "bg-[#fff1f6] text-[#b74b6b]" : "text-slate-600"
               }`}
             >
-              <Icon className="h-4 w-4" strokeWidth={2.5} />
-              <span>{link.name}</span>
+              <Icon size={19} className="text-slate-500 transition group-hover:text-[#b74b6b]" />
+              {item.name}
             </Link>
           );
         })}
-      </div>
+      </nav>
     </aside>
   );
 }
